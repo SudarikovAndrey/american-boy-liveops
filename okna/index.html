@@ -1,0 +1,945 @@
+<title>Окна «Америкэн боя»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+:root{
+  --ground:#F2EDE3; --surface:#FFFDF8; --line:#DDD3C2; --ink:#1D1A16; --muted:#6E6556; --paper:#E6D6B2;
+  --keep:#2F7F3E; --skin:#2C68B0; --mod:#B8741A; --new:#C23A2C; --link:#2C68B0;
+  --display:"Oswald","Arial Narrow",sans-serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  color-scheme:dark; --ground:#141311; --surface:#1D1B18; --line:#34302A; --ink:#EFE7D7; --muted:#A2998A; --paper:#3A3326;
+  --keep:#5BAA66; --skin:#5E9BE0; --mod:#E4A043; --new:#E4604F; --link:#7FB2EE; } }
+:root[data-theme="dark"]{ color-scheme:dark; --ground:#141311; --surface:#1D1B18; --line:#34302A; --ink:#EFE7D7; --muted:#A2998A; --paper:#3A3326;
+  --keep:#5BAA66; --skin:#5E9BE0; --mod:#E4A043; --new:#E4604F; --link:#7FB2EE; }
+body{background:var(--ground);color:var(--ink);font:15px/1.5 var(--body);padding-inline:16px}
+.wrap{max-width:1180px;margin:0 auto;padding-block:28px 80px}
+h1,h2,h3{font-family:var(--display);font-weight:600;text-wrap:balance;margin:0}
+h1{font-size:clamp(30px,5vw,46px);letter-spacing:.01em;line-height:1.05;text-transform:uppercase}
+.lede{color:var(--muted);max-width:68ch;margin:10px 0 0}
+.lede a{color:var(--link)}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ground);border-bottom:1px solid var(--line);padding-block:10px;margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.chip{font:500 13px var(--body);display:inline-flex;gap:6px;align-items:baseline;border:1.5px solid currentColor;background:transparent;border-radius:999px;padding:4px 12px;cursor:pointer}
+.chip b{font-family:var(--display);font-size:16px}
+.chip.keep{color:var(--keep)} .chip.skin{color:var(--skin)} .chip.mod{color:var(--mod)} .chip.new{color:var(--new)}
+.chip[aria-pressed="false"]{opacity:.35}
+.chip:focus-visible,.shot:focus-visible,input:focus-visible{outline:2px solid var(--link);outline-offset:2px}
+#q{flex:1 1 180px;min-width:0;font:14px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
+nav.groups{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px;margin-top:8px;width:100%}
+nav.groups a{color:var(--muted);text-decoration:none} nav.groups a:hover{color:var(--ink)}
+details.flow{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:14px 18px}
+details.flow summary{font-family:var(--display);font-size:20px;cursor:pointer;text-transform:uppercase}
+.flow ol{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}
+.flow li{display:flex;gap:10px}
+.fn{font-family:var(--display);font-size:22px;color:var(--muted);min-width:1.2em}
+.flow p{margin:2px 0;font-size:13px;color:var(--muted)}
+.fids a,.uid{font-family:var(--mono);font-size:12px}
+.fids a{color:var(--link);margin-right:6px;text-decoration:none}
+.grp{margin-top:44px}
+.grp h2{font-size:26px;text-transform:uppercase;display:flex;gap:10px;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.grp h2 small{font:500 14px var(--body);color:var(--muted)}
+.scr{display:grid;grid-template-columns:auto 1fr;gap:22px;padding-block:22px;border-bottom:1px solid var(--line);scroll-margin-top:110px}
+.scr[hidden]{display:none!important}
+.shots{display:flex;gap:14px;flex-wrap:wrap} .shots figure{margin:0} .shots figcaption{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:6px} .shots .row{display:flex;gap:6px}
+.shot{padding:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#000;cursor:zoom-in;width:150px;aspect-ratio:393/852;max-width:100%}
+.shot img{display:block;width:100%;height:100%;object-fit:cover}
+.shot.empty{cursor:default;background:transparent;border:1.5px dashed var(--new);color:var(--new);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:13px;text-align:center}
+.shot.empty.muted{border-color:var(--line);color:var(--muted)} .shot.empty small{font-size:11px;padding:0 8px;color:var(--muted)} .shot.empty b{font-family:var(--display);font-size:17px;text-transform:uppercase}
+.info header{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.uid{background:var(--paper);color:var(--ink);padding:2px 7px;border-radius:4px}
+.pill{font-size:12px;font-weight:600;color:var(--surface);padding:2px 9px;border-radius:999px}
+.pill.drop{background:var(--muted)} .chip.drop{color:var(--muted)} .pill.keep{background:var(--keep)} .pill.skin{background:var(--skin)} .pill.mod{background:var(--mod)} .pill.new{background:var(--new)}
+.match{font-size:12px;color:var(--muted)}
+.info h3{font-size:22px;margin-top:8px;line-height:1.15}
+.when{color:var(--muted);margin:4px 0 8px;font-size:14px}
+.chg{margin:0;padding-left:18px;max-width:70ch} .chg li{margin:2px 0}
+.sts{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.st{font-size:12px;border:1px solid var(--line);border-radius:4px;padding:1px 7px;color:var(--muted)}
+.ex{margin:10px 0 0;font-size:13px;max-width:70ch}
+.ex span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:8px}
+.note{margin:8px 0 0;font-size:13px;color:var(--mod);max-width:70ch}
+.src{margin:10px 0 0;font-size:13px}
+.base{color:var(--link)} .base.none{color:var(--muted)}
+dialog{border:0;padding:0;background:transparent;max-width:96vw;max-height:94vh}
+dialog::backdrop{background:rgba(10,9,8,.82)}
+dialog img{display:block;max-height:92vh;width:auto;border-radius:12px}
+.empty-msg{color:var(--muted);margin-top:30px}
+@media (max-width:640px){ .scr{grid-template-columns:1fr} .shot{width:118px} }
+@media (prefers-reduced-motion:no-preference){ html{scroll-behavior:smooth} }
+</style>
+<div class="wrap">
+  <h1>Окна ивента «Америкэн бой»</h1>
+  <p class="lede">Все 77 экранов из реестра ТЗ интерфейсов. Слева — как окно выглядит сейчас в прототипе и фрейм-основа из <a href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI" target="_blank" rel="noopener">Block Boss UI</a>, на котором строится окно ивента; справа — что меняется в ивенте. Макеты «стало» — в Figma-атласе <a href="https://www.figma.com/design/aKyv49J53bI3rYZ4qgrnMJ/Untitled" target="_blank" rel="noopener">«Америкэн бой — атлас»</a>. Тап по картинке открывает её крупно. Прототип ивента для тестирования — <a href="https://sudarikovandrey.github.io/american-boy-liveops/" target="_blank" rel="noopener">sudarikovandrey.github.io/american-boy-liveops</a>.</p>
+  <details class="flow"><summary>Флоу игрока</summary><ol><li><span class="fn">1</span><div><b>Кор, первый показ</b><p>Виджет ивента на главном экране кора, стартовый попап в очереди, «Поехали» — загрузка режима</p><p class="fids"><a href="#UI-63">UI-63</a><a href="#UI-64">UI-64</a><a href="#UI-65">UI-65</a></p></div></li><li><span class="fn">2</span><div><b>Первый запуск режима</b><p>Онбординг с Джонни, затем главный экран поля; правила всегда по «Как играть»</p><p class="fids"><a href="#UI-66">UI-66</a><a href="#UI-01">UI-01</a><a href="#UI-67">UI-67</a></p></div></li><li><span class="fn">3</span><div><b>Учебный круг, день 1</b><p>Подсвеченные шаги: бросок → покупка точки → склад → бизнес → старт; пробная посылка, поставка дня, «Первые шаги»; стартовые награды у кубика</p><p class="fids"><a href="#UI-68">UI-68</a><a href="#UI-03">UI-03</a><a href="#UI-22">UI-22</a><a href="#UI-25">UI-25</a><a href="#UI-24">UI-24</a><a href="#UI-41">UI-41</a><a href="#UI-40">UI-40</a><a href="#UI-69">UI-69</a><a href="#UI-05">UI-05</a></p></div></li><li><span class="fn">4</span><div><b>Игровой день</b><p>Бросок и остановка на клетке: точка, бизнес, склад, участок, инспектор, джекпот, инкассатор, банк, шанс, стройка. Такси с дня 3, поставка раз в день. Прогресс — в билете и окне ивента с тремя кнопками; задания дня</p><p class="fids"><a href="#UI-03">UI-03</a><a href="#UI-04">UI-04</a><a href="#UI-22">UI-22</a><a href="#UI-23">UI-23</a><a href="#UI-24">UI-24</a><a href="#UI-25">UI-25</a><a href="#UI-26">UI-26</a><a href="#UI-27">UI-27</a><a href="#UI-28">UI-28</a><a href="#UI-29">UI-29</a><a href="#UI-30">UI-30</a><a href="#UI-31">UI-31</a><a href="#UI-32">UI-32</a><a href="#UI-33">UI-33</a><a href="#UI-34">UI-34</a><a href="#UI-35">UI-35</a><a href="#UI-38">UI-38</a><a href="#UI-39">UI-39</a><a href="#UI-12">UI-12</a><a href="#UI-37">UI-37</a><a href="#UI-40">UI-40</a><a href="#UI-06">UI-06</a><a href="#UI-45">UI-45</a><a href="#UI-46">UI-46</a><a href="#UI-59">UI-59</a><a href="#UI-48">UI-48</a><a href="#UI-10">UI-10</a><a href="#UI-49">UI-49</a></p></div></li><li><span class="fn">5</span><div><b>Рубеж взят</b><p>Рубеж сразу выдаёт пачку карточек Джонни с анимацией (2 / 3 / 5); на 375 Джонни вступает в банду посреди недели</p><p class="fids"><a href="#UI-47">UI-47</a><a href="#UI-44">UI-44</a><a href="#UI-77">UI-77</a><a href="#UI-51">UI-51</a></p></div></li><li><span class="fn">6</span><div><b>Ходы кончились</b><p>Покупка ходов, магазин, офферы; ходы восстанавливаются сами, пуш «кубики полны»</p><p class="fids"><a href="#UI-57">UI-57</a><a href="#UI-55">UI-55</a><a href="#UI-56">UI-56</a><a href="#UI-58">UI-58</a><a href="#UI-61">UI-61</a><a href="#UI-62">UI-62</a></p></div></li><li><span class="fn">7</span><div><b>Полночь</b><p>Фура уезжает сама, при входе — итоги дня; две просрочки — изъятие; утро нового дня; в дни 5–6 — «Рывок»; пропущенный день можно догнать</p><p class="fids"><a href="#UI-53">UI-53</a><a href="#UI-36">UI-36</a><a href="#UI-54">UI-54</a><a href="#UI-61">UI-61</a><a href="#UI-42">UI-42</a><a href="#UI-43">UI-43</a></p></div></li><li><span class="fn">8</span><div><b>Конец недели</b><p>После поставки дня 7 или в полночь — подсчёт итогов, затем финал и приз за место</p><p class="fids"><a href="#UI-71">UI-71</a><a href="#UI-72">UI-72</a><a href="#UI-73">UI-73</a><a href="#UI-74">UI-74</a><a href="#UI-75">UI-75</a></p></div></li><li><span class="fn">9</span><div><b>Возврат в кор</b><p>Выход из режима в любой момент; если ивент закончился без игрока — финал при первом входе; дубликаты Джонни сливаются в ранг в окне пацана кора</p><p class="fids"><a href="#UI-14">UI-14</a><a href="#UI-76">UI-76</a><a href="#UI-77">UI-77</a></p></div></li></ol></details>
+  <div class="bar"><button type="button" class="chip keep" data-f="keep" aria-pressed="true" id="f-keep"><b>11</b>как есть</button><button type="button" class="chip skin" data-f="skin" aria-pressed="true" id="f-skin"><b>35</b>переодеть</button><button type="button" class="chip mod" data-f="mod" aria-pressed="true" id="f-mod"><b>17</b>доработать</button><button type="button" class="chip new" data-f="new" aria-pressed="true" id="f-new"><b>13</b>новое</button><button type="button" class="chip drop" data-f="drop" aria-pressed="true" id="f-drop"><b>1</b>не делаем</button><input id="q" type="search" placeholder="Поиск: фура, джекпот, UI-40…" aria-label="Поиск по экранам"><nav class="groups"><a href="#g0">HUD и главный экран поля</a><a href="#g1">Клетки поля</a><a href="#g2">Поставка и товары</a><a href="#g3">Прогресс, рубежи, рейтинг, задания</a><a href="#g4">Магазин, харда, пропуск</a><a href="#g5">Вход, правила, туториал</a><a href="#g6">Финал</a></nav></div>
+  <section class="grp" id="g0"><h2>HUD и главный экран поля<small>21</small></h2><article class="scr" id="UI-01" data-dec="new" data-text="ui-01 главный экран режима (поле + hud) всё время в режиме ивента поле кора заменяется полем бруклина на 40 клеток верхний hud собираем из плашек ивента: валюты, билет, джонни, день, задания, товар кнопки кора прячем: банда, дом, районы, магазин и дейлики кора внизу своё меню ивента и строка текущей клетки кнопка «← выход» в кор — правый верхний угол, всегда видна hud кора есть, поля бруклина в figma нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-01 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-01 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-01.jpg" aria-label="Открыть крупно: UI-01 — основа Block Boss"><img src="img/UI-01.jpg" alt="UI-01 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-01</span><span class="pill new">новое</span><span class="match">основа: близко</span></header>
+    <h3>Главный экран режима (поле + HUD)</h3>
+    <p class="when">Всё время в режиме ивента</p>
+    <ul class="chg"><li>Поле кора заменяется полем Бруклина на 40 клеток</li><li>Верхний HUD собираем из плашек ивента: валюты, билет, Джонни, день, задания, товар</li><li>Кнопки кора прячем: банда, дом, районы, магазин и дейлики кора</li><li>Внизу своё меню ивента и строка текущей клетки</li><li>Кнопка «← Выход» в кор — правый верхний угол, всегда видна</li></ul>
+    <div class="sts"><span class="st">обычный</span><span class="st">идёт ход — кнопки заперты</span><span class="st">учебный круг — виден только кубик и строка клетки</span><span class="st">ивент закончен</span></div>
+    <p class="ex"><span>Пример</span>40 клеток: 22 точки, 6 бизнесов, 4 склада (6, 10, 24, 30), 2 «Шанса» (19, 34), 6 служебных</p><p class="note">HUD кора есть, поля Бруклина в Figma нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7003-2449" target="_blank" rel="noopener">Главный экран → IOS grid · «Актуальный размер HUD»</a></p>
+  </div>
+</article><article class="scr" id="UI-02" data-dec="skin" data-text="ui-02 плашка валют ивента всегда, вверху две валюты ивента: доллары и золото иконка долларов своя — не похожа на баксы кора тап по золоту открывает магазин ивента новые иконки долларов и золота рисуем. доллары не уходят ниже нуля (решение контура)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-02 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-02 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-01.jpg" aria-label="Открыть крупно: UI-02 — основа Block Boss"><img src="img/UI-01.jpg" alt="UI-02 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-02</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Плашка валют ивента</h3>
+    <p class="when">Всегда, вверху</p>
+    <ul class="chg"><li>Две валюты ивента: доллары и золото</li><li>Иконка долларов своя — не похожа на баксы кора</li><li>Тап по золоту открывает магазин ивента</li></ul>
+    <div class="sts"><span class="st">норма</span><span class="st">пульс при начислении</span><span class="st">покупки закрыты, если денег нет</span></div>
+    <p class="ex"><span>Пример</span>старт: 600 дол. и 5 зол.</p><p class="note">Новые иконки долларов и золота рисуем. Доллары не уходят ниже нуля (решение контура)</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7003-2449" target="_blank" rel="noopener">Главный экран → IOS grid · «Актуальный размер HUD»</a></p>
+  </div>
+</article><article class="scr" id="UI-03" data-dec="skin" data-text="ui-03 кубик: бросок, запас, таймер всегда, в центре нижней панели счётчик кубиков ивента вместо энергии кора свой таймер: +1 кубик за 8 минут потолок 30 не зависит от уровня героя ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-03 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-03 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-01.jpg" aria-label="Открыть крупно: UI-03 — основа Block Boss"><img src="img/UI-01.jpg" alt="UI-03 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-03</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Кубик: бросок, запас, таймер</h3>
+    <p class="when">Всегда, в центре нижней панели</p>
+    <ul class="chg"><li>Счётчик кубиков ивента вместо энергии кора</li><li>Свой таймер: +1 кубик за 8 минут</li><li>Потолок 30 не зависит от уровня героя</li></ul>
+    <div class="sts"><span class="st">есть ходы</span><span class="st">0 ходов — тап ведёт в покупку ходов</span><span class="st">полный запас</span><span class="st">сверх потолка</span><span class="st">режим «ловить дубль» в участке и у инспектора</span><span class="st">заперт в обучении</span></div>
+    <p class="ex"><span>Пример</span>«24/30 · +1 через 7:59», «42/30» после покупки</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7003-2449" target="_blank" rel="noopener">Главный экран → IOS grid · «Актуальный размер HUD»</a></p>
+  </div>
+</article><article class="scr" id="UI-04" data-dec="keep" data-text="ui-04 результат броска после броска кубики и выпавшие числа — как в коре нарисованы только дубли, обычный бросок — из билда ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-04.jpg" aria-label="Открыть крупно: UI-04 в прототипе"><img src="proto-web/UI-04.jpg" alt="UI-04 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-04.jpg" aria-label="Открыть крупно: UI-04 — основа Block Boss"><img src="img/UI-04.jpg" alt="UI-04 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-04</span><span class="pill keep">как есть</span><span class="match">основа: близко</span></header>
+    <h3>Результат броска</h3>
+    <p class="when">После броска</p>
+    <ul class="chg"><li>Кубики и выпавшие числа — как в коре</li><li>Нарисованы только дубли, обычный бросок — из билда</li></ul>
+    <div class="sts"><span class="st">обычный</span><span class="st">дубль</span></div>
+    <p class="ex"><span>Пример</span>3 + 3 — дубль</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=8561-481" target="_blank" rel="noopener">Главный экран → второй дубль (секция «Итерация 3»)</a></p>
+  </div>
+</article><article class="scr" id="UI-05" data-dec="keep" data-text="ui-05 стартовые награды — без плашки день 1, пока есть незабранные плашки и отложенного запаса нет награды за первые действия начисляются сразу, как награды миссий кора кубики — стандартный счётчик кора: число и время до следующего решение 07.10">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-05.jpg" aria-label="Открыть крупно: UI-05 в прототипе"><img src="proto-web/UI-05.jpg" alt="UI-05 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-05</span><span class="pill keep">как есть</span><span class="match">основа: нет</span></header>
+    <h3>Стартовые награды — без плашки</h3>
+    <p class="when">День 1, пока есть незабранные</p>
+    <ul class="chg"><li>Плашки и отложенного запаса нет</li><li>Награды за первые действия начисляются сразу, как награды миссий кора</li><li>Кубики — стандартный счётчик кора: число и время до следующего</li></ul>
+    <div class="sts"><span class="st">ждёт</span><span class="st">«+4 · первая точка» после выдачи</span></div>
+    <p class="ex"><span>Пример</span>+4 за точку, +4 за закупку, +6 за пробную посылку, +6 за поставку; выдаются при остатке ≤ 3</p><p class="note">Решение 07.10</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-06" data-dec="skin" data-text="ui-06 виджет билета (цель недели) всегда, вверху иконка джонни вместо иконки крысиных бегов очки к ближайшему рубежу и полоса прогресса метка «забрать», если в рубежах или пропуске ждёт награда тап открывает окно ивента в figma есть только иконка слота (`run`) и состояния таймера и нотификации; метки «забрать» и полосы нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-06 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-06 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-06.jpg" aria-label="Открыть крупно: UI-06 — основа Block Boss"><img src="img/UI-06.jpg" alt="UI-06 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-06</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Виджет билета (цель недели)</h3>
+    <p class="when">Всегда, вверху</p>
+    <ul class="chg"><li>Иконка Джонни вместо иконки Крысиных бегов</li><li>Очки к ближайшему рубежу и полоса прогресса</li><li>Метка «Забрать», если в рубежах или пропуске ждёт награда</li><li>Тап открывает окно ивента</li></ul>
+    <div class="sts"><span class="st">идёт к рубежу</span><span class="st">есть награда</span><span class="st">все рубежи взяты</span></div>
+    <p class="ex"><span>Пример</span>«120/375», дальше «420/800»</p><p class="note">В Figma есть только иконка слота (`Run`) и состояния таймера и нотификации; метки «Забрать» и полосы нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=13114-14323" target="_blank" rel="noopener">Главный экран → Описание состояний слота</a></p>
+  </div>
+</article><article class="scr" id="UI-07" data-dec="skin" data-text="ui-07 портрет джонни с уровнем всегда, вверху слева портрет джонни вместо аватара игрока уровень джонни и полоса опыта тап открывает карточку джонни ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-07 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-07 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-01.jpg" aria-label="Открыть крупно: UI-07 — основа Block Boss"><img src="img/UI-01.jpg" alt="UI-07 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-07</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Портрет Джонни с уровнем</h3>
+    <p class="when">Всегда, вверху слева</p>
+    <ul class="chg"><li>Портрет Джонни вместо аватара игрока</li><li>Уровень Джонни и полоса опыта</li><li>Тап открывает карточку Джонни</li></ul>
+    <div class="sts"><span class="st">обычный</span><span class="st">есть награда пропуска (точка)</span></div>
+    <p class="ex"><span>Пример</span>ур. 3, опыт 70/140</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7003-2449" target="_blank" rel="noopener">Главный экран → IOS grid · «Актуальный размер HUD»</a></p>
+  </div>
+</article><article class="scr" id="UI-08" data-dec="skin" data-text="ui-08 таймер и номер дня всегда, вверху виджет с таймером показывает «до полуночи 5 ч 12 м» добавляем номер дня «день 3/7» тап открывает «сегодня и неделя» «день 3/7» в макете нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-08 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-08 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-08.jpg" aria-label="Открыть крупно: UI-08 — основа Block Boss"><img src="img/UI-08.jpg" alt="UI-08 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-08</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Таймер и номер дня</h3>
+    <p class="when">Всегда, вверху</p>
+    <ul class="chg"><li>Виджет с таймером показывает «До полуночи 5 ч 12 м»</li><li>Добавляем номер дня «день 3/7»</li><li>Тап открывает «Сегодня и неделя»</li></ul>
+    <div class="sts"><span class="st">обычный</span><span class="st">последний час дня</span><span class="st">день 7</span></div>
+    <p class="ex"><span>Пример</span>день 3/7</p><p class="note">«день 3/7» в макете нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=12758-1018" target="_blank" rel="noopener">Главный экран → IOS grid · «Новые виджеты»</a></p>
+  </div>
+</article><article class="scr" id="UI-09" data-dec="skin" data-text="ui-09 модификаторы дня есть тренд, чёрная пятница, кредит или участок на hud — не список, а маленькая кнопка «×2» со счётчиком модификаторов пояснение — по тапу: тренд, «чёрная пятница», проценты кредита главная подсказка — на складе (ui-25) колонка круговых событий кора становится списком модификаторов дня [?] что это та же панель, что подсказка круга в коде, по макету не подтверждено">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-09.jpg" aria-label="Открыть крупно: UI-09 в прототипе"><img src="proto-web/UI-09.jpg" alt="UI-09 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-09.jpg" aria-label="Открыть крупно: UI-09 — основа Block Boss"><img src="img/UI-09.jpg" alt="UI-09 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-09</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Модификаторы дня</h3>
+    <p class="when">Есть тренд, Чёрная пятница, кредит или участок</p>
+    <ul class="chg"><li>На HUD — не список, а маленькая кнопка «×2» со счётчиком модификаторов</li><li>Пояснение — по тапу: тренд, «Чёрная пятница», проценты кредита</li><li>Главная подсказка — на складе (UI-25)</li><li>Колонка круговых событий кора становится списком модификаторов дня</li></ul>
+    <div class="sts"><span class="st">нет модификаторов — скрыта</span><span class="st">только хорошие</span><span class="st">только плохие</span><span class="st">оба</span></div>
+    <p class="ex"><span>Пример</span>«Джинсы ×2», «Чёрная пятница ×1,5», «−9 дол. за круг»</p><p class="note">[?] Что это та же панель, что подсказка круга в коде, по макету не подтверждено</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=5068-1815" target="_blank" rel="noopener">Главный экран → «Анимация событий справа»</a></p>
+  </div>
+</article><article class="scr" id="UI-10" data-dec="skin" data-text="ui-10 задания дня на hud всегда, две плашки две плашки: лёгкое и сложное задание дня с полосой выполнено — «забрать: +4 хода», тап забирает ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-10 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-10 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-01.jpg" aria-label="Открыть крупно: UI-10 — основа Block Boss"><img src="img/UI-01.jpg" alt="UI-10 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-10</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Задания дня на HUD</h3>
+    <p class="when">Всегда, две плашки</p>
+    <ul class="chg"><li>Две плашки: лёгкое и сложное задание дня с полосой</li><li>Выполнено — «Забрать: +4 хода», тап забирает</li></ul>
+    <div class="sts"><span class="st">в процессе</span><span class="st">готово — мигает</span><span class="st">забрано — скрыто</span></div>
+    <p class="ex"><span>Пример</span>день 1: «продай 12 шт.» → +4 хода; «поставка на 12+ очков» → +10 ходов</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7003-2449" target="_blank" rel="noopener">Главный экран → IOS grid · «Актуальный размер HUD»</a></p>
+  </div>
+</article><article class="scr" id="UI-11" data-dec="skin" data-text="ui-11 запас товара на hud есть хоть одна своя точка свёрнуто: общий запас и вместимость точек развёрнуто: запас по каждому товару товар в тренде подсвечен второй кадр — развёрнутый вид (11237:4420)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-11.jpg" aria-label="Открыть крупно: UI-11 в прототипе"><img src="proto-web/UI-11.jpg" alt="UI-11 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-11.jpg" aria-label="Открыть крупно: UI-11 — основа Block Boss"><img src="img/UI-11.jpg" alt="UI-11 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-11-b.jpg" aria-label="Открыть крупно: UI-11 — основа Block Boss"><img src="img/UI-11-b.jpg" alt="UI-11 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-11</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Запас товара на HUD</h3>
+    <p class="when">Есть хоть одна своя точка</p>
+    <ul class="chg"><li>Свёрнуто: общий запас и вместимость точек</li><li>Развёрнуто: запас по каждому товару</li><li>Товар в тренде подсвечен</li></ul>
+    <div class="sts"><span class="st">свёрнут</span><span class="st">развёрнут</span><span class="st">пусто</span></div>
+    <p class="ex"><span>Пример</span>«34/60»; «кола 12/22 · жвачка 22/38»</p><p class="note">Второй кадр — развёрнутый вид (11237:4420)</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=11237-2516" target="_blank" rel="noopener">Главный экран → IOS grid · «Прототип взаимодействия со статус баром складов»</a></p>
+  </div>
+</article><article class="scr" id="UI-12" data-dec="keep" data-text="ui-12 строка текущей клетки стоишь на точке, бизнесе, складе или в банке тексты под типы клеток ивента тап снова открывает окно клетки [?] отдельного макета строки клетки нет, это старый hud с кнопками «собрать навар / качнуть ларёк»">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-12 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-12 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-12.jpg" aria-label="Открыть крупно: UI-12 — основа Block Boss"><img src="img/UI-12.jpg" alt="UI-12 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-12</span><span class="pill keep">как есть</span><span class="match">основа: близко</span></header>
+    <h3>Строка текущей клетки</h3>
+    <p class="when">Стоишь на точке, бизнесе, складе или в банке</p>
+    <ul class="chg"><li>Тексты под типы клеток ивента</li><li>Тап снова открывает окно клетки</li></ul>
+    <div class="sts"><span class="st">доступна</span><span class="st">не по карману — серая</span><span class="st">заперта в обучении</span><span class="st">пульс после остановки</span></div>
+    <p class="ex"><span>Пример</span>«Жвачка · 60 дол. — открыть», «Прачечная · ур. 2», «Склад · закупка», «Банк · долг 300 дол.»</p><p class="note">[?] Отдельного макета строки клетки нет, это старый HUD с кнопками «Собрать навар / Качнуть ларёк»</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=3901-21" target="_blank" rel="noopener">Главный экран → main (старый HUD)</a></p>
+  </div>
+</article><article class="scr" id="UI-13" data-dec="mod" data-text="ui-13 нижнее меню всегда новая раскладка: такси, поставка, кубик, билет, магазин кнопка «поставка» меняет подпись по состоянию дня такси показывает цену в золоте или «с 3 дня» точки уведомлений на кнопках меню кора есть, раскладка ивента новая">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-13 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-13 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-01.jpg" aria-label="Открыть крупно: UI-13 — основа Block Boss"><img src="img/UI-01.jpg" alt="UI-13 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-13</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Нижнее меню</h3>
+    <p class="when">Всегда</p>
+    <ul class="chg"><li>Новая раскладка: такси, поставка, кубик, билет, магазин</li><li>Кнопка «Поставка» меняет подпись по состоянию дня</li><li>Такси показывает цену в золоте или «с 3 дня»</li><li>Точки уведомлений на кнопках</li></ul>
+    <div class="sts"><span class="st">Поставка: «Поставка» / горит / «Отправка завтра» / «Догнать» / «Итоги»</span><span class="st">Такси: «с 3 дня» / «1 зол.» / заперто в участке</span></div>
+    <p class="ex"><span>Пример</span>такси 1 зол. → 2 зол. → 4 зол.</p><p class="note">Меню кора есть, раскладка ивента новая</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7003-2449" target="_blank" rel="noopener">Главный экран → IOS grid · «Актуальный размер HUD»</a></p>
+  </div>
+</article><article class="scr" id="UI-14" data-dec="mod" data-text="ui-14 выход в кор всегда, в углу постоянная кнопка «← выход» на главном экране, правый верхний угол; прогресс сохраняется, возврат — через виджет ивента; во время хода заперта кнопка «в район» возвращает в кор, прогресс сохраняется в прототипе выхода нет вовсе основа из карты (рейд, «второй заход в режим», 8532:436) не подошла: это попап повторного входа в рейд, кнопки «назад» на нём нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><div class="shot empty muted"><span>В прототипе нет</span><small>В прототипе кнопки выхода в кор нет (так же в реестре ТЗ)</small></div></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-14</span><span class="pill mod">доработать</span><span class="match">основа: нет</span></header>
+    <h3>Выход в кор</h3>
+    <p class="when">Всегда, в углу</p>
+    <ul class="chg"><li>Постоянная кнопка «← Выход» на главном экране, правый верхний угол; прогресс сохраняется, возврат — через виджет ивента; во время хода заперта</li><li>Кнопка «В район» возвращает в кор, прогресс сохраняется</li><li>В прототипе выхода нет вовсе</li></ul>
+    <div class="sts"><span class="st">обычный</span><span class="st">во время хода заперта</span></div>
+    <p class="ex"><span>Пример</span>—</p><p class="note">Основа из карты (рейд, «второй заход в режим», 8532:436) не подошла: это попап повторного входа в рейд, кнопки «назад» на нём нет</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-15" data-dec="drop" data-text="ui-15 кнопки камеры «всё поле» / «к джонни» всегда, на поле убираем: кнопок «всё поле» / «к джонни» нет, камера как в коре две кнопки над полем: обзор всего поля и возврат к джонни обзорного режима камеры в коре не нашли; от кнопок можно отказаться">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><div class="shot empty muted"><span>В прототипе нет</span><small>Кнопки «Всё поле» / «К Джонни» есть в разметке (.map-controls), но на мобильной вёрстке скрыты (display:none в mobile.css)</small></div></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-15</span><span class="pill drop">не делаем</span><span class="match">основа: нет</span></header>
+    <h3>Кнопки камеры «Всё поле» / «К Джонни»</h3>
+    <p class="when">Всегда, на поле</p>
+    <ul class="chg"><li>Убираем: кнопок «Всё поле» / «К Джонни» нет, камера как в коре</li><li>Две кнопки над полем: обзор всего поля и возврат к Джонни</li></ul>
+    <div class="sts"><span class="st">обычный</span><span class="st">камера уже у Джонни</span></div>
+    <p class="ex"><span>Пример</span>—</p><p class="note">Обзорного режима камеры в коре не нашли; от кнопок можно отказаться</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-16" data-dec="keep" data-text="ui-16 тост короткие события без выбора тексты ивента в тосте кора макета тоста в figma не нашли, он есть в билде">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-16.jpg" aria-label="Открыть крупно: UI-16 в прототипе"><img src="proto-web/UI-16.jpg" alt="UI-16 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-16</span><span class="pill keep">как есть</span><span class="match">основа: нет</span></header>
+    <h3>Тост</h3>
+    <p class="when">Короткие события без выбора</p>
+    <ul class="chg"><li>Тексты ивента в тосте кора</li></ul>
+    <div class="sts"><span class="st">хорошее</span><span class="st">плохое</span></div>
+    <p class="ex"><span>Пример</span>«Точка твоя! Закупи товар на складе.», «Поставка уже ушла. Следующая — завтра.»</p><p class="note">Макета тоста в Figma не нашли, он есть в билде</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-17" data-dec="skin" data-text="ui-17 совет джонни один раз на тему, по действию портрет джонни вместо бабы нины реплика с крестиком над окном или по центру поля ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-17.jpg" aria-label="Открыть крупно: UI-17 в прототипе"><img src="proto-web/UI-17.jpg" alt="UI-17 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-17.jpg" aria-label="Открыть крупно: UI-17 — основа Block Boss"><img src="img/UI-17.jpg" alt="UI-17 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-17</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Совет Джонни</h3>
+    <p class="when">Один раз на тему, по действию</p>
+    <ul class="chg"><li>Портрет Джонни вместо бабы Нины</li><li>Реплика с крестиком над окном или по центру поля</li></ul>
+    <div class="sts"><span class="st">над окном</span><span class="st">отдельно на поле</span></div>
+    <p class="ex"><span>Пример</span>«Серые клетки — стройка. Пробегая мимо, ты подрабатываешь.»</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=13114-5931" target="_blank" rel="noopener">Тутор v2 → main (реплика бабы Нины, секция «Тултипы»)</a></p>
+  </div>
+</article><article class="scr" id="UI-18" data-dec="keep" data-text="ui-18 кнопка «?» в окнах в окнах клеток, поставки, магазина, ивента тексты подсказок под ивент ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-18.jpg" aria-label="Открыть крупно: UI-18 в прототипе"><img src="proto-web/UI-18.jpg" alt="UI-18 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-18.jpg" aria-label="Открыть крупно: UI-18 — основа Block Boss"><img src="img/UI-18.jpg" alt="UI-18 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-18</span><span class="pill keep">как есть</span><span class="match">основа: близко</span></header>
+    <h3>Кнопка «?» в окнах</h3>
+    <p class="when">В окнах клеток, поставки, магазина, ивента</p>
+    <ul class="chg"><li>Тексты подсказок под ивент</li></ul>
+    
+    <p class="ex"><span>Пример</span>«Сколько штук точка продаёт на каждом СТАРТЕ.»</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=11034-4635" target="_blank" rel="noopener">Точки, бизнес, склады, случай → Help</a></p>
+  </div>
+</article><article class="scr" id="UI-19" data-dec="skin" data-text="ui-19 подписи на клетках и всплывающие суммы на поле постоянно; суммы — при начислении подписи клеток: запас точки, цена свободной, сбор и уровень бизнеса, сумма джекпота значки «участок», «инспектор», «инкассатор», проверки и находки — новые всплывающие «+48 дол.», «−1 ход», «×1,5 сработал» [?] значков проверки, находки и «ажиотажа» в figma нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-19.jpg" aria-label="Открыть крупно: UI-19 в прототипе"><img src="proto-web/UI-19.jpg" alt="UI-19 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-19.jpg" aria-label="Открыть крупно: UI-19 — основа Block Boss"><img src="img/UI-19.jpg" alt="UI-19 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-19</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Подписи на клетках и всплывающие суммы</h3>
+    <p class="when">На поле постоянно; суммы — при начислении</p>
+    <ul class="chg"><li>Подписи клеток: запас точки, цена свободной, сбор и уровень бизнеса, сумма джекпота</li><li>Значки «Участок», «Инспектор», «Инкассатор», проверки и находки — новые</li><li>Всплывающие «+48 дол.», «−1 ход», «×1,5 сработал»</li></ul>
+    <div class="sts"><span class="st">своя</span><span class="st">чужая свободная</span><span class="st">под проверкой</span><span class="st">с находкой</span><span class="st">с «Ажиотажем»</span></div>
+    <p class="ex"><span>Пример</span>«8/14», «60 дол.», «50 дол. · ур. 2», «72 дол.»</p><p class="note">[?] Значков проверки, находки и «Ажиотажа» в Figma нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7235-5382" target="_blank" rel="noopener">Главный экран → IOS grid · «Цифры с ресурсами при прохождении по клеткам»</a></p>
+  </div>
+</article><article class="scr" id="UI-20" data-dec="keep" data-text="ui-20 полёт ресурсов любое начисление или трата иконки долларов, золота и кубиков ивента полёт товара в фуру и очков в билет ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-20.jpg" aria-label="Открыть крупно: UI-20 в прототипе"><img src="proto-web/UI-20.jpg" alt="UI-20 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-20.jpg" aria-label="Открыть крупно: UI-20 — основа Block Boss"><img src="img/UI-20.jpg" alt="UI-20 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-20</span><span class="pill keep">как есть</span><span class="match">основа: близко</span></header>
+    <h3>Полёт ресурсов</h3>
+    <p class="when">Любое начисление или трата</p>
+    <ul class="chg"><li>Иконки долларов, золота и кубиков ивента</li><li>Полёт товара в фуру и очков в билет</li></ul>
+    
+    <p class="ex"><span>Пример</span>—</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=5061-1799" target="_blank" rel="noopener">Главный экран → anim («Автоанимация»)</a></p>
+  </div>
+</article><article class="scr" id="UI-21" data-dec="new" data-text="ui-21 фишка джонни и реакции на поле модель джонни на поле вместо героя кора реакции: радость, танец, огорчение задача арта и анимации">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-01.jpg" aria-label="Открыть крупно: UI-21 в прототипе"><img src="proto-web/UI-01.jpg" alt="UI-21 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-21</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Фишка Джонни и реакции</h3>
+    <p class="when">На поле</p>
+    <ul class="chg"><li>Модель Джонни на поле вместо героя кора</li><li>Реакции: радость, танец, огорчение</li></ul>
+    <div class="sts"><span class="st">идёт</span><span class="st">стоит</span><span class="st">радость — награда</span><span class="st">танец — рубеж, рекордная фура</span><span class="st">огорчение — минус, штраф</span></div>
+    <p class="ex"><span>Пример</span>—</p><p class="note">Задача арта и анимации</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article></section><section class="grp" id="g1"><h2>Клетки поля<small>18</small></h2><article class="scr" id="UI-22" data-dec="skin" data-text="ui-22 точка: покупка остановка на свободной точке или тап по строке клетки одна кнопка «купить · 60 дол.» вместо «купить / отжать» товар точки, прибыль за круг и вместимость при нехватке — строка «не хватает 15 дол. · купить за 1 зол.» ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-22.jpg" aria-label="Открыть крупно: UI-22 в прототипе"><img src="proto-web/UI-22.jpg" alt="UI-22 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-22.jpg" aria-label="Открыть крупно: UI-22 — основа Block Boss"><img src="img/UI-22.jpg" alt="UI-22 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-22</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Точка: покупка</h3>
+    <p class="when">Остановка на свободной точке или тап по строке клетки</p>
+    <ul class="chg"><li>Одна кнопка «Купить · 60 дол.» вместо «Купить / Отжать»</li><li>Товар точки, прибыль за круг и вместимость</li><li>При нехватке — строка «Не хватает 15 дол. · купить за 1 зол.»</li></ul>
+    <div class="sts"><span class="st">хватает</span><span class="st">не хватает</span><span class="st">заперто в обучении</span></div>
+    <p class="ex"><span>Пример</span>Жвачка 60 дол.: 2 шт × 2 дол. = 4 дол. за круг, вместимость 8 шт</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=376-287" target="_blank" rel="noopener">Точки, бизнес, склады, случай → main («Купить / отжать»)</a></p>
+  </div>
+</article><article class="scr" id="UI-23" data-dec="mod" data-text="ui-23 своя точка: прокачка и улучшение остановка на своей точке одна кнопка прокачки вместо двух веток: шаги по очереди «продажи → запас» уровни 1–7 и строка «улучшить до «магазина»» с новым товаром полоса запаса и прибыль за круг плашка проверки инспектора, если точка под проверкой [?] умеет ли окно точки менять товар при улучшении — вопрос к разработке">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-23.jpg" aria-label="Открыть крупно: UI-23 в прототипе"><img src="proto-web/UI-23.jpg" alt="UI-23 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-23.jpg" aria-label="Открыть крупно: UI-23 — основа Block Boss"><img src="img/UI-23.jpg" alt="UI-23 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-23</span><span class="pill mod">доработать</span><span class="match">основа: точно</span></header>
+    <h3>Своя точка: прокачка и улучшение</h3>
+    <p class="when">Остановка на своей точке</p>
+    <ul class="chg"><li>Одна кнопка прокачки вместо двух веток: шаги по очереди «продажи → запас»</li><li>Уровни 1–7 и строка «Улучшить до «Магазина»» с новым товаром</li><li>Полоса запаса и прибыль за круг</li><li>Плашка проверки инспектора, если точка под проверкой</li></ul>
+    <div class="sts"><span class="st">шаг доступен</span><span class="st">не хватает</span><span class="st">ур. 7 — ждёт дня</span><span class="st">улучшение доступно</span><span class="st">тир 3 — максимум</span><span class="st">заперто в обучении</span><span class="st">под проверкой</span></div>
+    <p class="ex"><span>Пример</span>шаги 35 / 25 / 70 / 50 / 105 / 75 дол.; «Улучшить до «Магазина» · 500 дол., с дня 2, новый товар — сигареты»</p><p class="note">[?] Умеет ли окно точки менять товар при улучшении — вопрос к разработке</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=1435-242" target="_blank" rel="noopener">Точки, бизнес, склады, случай → Point</a></p>
+  </div>
+</article><article class="scr" id="UI-24" data-dec="skin" data-text="ui-24 бизнес: покупка, прокачка, улучшение остановка на бизнесе доход за проход и за остановку ×3, «окупится за 12 кругов» прокачка сбора до ур. 3 улучшение до «сети» и «корпорации» второй кадр — свой бизнес с уровнями дохода (7208:2038)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-24.jpg" aria-label="Открыть крупно: UI-24 в прототипе"><img src="proto-web/UI-24.jpg" alt="UI-24 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-24.jpg" aria-label="Открыть крупно: UI-24 — основа Block Boss"><img src="img/UI-24.jpg" alt="UI-24 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-24-b.jpg" aria-label="Открыть крупно: UI-24 — основа Block Boss"><img src="img/UI-24-b.jpg" alt="UI-24 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-24</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Бизнес: покупка, прокачка, улучшение</h3>
+    <p class="when">Остановка на бизнесе</p>
+    <ul class="chg"><li>Доход за проход и за остановку ×3, «окупится за 12 кругов»</li><li>Прокачка сбора до ур. 3</li><li>Улучшение до «Сети» и «Корпорации»</li></ul>
+    <div class="sts"><span class="st">свободный</span><span class="st">свой, ур. 1–3</span><span class="st">улучшение с дня N</span><span class="st">максимум</span><span class="st">под проверкой</span></div>
+    <p class="ex"><span>Пример</span>Прачечная 250 дол.: 50 / 150 дол., дальше 80 / 240; прокачки 360 и 580 дол.</p><p class="note">Второй кадр — свой бизнес с уровнями дохода (7208:2038)</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=1562-165" target="_blank" rel="noopener">Точки, бизнес, склады, случай → main (покупка бизнеса)</a></p>
+  </div>
+</article><article class="scr" id="UI-25" data-dec="mod" data-text="ui-25 склад: закупка в точки остановка на складе (клетки 6, 10, 24, 30) склад показывает, что выгоднее купить сегодня: товар дня в зелёной рамке «выгодно сегодня · ×2», список по выгоде склад не хранит товар, а закупает его сразу в свои точки строка на товар: запас / вместимость, продажи за круг, цена, «+1 · 4 дол.» с удержанием внизу «закупиться на точки» или «на все — самое выгодное» метки тренда и скидки джонни, учебный резерв макет «покупай товары для точек» уже почти закупка ивента. клетки 19 и 34 отданы под «шанс»">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-25.jpg" aria-label="Открыть крупно: UI-25 в прототипе"><img src="proto-web/UI-25.jpg" alt="UI-25 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-25.jpg" aria-label="Открыть крупно: UI-25 — основа Block Boss"><img src="img/UI-25.jpg" alt="UI-25 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-25</span><span class="pill mod">доработать</span><span class="match">основа: точно</span></header>
+    <h3>Склад: закупка в точки</h3>
+    <p class="when">Остановка на складе (клетки 6, 10, 24, 30)</p>
+    <ul class="chg"><li>Склад показывает, что выгоднее купить сегодня: товар дня в зелёной рамке «выгодно сегодня · ×2», список по выгоде</li><li>Склад не хранит товар, а закупает его сразу в свои точки</li><li>Строка на товар: запас / вместимость, продажи за круг, цена, «+1 · 4 дол.» с удержанием</li><li>Внизу «Закупиться на точки» или «На все — самое выгодное»</li><li>Метки тренда и скидки Джонни, учебный резерв</li></ul>
+    <div class="sts"><span class="st">нет своих точек</span><span class="st">есть место</span><span class="st">всё заполнено</span><span class="st">не хватает денег</span><span class="st">тренд</span><span class="st">учебный резерв «250 дол. отложено на бизнес»</span></div>
+    <p class="ex"><span>Пример</span>кола: закупка 4 дол., продажа 7 дол.; жвачка 2 / 4 дол.; скидка Джонни −10% с ур. 2</p><p class="note">Макет «Покупай товары для точек» уже почти закупка ивента. Клетки 19 и 34 отданы под «Шанс»</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=14657-6762" target="_blank" rel="noopener">Точки, бизнес, склады, случай → v2 («Склад» 24.02.26)</a></p>
+  </div>
+</article><article class="scr" id="UI-26" data-dec="mod" data-text="ui-26 участок: выбор остановка на клетке 15 на фоне — мерцание сирены: готовый эффект block boss (тюрьма → v1 police lights) реплика полицейского и сумма штрафа три кнопки вместо двух: «заплатить 150 дол.» / «откупиться 3 зол.» / «ловить дубль» строка «уйдёшь в минус на n дол.», если не хватает [?] в макете тюрьмы два пути, нет «откупиться за золото». доллары не уходят ниже нуля — поведение при нехватке опишет тз разработчикам">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-26.jpg" aria-label="Открыть крупно: UI-26 в прототипе"><img src="proto-web/UI-26.jpg" alt="UI-26 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-26.jpg" aria-label="Открыть крупно: UI-26 — основа Block Boss"><img src="img/UI-26.jpg" alt="UI-26 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-26</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Участок: выбор</h3>
+    <p class="when">Остановка на клетке 15</p>
+    <ul class="chg"><li>На фоне — мерцание сирены: готовый эффект Block Boss (Тюрьма → v1 police lights)</li><li>Реплика полицейского и сумма штрафа</li><li>Три кнопки вместо двух: «Заплатить 150 дол.» / «Откупиться 3 зол.» / «Ловить дубль»</li><li>Строка «уйдёшь в минус на N дол.», если не хватает</li></ul>
+    <div class="sts"><span class="st">хватает</span><span class="st">не хватает</span><span class="st">золота не хватает — кнопка серая</span></div>
+    <p class="ex"><span>Пример</span>штраф: день 1 — 20 дол., день 3 — 150 дол., день 7 — 6000 дол.; 3 попытки</p><p class="note">[?] В макете тюрьмы два пути, нет «Откупиться за золото». Доллары не уходят ниже нуля — поведение при нехватке опишет ТЗ разработчикам</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=11568-1285" target="_blank" rel="noopener">Тюрьма → IOS grid («плати или выкидывай дубль»)</a></p>
+  </div>
+</article><article class="scr" id="UI-27" data-dec="keep" data-text="ui-27 участок: ловим дубль выбрал «ловить дубль» штраф в долларах ивента кубик в режиме участка второй кадр — промах (jail_fail_1, 13459:2569)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-27.jpg" aria-label="Открыть крупно: UI-27 в прототипе"><img src="proto-web/UI-27.jpg" alt="UI-27 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-27.jpg" aria-label="Открыть крупно: UI-27 — основа Block Boss"><img src="img/UI-27.jpg" alt="UI-27 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-27-b.jpg" aria-label="Открыть крупно: UI-27 — основа Block Boss"><img src="img/UI-27-b.jpg" alt="UI-27 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-27</span><span class="pill keep">как есть</span><span class="match">основа: точно</span></header>
+    <h3>Участок: ловим дубль</h3>
+    <p class="when">Выбрал «Ловить дубль»</p>
+    <ul class="chg"><li>Штраф в долларах ивента</li><li>Кубик в режиме участка</li></ul>
+    <div class="sts"><span class="st">попытка 3/3…1/3</span><span class="st">дубль — свободен</span><span class="st">три промаха — штраф списан</span></div>
+    <p class="ex"><span>Пример</span>«Попыток: 2», «Выписали 150 дол.»</p><p class="note">Второй кадр — промах (Jail_Fail_1, 13459:2569)</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=13459-2435" target="_blank" rel="noopener">Тюрьма → Jail_Start</a></p>
+  </div>
+</article><article class="scr" id="UI-28" data-dec="new" data-text="ui-28 инспектор: рассылка проверок остановка на клетке 5 клетка инспектора: 1–3 проверки вылетают на свои точки и бизнесы на клетке висит значок проверки тост о рассылке ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-28.jpg" aria-label="Открыть крупно: UI-28 в прототипе"><img src="proto-web/UI-28.jpg" alt="UI-28 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-28</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Инспектор: рассылка проверок</h3>
+    <p class="when">Остановка на клетке 5</p>
+    <ul class="chg"><li>Клетка инспектора: 1–3 проверки вылетают на свои точки и бизнесы</li><li>На клетке висит значок проверки</li><li>Тост о рассылке</li></ul>
+    <div class="sts"><span class="st">разослал N</span><span class="st">все три уже висят</span><span class="st">проверять некого</span></div>
+    <p class="ex"><span>Пример</span>до 3 проверок одновременно</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-29" data-dec="mod" data-text="ui-29 инспектор: попап и проверка в карточке остановка на клетке с проверкой или открытие её карточки попап как в участке: «заплатить 80 дол.» / «откупиться 3 зол.» / «ловить дубль» в карточке точки — плашка «идёт проверка — точка не торгует» арт злого инспектора на половину картинки, остальные кнопки заперты кадры переиспользуют основы участка (ui-26) и точки (ui-23, 1435:242). плашки «идёт проверка» в figma нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-29.jpg" aria-label="Открыть крупно: UI-29 в прототипе"><img src="proto-web/UI-29.jpg" alt="UI-29 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-26.jpg" aria-label="Открыть крупно: UI-29 — основа Block Boss"><img src="img/UI-26.jpg" alt="UI-29 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-23.jpg" aria-label="Открыть крупно: UI-29 — основа Block Boss"><img src="img/UI-23.jpg" alt="UI-29 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-29</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Инспектор: попап и проверка в карточке</h3>
+    <p class="when">Остановка на клетке с проверкой или открытие её карточки</p>
+    <ul class="chg"><li>Попап как в участке: «Заплатить 80 дол.» / «Откупиться 3 зол.» / «Ловить дубль»</li><li>В карточке точки — плашка «Идёт проверка — точка не торгует»</li><li>Арт злого инспектора на половину картинки, остальные кнопки заперты</li></ul>
+    <div class="sts"><span class="st">попап</span><span class="st">карточка с проверкой</span><span class="st">спор — осталось попыток N</span><span class="st">проверка снята</span></div>
+    <p class="ex"><span>Пример</span>штраф = половина полицейского, минимум 10 дол.: день 3 — 80 дол.</p><p class="note">Кадры переиспользуют основы участка (UI-26) и точки (UI-23, 1435:242). Плашки «Идёт проверка» в Figma нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=11568-1285" target="_blank" rel="noopener">Тюрьма → IOS grid (попап — как в участке)</a></p>
+  </div>
+</article><article class="scr" id="UI-30" data-dec="skin" data-text="ui-30 джекпот остановка на клетке 25 заголовок «джекпот! +n дол. — всё, что город собрал штрафами» подпись «копит 72 дол. за круг» не путать с копилкой кора — отсюда название ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-30.jpg" aria-label="Открыть крупно: UI-30 в прототипе"><img src="proto-web/UI-30.jpg" alt="UI-30 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-30.jpg" aria-label="Открыть крупно: UI-30 — основа Block Boss"><img src="img/UI-30.jpg" alt="UI-30 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-30</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Джекпот</h3>
+    <p class="when">Остановка на клетке 25</p>
+    <ul class="chg"><li>Заголовок «Джекпот! +N дол. — всё, что город собрал штрафами»</li><li>Подпись «копит 72 дол. за круг»</li><li>Не путать с копилкой кора — отсюда название</li></ul>
+    <div class="sts"><span class="st">сумма есть</span><span class="st">пусто</span></div>
+    <p class="ex"><span>Пример</span>+8 × день² за круг: день 3 — 72 дол., плюс все штрафы</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=16433-2753" target="_blank" rel="noopener">Экраны награды → 1 («твоя награда / Забрать»)</a></p>
+  </div>
+</article><article class="scr" id="UI-31" data-dec="new" data-text="ui-31 инкассатор и находки остановка на клетке 35; находка — при остановке на клетке с ней «ажиотажа» нет — мешок всегда разлетается по всем клеткам, свободным и занятым пачки разлетаются по закрытым клеткам, на клетке значок находки тост «мешок лопнул! 86 дол. разлетелось по стройке» ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-31.jpg" aria-label="Открыть крупно: UI-31 в прототипе"><img src="proto-web/UI-31.jpg" alt="UI-31 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-31</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Инкассатор и находки</h3>
+    <p class="when">Остановка на клетке 35; находка — при остановке на клетке с ней</p>
+    <ul class="chg"><li>«Ажиотажа» нет — мешок всегда разлетается по всем клеткам, свободным и занятым</li><li>Пачки разлетаются по закрытым клеткам, на клетке значок находки</li><li>Тост «Мешок лопнул! 86 дол. разлетелось по стройке»</li></ul>
+    <div class="sts"><span class="st">деньги</span><span class="st">ходы</span><span class="st">золото</span><span class="st">«Ажиотаж»</span></div>
+    <p class="ex"><span>Пример</span>6 пачек по (5…19) дол. × день; 8% — 1 зол.; 25% — +2 хода</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-32" data-dec="mod" data-text="ui-32 события стройки остановка на закрытой клетке компактная плашка над кубиком (quickmessagescreen кора) вместо окна с «ок» закрывать не нужно — следующий бросок её убирает тост с текстом события и суммой всплывающая сумма на клетке в реестре основа — тост; макет «случай» — это блокирующий вариант. кадр общий с ui-38">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-32.jpg" aria-label="Открыть крупно: UI-32 в прототипе"><img src="proto-web/UI-32.jpg" alt="UI-32 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-38.jpg" aria-label="Открыть крупно: UI-32 — основа Block Boss"><img src="img/UI-38.jpg" alt="UI-32 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-32</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>События стройки</h3>
+    <p class="when">Остановка на закрытой клетке</p>
+    <ul class="chg"><li>Компактная плашка над кубиком (QuickMessageScreen кора) вместо окна с «Ок»</li><li>Закрывать не нужно — следующий бросок её убирает</li><li>Тост с текстом события и суммой</li><li>Всплывающая сумма на клетке</li></ul>
+    <div class="sts"><span class="st">плюс</span><span class="st">минус</span><span class="st">ход</span><span class="st">товар</span><span class="st">тренд</span></div>
+    <p class="ex"><span>Пример</span>«Подработал на стройке грузчиком: +18 дол.», «Кристалл в асфальте: +1 зол.»</p><p class="note">В реестре основа — тост; макет «Случай» — это блокирующий вариант. Кадр общий с UI-38</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=463-4" target="_blank" rel="noopener">Точки, бизнес, склады, случай → main («Случай», хорошее)</a></p>
+  </div>
+</article><article class="scr" id="UI-33" data-dec="new" data-text="ui-33 закрытая улица на поле улицы 2 и 3 до дней 3 и 5 состояние «стройка» для клеток закрытой улицы монетка за проход открытие улицы — в утреннем окне ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-33.jpg" aria-label="Открыть крупно: UI-33 в прототипе"><img src="proto-web/UI-33.jpg" alt="UI-33 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-33</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Закрытая улица на поле</h3>
+    <p class="when">Улицы 2 и 3 до дней 3 и 5</p>
+    <ul class="chg"><li>Состояние «стройка» для клеток закрытой улицы</li><li>Монетка за проход</li><li>Открытие улицы — в утреннем окне</li></ul>
+    <div class="sts"><span class="st">закрыта</span><span class="st">открывается — анимация</span><span class="st">открыта</span></div>
+    <p class="ex"><span>Пример</span>проход: 1 дол. × уровень Джонни за клетку</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-34" data-dec="new" data-text="ui-34 банк остановка на клетке 20 с дня 3 список кредитов: сумма, процент за круг, просрочки n из 2, «погасить» итог процентов и «сколько точек заберут» предложение нового кредита: «взять 300 дол. · 3 зол.» банка и кредитов в figma нет; каркас — универсальное модальное окно. банк ужесточаем по решению баланса">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-34.jpg" aria-label="Открыть крупно: UI-34 в прототипе"><img src="proto-web/UI-34.jpg" alt="UI-34 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-34</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Банк</h3>
+    <p class="when">Остановка на клетке 20 с дня 3</p>
+    <ul class="chg"><li>Список кредитов: сумма, процент за круг, просрочки N из 2, «Погасить»</li><li>Итог процентов и «сколько точек заберут»</li><li>Предложение нового кредита: «Взять 300 дол. · 3 зол.»</li></ul>
+    <div class="sts"><span class="st">кредитов нет</span><span class="st">1–3 кредита</span><span class="st">новый не дадут</span><span class="st">открыт издалека — только погашение</span></div>
+    <p class="ex"><span>Пример</span>Обычный: от 300 дол., 3% за круг, 3 зол.; Рисковый: от 1000 дол., 5%, 10 зол.; Кабальный: от 3000 дол., 8%, 30 зол.</p><p class="note">Банка и кредитов в Figma нет; каркас — универсальное модальное окно. Банк ужесточаем по решению баланса</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-35" data-dec="skin" data-text="ui-35 коллекторы: просрочка долларов не хватает на процент — триггер уточнит тз разработчикам долг и процент за круг, «выйди в плюс до полуночи» кнопки «закрыть долг · n зол.» / «понял» [?] доллары не уходят ниже нуля — формулировку «в минусе» и триггер окна переопределит тз разработчикам">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-35.jpg" aria-label="Открыть крупно: UI-35 в прототипе"><img src="proto-web/UI-35.jpg" alt="UI-35 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-35.jpg" aria-label="Открыть крупно: UI-35 — основа Block Boss"><img src="img/UI-35.jpg" alt="UI-35 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-35</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Коллекторы: просрочка</h3>
+    <p class="when">Долларов не хватает на процент — триггер уточнит ТЗ разработчикам</p>
+    <ul class="chg"><li>Долг и процент за круг, «Выйди в плюс до полуночи»</li><li>Кнопки «Закрыть долг · N зол.» / «Понял»</li></ul>
+    <div class="sts"><span class="st">первая просрочка</span><span class="st">следующая — изъятие</span></div>
+    <p class="ex"><span>Пример</span>«Процент съел 9 дол.»</p><p class="note">[?] Доллары не уходят ниже нуля — формулировку «в минусе» и триггер окна переопределит ТЗ разработчикам</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=2492-780" target="_blank" rel="noopener">Универсальное модальное окно → 0 («Заплатить 3000»)</a></p>
+  </div>
+</article><article class="scr" id="UI-36" data-dec="skin" data-text="ui-36 коллекторы: изъятие полночь, две просрочки какие точки забрали и за какой кредит сколько в них вложено и сколько долгов осталось одна кнопка «понял» ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-36.jpg" aria-label="Открыть крупно: UI-36 в прототипе"><img src="proto-web/UI-36.jpg" alt="UI-36 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-36.jpg" aria-label="Открыть крупно: UI-36 — основа Block Boss"><img src="img/UI-36.jpg" alt="UI-36 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-36</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Коллекторы: изъятие</h3>
+    <p class="when">Полночь, две просрочки</p>
+    <ul class="chg"><li>Какие точки забрали и за какой кредит</li><li>Сколько в них вложено и сколько долгов осталось</li><li>Одна кнопка «Понял»</li></ul>
+    <div class="sts"><span class="st">одна точка</span><span class="st">несколько</span></div>
+    <p class="ex"><span>Пример</span>«Забрали Жвачку и Колу, вложено 410 дол.»</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=2492-612" target="_blank" rel="noopener">Универсальное модальное окно → 2 (одна кнопка)</a></p>
+  </div>
+</article><article class="scr" id="UI-37" data-dec="mod" data-text="ui-37 такси кнопка такси, с дня 3 цена поездки в золоте, удваивается за каждую поездку в день три цели: ближайший склад, старт, банк в коре поездки восстанавливаются — здесь нет второй кадр — покупка поездки (7842:1485). золото или поездки кора — открытый вопрос">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-37.jpg" aria-label="Открыть крупно: UI-37 в прототипе"><img src="proto-web/UI-37.jpg" alt="UI-37 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-37.jpg" aria-label="Открыть крупно: UI-37 — основа Block Boss"><img src="img/UI-37.jpg" alt="UI-37 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-37-b.jpg" aria-label="Открыть крупно: UI-37 — основа Block Boss"><img src="img/UI-37-b.jpg" alt="UI-37 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-37</span><span class="pill mod">доработать</span><span class="match">основа: точно</span></header>
+    <h3>Такси</h3>
+    <p class="when">Кнопка такси, с дня 3</p>
+    <ul class="chg"><li>Цена поездки в золоте, удваивается за каждую поездку в день</li><li>Три цели: ближайший склад, старт, банк</li><li>В коре поездки восстанавливаются — здесь нет</li></ul>
+    <div class="sts"><span class="st">до дня 3 — тост</span><span class="st">хватает золота</span><span class="st">не хватает</span><span class="st">в участке нельзя</span></div>
+    <p class="ex"><span>Пример</span>1 зол., потом 2, 4; сброс в полночь</p><p class="note">Второй кадр — покупка поездки (7842:1485). Золото или поездки кора — открытый вопрос</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7822-144" target="_blank" rel="noopener">Такси → раздел поездки</a></p>
+  </div>
+</article><article class="scr" id="UI-38" data-dec="skin" data-text="ui-38 шанс остановка на клетке 19 или 34 карта из фиксированной колоды 16 карт: картинка, текст исхода, сумма без выбора, коллекции, модификации и вращения колода с перевесом хороших карт второй кадр — плохой исход (446:455). нужен свой пул событий ивента — вопрос к разработке">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-38.jpg" aria-label="Открыть крупно: UI-38 в прототипе"><img src="proto-web/UI-38.jpg" alt="UI-38 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-38.jpg" aria-label="Открыть крупно: UI-38 — основа Block Boss"><img src="img/UI-38.jpg" alt="UI-38 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-38-b.jpg" aria-label="Открыть крупно: UI-38 — основа Block Boss"><img src="img/UI-38-b.jpg" alt="UI-38 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-38</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Шанс</h3>
+    <p class="when">Остановка на клетке 19 или 34</p>
+    <ul class="chg"><li>Карта из фиксированной колоды 16 карт: картинка, текст исхода, сумма</li><li>Без выбора, коллекции, модификации и вращения</li><li>Колода с перевесом хороших карт</li></ul>
+    <div class="sts"><span class="st">хорошая</span><span class="st">плохая</span></div>
+    <p class="ex"><span>Пример</span>«Нашёл в старых кроссовках 70 дол.», «Кофе на вынос: +3 хода»</p><p class="note">Второй кадр — плохой исход (446:455). Нужен свой пул событий ивента — вопрос к разработке</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=463-4" target="_blank" rel="noopener">Точки, бизнес, склады, случай → main («Случай», хорошее)</a></p>
+  </div>
+</article><article class="scr" id="UI-39" data-dec="skin" data-text="ui-39 дубль: продажи на старте ×2 дубль, если у джонни открыт перк ур. 5 дубль всегда даёт доллары: круговой доход ×2, без перка джонни плашка «дубль! продажи на старте ×2» вместо бонуса кора ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><div class="shot empty muted"><span>В прототипе нет</span><small>Отдельного окна или плашки нет: при дубле с перком ур. 5 доход на старте просто удваивается в обычной всплывающей сумме</small></div></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-39.jpg" aria-label="Открыть крупно: UI-39 — основа Block Boss"><img src="img/UI-39.jpg" alt="UI-39 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-39</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Дубль: продажи на старте ×2</h3>
+    <p class="when">Дубль, если у Джонни открыт перк ур. 5</p>
+    <ul class="chg"><li>Дубль всегда даёт доллары: круговой доход ×2, без перка Джонни</li><li>Плашка «Дубль! Продажи на старте ×2» вместо бонуса кора</li></ul>
+    
+    <p class="ex"><span>Пример</span>перк Джонни на 240 опыта</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=8561-1092" target="_blank" rel="noopener">Главный экран → первый дубль (секция «Итерация 3»)</a></p>
+  </div>
+</article></section><section class="grp" id="g2"><h2>Поставка и товары<small>4</small></h2><article class="scr" id="UI-40" data-dec="new" data-text="ui-40 поставка (фура) кнопка «поставка», раз в день, с любой клетки анимация: контейнер наполняется ящиками, как в прототипе (parcel-fill.js) сверху очки фуры, три звезды, вердикт и «максимум сегодня ≈ 55» фура n/6 мест, по k шт. на место; список товаров с − / + «ещё место в фуре · 2 зол.» внизу «заполнить» и «отправить · +55»; после — полёт в билет, рубеж, уровень ближайший референс строки товара — склад v2 (14657:6762)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-40.jpg" aria-label="Открыть крупно: UI-40 в прототипе"><img src="proto-web/UI-40.jpg" alt="UI-40 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-40</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Поставка (фура)</h3>
+    <p class="when">Кнопка «Поставка», раз в день, с любой клетки</p>
+    <ul class="chg"><li>Анимация: контейнер наполняется ящиками, как в прототипе (parcel-fill.js)</li><li>Сверху очки фуры, три звезды, вердикт и «максимум сегодня ≈ 55»</li><li>Фура N/6 мест, по k шт. на место; список товаров с − / +</li><li>«Ещё место в фуре · 2 зол.»</li><li>Внизу «Заполнить» и «Отправить · +55»; после — полёт в билет, рубеж, уровень</li></ul>
+    <div class="sts"><span class="st">пустая</span><span class="st">слабая / неплохая / отличная / рекорд</span><span class="st">нет товара на место</span><span class="st">куплено доп. место</span><span class="st">уже отправлена — тост</span></div>
+    <p class="ex"><span>Пример</span>день 1: 6 мест по 1 шт., норма 55; день 3: по 4 шт., норма 100; доп. место 2 зол., дальше ×2</p><p class="note">Ближайший референс строки товара — склад v2 (14657:6762)</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-41" data-dec="new" data-text="ui-41 пробная посылка день 1, после первой закупки шаг 1: «положи товар в посылку» — тап по товару, он летит в ящик шаг 2: «пацаны приняли груз!» с приростом очков и полосой к билету шаг 3: «больше груза — больше очков» со стрелкой на поставку ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-41.jpg" aria-label="Открыть крупно: UI-41 в прототипе"><img src="proto-web/UI-41.jpg" alt="UI-41 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-41</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Пробная посылка</h3>
+    <p class="when">День 1, после первой закупки</p>
+    <ul class="chg"><li>Шаг 1: «Положи товар в посылку» — тап по товару, он летит в ящик</li><li>Шаг 2: «Пацаны приняли груз!» с приростом очков и полосой к билету</li><li>Шаг 3: «Больше груза — больше очков» со стрелкой на поставку</li></ul>
+    <div class="sts"><span class="st">выбор</span><span class="st">результат</span><span class="st">дальше — поставка дня</span></div>
+    <p class="ex"><span>Пример</span>кола +9 очков, жвачка +6; «9 / 375 на билет»</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-42" data-dec="new" data-text="ui-42 догоняем день поставка сегодня ушла, а за прошлые дни их меньше номера дня режим окна поставки: заголовок «догоняем день» k и норма пропущенного дня первая догоняющая — бесплатно ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-42.jpg" aria-label="Открыть крупно: UI-42 в прототипе"><img src="proto-web/UI-42.jpg" alt="UI-42 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-42</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Догоняем день</h3>
+    <p class="when">Поставка сегодня ушла, а за прошлые дни их меньше номера дня</p>
+    <ul class="chg"><li>Режим окна поставки: заголовок «Догоняем день»</li><li>k и норма пропущенного дня</li><li>Первая догоняющая — бесплатно</li></ul>
+    <div class="sts"><span class="st">бесплатная</span><span class="st">нужен оффер «Догон»</span></div>
+    <p class="ex"><span>Пример</span>пропущен день 2: по 2 шт. на место, норма 75</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-43" data-dec="skin" data-text="ui-43 оффер «догон» вторая и дальнейшие догоняющие поставки «пропущено поставок: 2» поставки за пропущенные дни до конца недели + 10 ходов шаблон оффера с таймером и плашкой выгоды ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-43.jpg" aria-label="Открыть крупно: UI-43 в прототипе"><img src="proto-web/UI-43.jpg" alt="UI-43 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-43.jpg" aria-label="Открыть крупно: UI-43 — основа Block Boss"><img src="img/UI-43.jpg" alt="UI-43 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-43</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Оффер «Догон»</h3>
+    <p class="when">Вторая и дальнейшие догоняющие поставки</p>
+    <ul class="chg"><li>«Пропущено поставок: 2»</li><li>Поставки за пропущенные дни до конца недели + 10 ходов</li><li>Шаблон оффера с таймером и плашкой выгоды</li></ul>
+    
+    <p class="ex"><span>Пример</span>249 ₽</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=12484-1337" target="_blank" rel="noopener">Офферы → info/big</a></p>
+  </div>
+</article></section><section class="grp" id="g3"><h2>Прогресс, рубежи, рейтинг, задания<small>11</small></h2><article class="scr" id="UI-44" data-dec="new" data-text="ui-44 анимация пачки карточек джонни сразу при взятии рубежа пачка карточек выезжает и раскрывается веером карточки джонни ложатся в стопку, счётчик «×n» растёт тап — пропустить, в конце «забрать» открытие дела с пропуском есть; веера и счётчика «×n» нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><div class="shot empty muted"><span>В прототипе нет</span><small>Анимации пачки карточек нет: рубеж показывает обычное окно (см. UI-47)</small></div></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-44.jpg" aria-label="Открыть крупно: UI-44 — основа Block Boss"><img src="img/UI-44.jpg" alt="UI-44 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-44</span><span class="pill new">новое</span><span class="match">основа: близко</span></header>
+    <h3>Анимация пачки карточек Джонни</h3>
+    <p class="when">Сразу при взятии рубежа</p>
+    <ul class="chg"><li>Пачка карточек выезжает и раскрывается веером</li><li>Карточки Джонни ложатся в стопку, счётчик «×N» растёт</li><li>Тап — пропустить, в конце «Забрать»</li></ul>
+    <div class="sts"><span class="st">первая пачка — Джонни впервые</span><span class="st">дубликаты</span><span class="st">шарды вместо карточек</span><span class="st">пропуск по тапу</span></div>
+    <p class="ex"><span>Пример</span>рубеж 375 — ×2, 800 — ×3, 1350 — ×5</p><p class="note">Открытие дела с пропуском есть; веера и счётчика «×N» нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=3475-3960" target="_blank" rel="noopener">Лутбоксы → 1000000096 («Открыть»)</a></p>
+  </div>
+</article><article class="scr" id="UI-45" data-dec="mod" data-text="ui-45 окно ивента тап по виджету билета или кнопке билета в меню одно окно вместо хаба с вкладками: арт джонни, цель, таймер, очки и место три кнопки: «билет и рубежи», «пропуск», «топ» точка «есть награда» на кнопке, «?» — правила главный приз — карточка джонни, как у дяди васи основа — окно ивента дяди васи; стартовый попап бега (13122:3569) тоже близок">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-45.jpg" aria-label="Открыть крупно: UI-45 в прототипе"><img src="proto-web/UI-45.jpg" alt="UI-45 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-45.jpg" aria-label="Открыть крупно: UI-45 — основа Block Boss"><img src="img/UI-45.jpg" alt="UI-45 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-45</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Окно ивента</h3>
+    <p class="when">Тап по виджету билета или кнопке билета в меню</p>
+    <ul class="chg"><li>Одно окно вместо хаба с вкладками: арт Джонни, цель, таймер, очки и место</li><li>Три кнопки: «Билет и рубежи», «Пропуск», «Топ»</li><li>Точка «есть награда» на кнопке, «?» — правила</li><li>Главный приз — карточка Джонни, как у Дяди Васи</li></ul>
+    <div class="sts"><span class="st">обычный</span><span class="st">есть награда в рубежах или пропуске</span><span class="st">все рубежи взяты</span><span class="st">последний день</span></div>
+    <p class="ex"><span>Пример</span>«Набери 375 очков — Джонни вступит в банду. 120 очков, 412 место, 6 дн 5 ч»</p><p class="note">Основа — окно ивента Дяди Васи; стартовый попап бега (13122:3569) тоже близок</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=22350-4770" target="_blank" rel="noopener">Дядя Вася → ivent main</a></p>
+  </div>
+</article><article class="scr" id="UI-46" data-dec="skin" data-text="ui-46 билет и рубежи (план ивента) кнопка «билет и рубежи» в окне ивента «до «билета джонни» ещё 255» шкала с тремя рубежами и три карточки стадий: «карточка джонни ×2 / ×3 / ×5» подписи «прокачка до 40 / 60 / 80 ур.» ниже задания дня с «забрать», кнопки «джонни» и «как играть» второй кадр — шкала купилки 150 / 300 / 500 (14082:4149), ближе всего по раскладке рубежей. пороги 800 и 1350 поднимем после прогона">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-45.jpg" aria-label="Открыть крупно: UI-46 в прототипе"><img src="proto-web/UI-45.jpg" alt="UI-46 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-46.jpg" aria-label="Открыть крупно: UI-46 — основа Block Boss"><img src="img/UI-46.jpg" alt="UI-46 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-46-b.jpg" aria-label="Открыть крупно: UI-46 — основа Block Boss"><img src="img/UI-46-b.jpg" alt="UI-46 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-46</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Билет и рубежи (план ивента)</h3>
+    <p class="when">Кнопка «Билет и рубежи» в окне ивента</p>
+    <ul class="chg"><li>«До «Билета Джонни» ещё 255»</li><li>Шкала с тремя рубежами и три карточки стадий: «Карточка Джонни ×2 / ×3 / ×5»</li><li>Подписи «прокачка до 40 / 60 / 80 ур.»</li><li>Ниже задания дня с «Забрать», кнопки «Джонни» и «Как играть»</li></ul>
+    <div class="sts"><span class="st">до первого рубежа</span><span class="st">между рубежами</span><span class="st">все взяты</span><span class="st">есть задание к выдаче</span><span class="st">карточки или шарды</span></div>
+    <p class="ex"><span>Пример</span>375 — вступает в банду, до 40 ур., ×2; 800 — до 60 ур., ×3; 1350 — до 80 ур., ×5</p><p class="note">Второй кадр — шкала Купилки 150 / 300 / 500 (14082:4149), ближе всего по раскладке рубежей. Пороги 800 и 1350 поднимем после прогона</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=13227-2102" target="_blank" rel="noopener">Ивенты → ивент (основной экран «Бега на опережение»)</a></p>
+  </div>
+</article><article class="scr" id="UI-47" data-dec="skin" data-text="ui-47 рубеж взят поставка перевалила рубеж, награда сразу название рубежа и реплика джонни запуск анимации пачки после — «карточка джонни ×n, прокачка до 40 ур.» и следующий рубеж ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-47.jpg" aria-label="Открыть крупно: UI-47 в прототипе"><img src="proto-web/UI-47.jpg" alt="UI-47 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-47.jpg" aria-label="Открыть крупно: UI-47 — основа Block Boss"><img src="img/UI-47.jpg" alt="UI-47 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-47</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Рубеж взят</h3>
+    <p class="when">Поставка перевалила рубеж, награда сразу</p>
+    <ul class="chg"><li>Название рубежа и реплика Джонни</li><li>Запуск анимации пачки</li><li>После — «Карточка Джонни ×N, прокачка до 40 ур.» и следующий рубеж</li></ul>
+    <div class="sts"><span class="st">375 — Джонни вступает в банду</span><span class="st">800</span><span class="st">1350</span><span class="st">карточки или шарды</span></div>
+    <p class="ex"><span>Пример</span>«Билет Джонни! «Уговор есть уговор». Карточка Джонни ×2, прокачка до 40 ур.»</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=16433-2723" target="_blank" rel="noopener">Экраны награды → 3 («Пацан к успеху шёл и пришёл»)</a></p>
+  </div>
+</article><article class="scr" id="UI-48" data-dec="mod" data-text="ui-48 топ (рейтинг недели) кнопка «топ» в окне ивента живые участники без ботов, длинный список со скроллом строка игрока закреплена, когда уходит из видимой части строка: место, аватар, имя, очки, награда за место без лиг; таймер до конца недели, приз — один раз в финале [?] нужен серверный лидерборд. призы по местам и формат (таблица / группы) отложены">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-48.jpg" aria-label="Открыть крупно: UI-48 в прототипе"><img src="proto-web/UI-48.jpg" alt="UI-48 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-48.jpg" aria-label="Открыть крупно: UI-48 — основа Block Boss"><img src="img/UI-48.jpg" alt="UI-48 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-48</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Топ (рейтинг недели)</h3>
+    <p class="when">Кнопка «Топ» в окне ивента</p>
+    <ul class="chg"><li>Живые участники без ботов, длинный список со скроллом</li><li>Строка игрока закреплена, когда уходит из видимой части</li><li>Строка: место, аватар, имя, очки, награда за место</li><li>Без лиг; таймер до конца недели, приз — один раз в финале</li></ul>
+    <div class="sts"><span class="st">игрок в топ-3</span><span class="st">в видимой части</span><span class="st">вне экрана — закреплённая строка</span><span class="st">ещё нет очков</span><span class="st">нет связи</span><span class="st">последний день</span></div>
+    <p class="ex"><span>Пример</span>«412 место из 18 350», «6 дн 5 ч»</p><p class="note">[?] Нужен серверный лидерборд. Призы по местам и формат (таблица / группы) отложены</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=14089-4189" target="_blank" rel="noopener">Ивенты → ивент (Зубная фея, строка You)</a></p>
+  </div>
+</article><article class="scr" id="UI-49" data-dec="skin" data-text="ui-49 задания дня (окно) тап по плашке задания на hud два задания: лёгкое и сложное, прогресс, награда «забери награду до полуночи — потом сгорит» задания ивента свои, кор не засчитывает ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-49.jpg" aria-label="Открыть крупно: UI-49 в прототипе"><img src="proto-web/UI-49.jpg" alt="UI-49 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-49.jpg" aria-label="Открыть крупно: UI-49 — основа Block Boss"><img src="img/UI-49.jpg" alt="UI-49 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-49</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Задания дня (окно)</h3>
+    <p class="when">Тап по плашке задания на HUD</p>
+    <ul class="chg"><li>Два задания: лёгкое и сложное, прогресс, награда</li><li>«Забери награду до полуночи — потом сгорит»</li><li>Задания ивента свои, кор не засчитывает</li></ul>
+    <div class="sts"><span class="st">в процессе</span><span class="st">готово</span><span class="st">забрано</span></div>
+    <p class="ex"><span>Пример</span>день 4: «заработай 2000 дол.» (+4 хода), «купи 2 точки» (+800 дол.)</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=1476-626" target="_blank" rel="noopener">Дейлики → 1 completed</a></p>
+  </div>
+</article><article class="scr" id="UI-50" data-dec="mod" data-text="ui-50 карточка джонни тап по портрету или кнопке в рубежах карточка legendary с уровнем, опытом и прогрессом к билету 10 перков ивента вместо способностей: открытые и закрытые список навыков с порогом уровня — готовая основа второй кадр — «навыки» (19969:13954). [?] не запутают ли перки ивента в коре">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-50.jpg" aria-label="Открыть крупно: UI-50 в прототипе"><img src="proto-web/UI-50.jpg" alt="UI-50 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-50.jpg" aria-label="Открыть крупно: UI-50 — основа Block Boss"><img src="img/UI-50.jpg" alt="UI-50 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-50-b.jpg" aria-label="Открыть крупно: UI-50 — основа Block Boss"><img src="img/UI-50-b.jpg" alt="UI-50 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-50</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Карточка Джонни</h3>
+    <p class="when">Тап по портрету или кнопке в рубежах</p>
+    <ul class="chg"><li>Карточка Legendary с уровнем, опытом и прогрессом к билету</li><li>10 перков ивента вместо способностей: открытые и закрытые</li><li>Список навыков с порогом уровня — готовая основа</li></ul>
+    <div class="sts"><span class="st">перк открыт</span><span class="st">перк закрыт</span></div>
+    <p class="ex"><span>Пример</span>ур. 2 (25 опыта) — склад −10%; ур. 6 (370) — +1 место в фуре; ур. 10 (1200) — продажи +45%</p><p class="note">Второй кадр — «Навыки» (19969:13954). [?] Не запутают ли перки ивента в коре</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=1802-5016" target="_blank" rel="noopener">Раздел Пацаны → card detailed legendary</a></p>
+  </div>
+</article><article class="scr" id="UI-51" data-dec="skin" data-text="ui-51 джонни — новый уровень после поставки, если вырос уровень «джонни — уровень 3!» и новый перк окна нового уровня в figma не нашли; референс — экраны награды">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-51.jpg" aria-label="Открыть крупно: UI-51 в прототипе"><img src="proto-web/UI-51.jpg" alt="UI-51 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-51</span><span class="pill skin">переодеть</span><span class="match">основа: нет</span></header>
+    <h3>Джонни — новый уровень</h3>
+    <p class="when">После поставки, если вырос уровень</p>
+    <ul class="chg"><li>«Джонни — уровень 3!» и новый перк</li></ul>
+    
+    <p class="ex"><span>Пример</span>«Продажи точек +15%»</p><p class="note">Окна нового уровня в Figma не нашли; референс — экраны награды</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-52" data-dec="new" data-text="ui-52 «сегодня» и неделя тап по таймеру дня что действует сегодня: тренд, чёрная пятница, проценты, отставание по поставкам, участок расписание 7 дней, сегодня выделено «до полуночи 5 ч 12 м · фура уедет сама» референс расписания — «еженедельный бонус» (2804:225)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-52.jpg" aria-label="Открыть крупно: UI-52 в прототипе"><img src="proto-web/UI-52.jpg" alt="UI-52 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-52</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>«Сегодня» и неделя</h3>
+    <p class="when">Тап по таймеру дня</p>
+    <ul class="chg"><li>Что действует сегодня: тренд, Чёрная пятница, проценты, отставание по поставкам, участок</li><li>Расписание 7 дней, сегодня выделено</li><li>«До полуночи 5 ч 12 м · фура уедет сама»</li></ul>
+    <div class="sts"><span class="st">обычный день</span><span class="st">есть модификаторы</span><span class="st">день 7</span></div>
+    <p class="ex"><span>Пример</span>день 3: «Улица 2, банк, такси»; день 6: «Чёрная пятница ×1,5»</p><p class="note">Референс расписания — «Еженедельный бонус» (2804:225)</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-53" data-dec="new" data-text="ui-53 итоги дня первый вход после полуночи заработано, продано, поставка, куплено точек билет n/375, до рубежа и прогноз на неделю незабранные награды — «забрать» референс — «флоу завершения рейда» (12150:684)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-53.jpg" aria-label="Открыть крупно: UI-53 в прототипе"><img src="proto-web/UI-53.jpg" alt="UI-53 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-53</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Итоги дня</h3>
+    <p class="when">Первый вход после полуночи</p>
+    <ul class="chg"><li>Заработано, продано, поставка, куплено точек</li><li>Билет N/375, до рубежа и прогноз на неделю</li><li>Незабранные награды — «Забрать»</li></ul>
+    <div class="sts"><span class="st">поставка была</span><span class="st">уехала ночью</span><span class="st">не было</span><span class="st">есть незабранное</span></div>
+    <p class="ex"><span>Пример</span>«Заработано 2093 дол., продано 40 шт., поставка +75, в таком темпе к концу недели ≈ 820»</p><p class="note">Референс — «Флоу завершения рейда» (12150:684)</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-54" data-dec="skin" data-text="ui-54 утро дня после итогов дня «день 3.» что открылось сегодня и тренд дня когда откроется следующая улица кнопка «поехали» кадр общий с ui-36 — та же модалка">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-54.jpg" aria-label="Открыть крупно: UI-54 в прототипе"><img src="proto-web/UI-54.jpg" alt="UI-54 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-36.jpg" aria-label="Открыть крупно: UI-54 — основа Block Boss"><img src="img/UI-36.jpg" alt="UI-54 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-54</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Утро дня</h3>
+    <p class="when">После итогов дня</p>
+    <ul class="chg"><li>«День 3.» Что открылось сегодня и тренд дня</li><li>Когда откроется следующая улица</li><li>Кнопка «Поехали»</li></ul>
+    <div class="sts"><span class="st">обычный день</span><span class="st">открылась улица</span><span class="st">Чёрная пятница</span></div>
+    <p class="ex"><span>Пример</span>«Улица 2 открылась. Сегодня: банк, такси. Тренд дня: джинсы ×2»</p><p class="note">Кадр общий с UI-36 — та же модалка</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=2492-612" target="_blank" rel="noopener">Универсальное модальное окно → 2 (одна кнопка)</a></p>
+  </div>
+</article></section><section class="grp" id="g4"><h2>Магазин, харда, пропуск<small>8</small></h2><article class="scr" id="UI-55" data-dec="skin" data-text="ui-55 магазин ивента кнопка магазина в меню, тап по золоту своя секция ивента «за золото»: +10 ходов и нал трёх размеров «золото»: четыре пакета за ₽ с плашкой выгоды [?] открывается ли магазин кора на одной секции изнутри режима">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-55.jpg" aria-label="Открыть крупно: UI-55 в прототипе"><img src="proto-web/UI-55.jpg" alt="UI-55 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-55.jpg" aria-label="Открыть крупно: UI-55 — основа Block Boss"><img src="img/UI-55.jpg" alt="UI-55 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-55</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Магазин ивента</h3>
+    <p class="when">Кнопка магазина в меню, тап по золоту</p>
+    <ul class="chg"><li>Своя секция ивента</li><li>«За золото»: +10 ходов и нал трёх размеров</li><li>«Золото»: четыре пакета за ₽ с плашкой выгоды</li></ul>
+    <div class="sts"><span class="st">хватает золота</span><span class="st">не хватает</span><span class="st">ходы подорожали</span></div>
+    <p class="ex"><span>Пример</span>+10 ходов — 5 зол., дальше ×2 за день; нал 65 / 200 / 520 дол. за 3 / 8 / 20 зол.; золото 10 / 30 / 70 / 160 за 99 / 249 / 499 / 999 ₽</p><p class="note">[?] Открывается ли магазин кора на одной секции изнутри режима</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=3495-2343" target="_blank" rel="noopener">Магазин → main (последняя версия)</a></p>
+  </div>
+</article><article class="scr" id="UI-56" data-dec="keep" data-text="ui-56 подтверждение покупки тап по товару магазина окно кора без правок ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><div class="shot empty muted"><span>В прототипе нет</span><small>Подтверждения покупки нет: в магазине прототипа покупка по тапу происходит сразу</small></div></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-56.jpg" aria-label="Открыть крупно: UI-56 — основа Block Boss"><img src="img/UI-56.jpg" alt="UI-56 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-56</span><span class="pill keep">как есть</span><span class="match">основа: точно</span></header>
+    <h3>Подтверждение покупки</h3>
+    <p class="when">Тап по товару магазина</p>
+    <ul class="chg"><li>Окно кора без правок</li></ul>
+    
+    <p class="ex"><span>Пример</span>—</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=595-9004" target="_blank" rel="noopener">Магазин → main («Мне надо»)</a></p>
+  </div>
+</article><article class="scr" id="UI-57" data-dec="mod" data-text="ui-57 ходы кончились бросок при 0 ходов кубики ивента вместо баксов кора «новый ход через 7:59, потом по одному каждые 8 мин» «+10 ходов · 5 зол.» или оффер «10 зол. за 99 ₽», «подожду» место под ходы за рекламу макет нарисован для баксов; для кубиков отдельного нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-57.jpg" aria-label="Открыть крупно: UI-57 в прототипе"><img src="proto-web/UI-57.jpg" alt="UI-57 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-57.jpg" aria-label="Открыть крупно: UI-57 — основа Block Boss"><img src="img/UI-57.jpg" alt="UI-57 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-57</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Ходы кончились</h3>
+    <p class="when">Бросок при 0 ходов</p>
+    <ul class="chg"><li>Кубики ивента вместо баксов кора</li><li>«Новый ход через 7:59, потом по одному каждые 8 мин»</li><li>«+10 ходов · 5 зол.» или оффер «10 зол. за 99 ₽», «Подожду»</li><li>Место под ходы за рекламу</li></ul>
+    <div class="sts"><span class="st">золота хватает</span><span class="st">не хватает — оффер</span></div>
+    <p class="ex"><span>Пример</span>5 зол. → 10 → 20 за день</p><p class="note">Макет нарисован для баксов; для кубиков отдельного нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=3489-2861" target="_blank" rel="noopener">Монетизационные модальные окна → V1 («упс! Все потратил!»)</a></p>
+  </div>
+</article><article class="scr" id="UI-58" data-dec="mod" data-text="ui-58 не хватает долларов покупка дороже наличных «не хватает 15 дол. — обменяй золото» курс малого пакета нет золота — оффер ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-58.jpg" aria-label="Открыть крупно: UI-58 в прототипе"><img src="proto-web/UI-58.jpg" alt="UI-58 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-58.jpg" aria-label="Открыть крупно: UI-58 — основа Block Boss"><img src="img/UI-58.jpg" alt="UI-58 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-58</span><span class="pill mod">доработать</span><span class="match">основа: точно</span></header>
+    <h3>Не хватает долларов</h3>
+    <p class="when">Покупка дороже наличных</p>
+    <ul class="chg"><li>«Не хватает 15 дол. — обменяй золото»</li><li>Курс малого пакета</li><li>Нет золота — оффер</li></ul>
+    <div class="sts"><span class="st">золота хватает</span><span class="st">не хватает</span></div>
+    <p class="ex"><span>Пример</span>улица 1: 65 дол. за 3 зол., то есть 15 дол. — 1 зол.</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=3074-5176" target="_blank" rel="noopener">Монетизационные модальные окна → V2 («Не хватает»)</a></p>
+  </div>
+</article><article class="scr" id="UI-59" data-dec="skin" data-text="ui-59 пропуск джонни кнопка «пропуск» в окне ивента 12 ступеней, две дорожки, «забрать всё · n» прогресс — очки ивента, «как продвигаться? — к поставке» без скина на 12-й ступени пропуск оставляем, детали обсуждаются. основа — ивентовый пропуск, а не пропуск кора">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-59.jpg" aria-label="Открыть крупно: UI-59 в прототипе"><img src="proto-web/UI-59.jpg" alt="UI-59 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-59.jpg" aria-label="Открыть крупно: UI-59 — основа Block Boss"><img src="img/UI-59.jpg" alt="UI-59 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-59</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Пропуск Джонни</h3>
+    <p class="when">Кнопка «Пропуск» в окне ивента</p>
+    <ul class="chg"><li>12 ступеней, две дорожки, «Забрать всё · N»</li><li>Прогресс — очки ивента, «Как продвигаться? — К поставке»</li><li>Без скина на 12-й ступени</li></ul>
+    <div class="sts"><span class="st">есть к выдаче</span><span class="st">нечего</span><span class="st">премиум куплен</span><span class="st">всё пройдено</span></div>
+    <p class="ex"><span>Пример</span>пороги 5, 20, 45 … 500; бесплатно +2 хода, на 6 и 12 — +5; премиум +5 ходов, на 6 — +10 и 5 зол., на 12 — +10 и 10 зол.</p><p class="note">Пропуск оставляем, детали обсуждаются. Основа — ивентовый пропуск, а не пропуск кора</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=22480-1739" target="_blank" rel="noopener">Календарный бонус / Батлпасс → ивент основной экран (Free / Super pass)</a></p>
+  </div>
+</article><article class="scr" id="UI-60" data-dec="skin" data-text="ui-60 премиум пропуска тап по закрытой премиум-награде три выгоды списком: +70 ходов, 15 зол., +1 место в фуре «сразу заберёшь награды за n уровней» скин из выгод убран — решение контура">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-60.jpg" aria-label="Открыть крупно: UI-60 в прототипе"><img src="proto-web/UI-60.jpg" alt="UI-60 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-60.jpg" aria-label="Открыть крупно: UI-60 — основа Block Boss"><img src="img/UI-60.jpg" alt="UI-60 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-60</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Премиум пропуска</h3>
+    <p class="when">Тап по закрытой премиум-награде</p>
+    <ul class="chg"><li>Три выгоды списком: +70 ходов, 15 зол., +1 место в фуре</li><li>«Сразу заберёшь награды за N уровней»</li></ul>
+    <div class="sts"><span class="st">до покупки</span><span class="st">после — премиум-дорожка открыта</span></div>
+    <p class="ex"><span>Пример</span>299 ₽</p><p class="note">Скин из выгод убран — решение контура</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=10919-2047" target="_blank" rel="noopener">Календарный бонус / Батлпасс → popup</a></p>
+  </div>
+</article><article class="scr" id="UI-61" data-dec="skin" data-text="ui-61 офферы «рывок» и стартовый «рывок» — утро дней 5–6 при 150+ очках; стартовый — в окнах нехватки «рывок к рубежу: до рубежа 380 очков» и содержимое стартовый пакет золота в окнах нехватки шаблон оффера кора с таймером второй кадр — «starter pac popup» (12728:6161)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-61.jpg" aria-label="Открыть крупно: UI-61 в прототипе"><img src="proto-web/UI-61.jpg" alt="UI-61 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-43.jpg" aria-label="Открыть крупно: UI-61 — основа Block Boss"><img src="img/UI-43.jpg" alt="UI-61 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-61.jpg" aria-label="Открыть крупно: UI-61 — основа Block Boss"><img src="img/UI-61.jpg" alt="UI-61 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-61</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Офферы «Рывок» и стартовый</h3>
+    <p class="when">«Рывок» — утро дней 5–6 при 150+ очках; стартовый — в окнах нехватки</p>
+    <ul class="chg"><li>«Рывок к рубежу: до рубежа 380 очков» и содержимое</li><li>Стартовый пакет золота в окнах нехватки</li><li>Шаблон оффера кора с таймером</li></ul>
+    <div class="sts"><span class="st">показан</span><span class="st">куплен — больше не показывается</span></div>
+    <p class="ex"><span>Пример</span>«Рывок»: 30 ходов + 10 зол. за 249 ₽; стартовый: 10 зол. за 99 ₽</p><p class="note">Второй кадр — «Starter pac popup» (12728:6161)</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=12484-1337" target="_blank" rel="noopener">Офферы → info/big</a></p>
+  </div>
+</article><article class="scr" id="UI-62" data-dec="keep" data-text="ui-62 пуш «кубики полны» и согласие первый раз упёрся в 0 ходов и выбрал «подожду» свой текст и id пуша ивента системный, макет не нужен">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-62.jpg" aria-label="Открыть крупно: UI-62 в прототипе"><img src="proto-web/UI-62.jpg" alt="UI-62 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-62</span><span class="pill keep">как есть</span><span class="match">основа: нет</span></header>
+    <h3>Пуш «кубики полны» и согласие</h3>
+    <p class="when">Первый раз упёрся в 0 ходов и выбрал «Подожду»</p>
+    <ul class="chg"><li>Свой текст и ID пуша ивента</li></ul>
+    <div class="sts"><span class="st">согласился</span><span class="st">отказался</span></div>
+    <p class="ex"><span>Пример</span>«Джонни размял пальцы: 30 ходов на месте. Бруклин ждёт!»; тихие часы 22–9, до 2 в день</p><p class="note">Системный, макет не нужен</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article></section><section class="grp" id="g5"><h2>Вход, правила, туториал<small>8</small></h2><article class="scr" id="UI-63" data-dec="skin" data-text="ui-63 виджет ивента в коре главный экран кора, пока идёт ивент иконка джонни в слоте ивента таймер ивента, очки, точка «есть награда» тап — стартовый попап или сразу в режим кадр общий с ui-06; сама иконка — `run` (18975:23759)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><div class="shot empty muted"><span>В прототипе нет</span><small>Виджет ивента в коре — вне прототипа (прототип — только режим ивента)</small></div></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-06.jpg" aria-label="Открыть крупно: UI-63 — основа Block Boss"><img src="img/UI-06.jpg" alt="UI-63 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-63</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Виджет ивента в коре</h3>
+    <p class="when">Главный экран кора, пока идёт ивент</p>
+    <ul class="chg"><li>Иконка Джонни в слоте ивента</li><li>Таймер ивента, очки, точка «есть награда»</li><li>Тап — стартовый попап или сразу в режим</li></ul>
+    <div class="sts"><span class="st">до первого входа</span><span class="st">идёт</span><span class="st">есть награда</span><span class="st">ивент закончен — финал ждёт</span></div>
+    <p class="ex"><span>Пример</span>«6 дн 5 ч», «120/375»</p><p class="note">Кадр общий с UI-06; сама иконка — `Run` (18975:23759)</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=13114-14323" target="_blank" rel="noopener">Главный экран → Описание состояний слота</a></p>
+  </div>
+</article><article class="scr" id="UI-64" data-dec="skin" data-text="ui-64 стартовый попап первый показ ивента в коре, в очереди попапов арт джонни вместо бегунов «набери 375 очков за 7 дней — и джонни вступит в банду» таймер, «поехали», «?» — правила взята версия из «правок» — она новее исходной (13122:3569)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-64.jpg" aria-label="Открыть крупно: UI-64 в прототипе"><img src="proto-web/UI-64.jpg" alt="UI-64 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-64.jpg" aria-label="Открыть крупно: UI-64 — основа Block Boss"><img src="img/UI-64.jpg" alt="UI-64 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-64</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Стартовый попап</h3>
+    <p class="when">Первый показ ивента в коре, в очереди попапов</p>
+    <ul class="chg"><li>Арт Джонни вместо бегунов</li><li>«Набери 375 очков за 7 дней — и Джонни вступит в банду»</li><li>Таймер, «Поехали», «?» — правила</li></ul>
+    <div class="sts"><span class="st">первый показ</span><span class="st">повторный вход — «Продолжить»</span></div>
+    <p class="ex"><span>Пример</span>375 очков, 7 дней</p><p class="note">Взята версия из «Правок» — она новее исходной (13122:3569)</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=16759-9381" target="_blank" rel="noopener">Ивенты → info popup (правки «Бега на опережение»)</a></p>
+  </div>
+</article><article class="scr" id="UI-65" data-dec="keep" data-text="ui-65 переход и загрузка режима вход в ивент и выход в кор картинка бруклина на загрузке экран загрузки рейда отдельно не нашли">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-65.jpg" aria-label="Открыть крупно: UI-65 в прототипе"><img src="proto-web/UI-65.jpg" alt="UI-65 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-65.jpg" aria-label="Открыть крупно: UI-65 — основа Block Boss"><img src="img/UI-65.jpg" alt="UI-65 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-65</span><span class="pill keep">как есть</span><span class="match">основа: близко</span></header>
+    <h3>Переход и загрузка режима</h3>
+    <p class="when">Вход в ивент и выход в кор</p>
+    <ul class="chg"><li>Картинка Бруклина на загрузке</li></ul>
+    <div class="sts"><span class="st">вход</span><span class="st">выход</span></div>
+    <p class="ex"><span>Пример</span>—</p><p class="note">Экран загрузки рейда отдельно не нашли</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=6547-271" target="_blank" rel="noopener">Смена района → loading district</a></p>
+  </div>
+</article><article class="scr" id="UI-66" data-dec="skin" data-text="ui-66 онбординг первый вход в режим реплики джонни вместо персонажей кора пять шагов: купи точку → закупи на складе → касса на старте → прокачивай → точка растёт в магазин [?] если нужны картинки к шагам — карусель новая">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-66.jpg" aria-label="Открыть крупно: UI-66 в прототипе"><img src="proto-web/UI-66.jpg" alt="UI-66 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-66.jpg" aria-label="Открыть крупно: UI-66 — основа Block Boss"><img src="img/UI-66.jpg" alt="UI-66 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-66</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Онбординг</h3>
+    <p class="when">Первый вход в режим</p>
+    <ul class="chg"><li>Реплики Джонни вместо персонажей кора</li><li>Пять шагов: купи точку → закупи на складе → касса на старте → прокачивай → точка растёт в магазин</li></ul>
+    <div class="sts"><span class="st">шаги 1–5</span><span class="st">пропуск</span></div>
+    <p class="ex"><span>Пример</span>«Цель — 375 очков за 7 дней»</p><p class="note">[?] Если нужны картинки к шагам — карусель новая</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=676-38" target="_blank" rel="noopener">Диалоги → main</a></p>
+  </div>
+</article><article class="scr" id="UI-67" data-dec="mod" data-text="ui-67 как играть кнопка «?» / «как играть», окно ивента, стартовый попап семь раскрывающихся разделов вместо четырёх фиксированных блоков разделы: цель; поставка и очки; деньги и точки; ходы и новый день; джонни и награды; покупки; полиция и банк текущие очки игрока в тексте ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-67.jpg" aria-label="Открыть крупно: UI-67 в прототипе"><img src="proto-web/UI-67.jpg" alt="UI-67 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-67.jpg" aria-label="Открыть крупно: UI-67 — основа Block Boss"><img src="img/UI-67.jpg" alt="UI-67 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-67</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Как играть</h3>
+    <p class="when">Кнопка «?» / «Как играть», окно ивента, стартовый попап</p>
+    <ul class="chg"><li>Семь раскрывающихся разделов вместо четырёх фиксированных блоков</li><li>Разделы: цель; поставка и очки; деньги и точки; ходы и новый день; Джонни и награды; покупки; полиция и банк</li><li>Текущие очки игрока в тексте</li></ul>
+    <div class="sts"><span class="st">общий вид</span><span class="st">открыт на разделе</span><span class="st">с очками игрока</span></div>
+    <p class="ex"><span>Пример</span>«Одна поставка в день. Сегодня место — 4 шт. одного товара»</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=11679-1822" target="_blank" rel="noopener">Ивенты → инфо попап («Правила события», Крысиные бега)</a></p>
+  </div>
+</article><article class="scr" id="UI-68" data-dec="mod" data-text="ui-68 учебный круг день 1, первый круг карточка «первый круг · 1/9» с картинкой и текстом подсветка кубика или строки клетки запертые прокачки с подписью, кубик подбирает маршрут ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-68.jpg" aria-label="Открыть крупно: UI-68 в прототипе"><img src="proto-web/UI-68.jpg" alt="UI-68 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-68.jpg" aria-label="Открыть крупно: UI-68 — основа Block Boss"><img src="img/UI-68.jpg" alt="UI-68 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-68</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Учебный круг</h3>
+    <p class="when">День 1, первый круг</p>
+    <ul class="chg"><li>Карточка «Первый круг · 1/9» с картинкой и текстом</li><li>Подсветка кубика или строки клетки</li><li>Запертые прокачки с подписью, кубик подбирает маршрут</li></ul>
+    <div class="sts"><span class="st">ждёт броска</span><span class="st">ждёт действия на клетке</span><span class="st">прокачки заперты</span></div>
+    <p class="ex"><span>Пример</span>9 шагов: точка → склад → бизнес → … → старт</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=8589-2333" target="_blank" rel="noopener">Тутор v2 → 1</a></p>
+  </div>
+</article><article class="scr" id="UI-69" data-dec="mod" data-text="ui-69 первые шаги после учебного круга, до первой поставки дня чек-лист из трёх шагов: купи точку → закупи товар → посылка / поставка подсветка нужной кнопки скрывается крестиком, включается из «как играть» в карте была секция «тултипы» целиком (13114:5914) — взят кадр тултипа склада. чек-листа в figma нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-69.jpg" aria-label="Открыть крупно: UI-69 в прототипе"><img src="proto-web/UI-69.jpg" alt="UI-69 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-69.jpg" aria-label="Открыть крупно: UI-69 — основа Block Boss"><img src="img/UI-69.jpg" alt="UI-69 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-69</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Первые шаги</h3>
+    <p class="when">После учебного круга, до первой поставки дня</p>
+    <ul class="chg"><li>Чек-лист из трёх шагов: купи точку → закупи товар → посылка / поставка</li><li>Подсветка нужной кнопки</li><li>Скрывается крестиком, включается из «Как играть»</li></ul>
+    <div class="sts"><span class="st">шаг 1–3</span><span class="st">скрыто</span></div>
+    <p class="ex"><span>Пример</span>«Первые шаги · 2/3 — Закупи товар»</p><p class="note">В карте была секция «Тултипы» целиком (13114:5914) — взят кадр тултипа склада. Чек-листа в Figma нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=13114-10906" target="_blank" rel="noopener">Тутор v2 → main (тултип склада, секция «Тултипы»)</a></p>
+  </div>
+</article><article class="scr" id="UI-70" data-dec="skin" data-text="ui-70 опоздавший: «джонни уже в деле» первый вход со 2-го дня ивента и позже что уже выдано для догонялок: деньги, прокачанные точки, поставки за пропущенные дни кнопка «погнали» оффер «ещё столько же + до 2 точек + 20 ходов» основа из карты (16755:5295) — пустая подложка без попапа, взят соседний кадр той же секции. детали обсуждаются">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-70.jpg" aria-label="Открыть крупно: UI-70 в прототипе"><img src="proto-web/UI-70.jpg" alt="UI-70 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-70.jpg" aria-label="Открыть крупно: UI-70 — основа Block Boss"><img src="img/UI-70.jpg" alt="UI-70 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-70</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Опоздавший: «Джонни уже в деле»</h3>
+    <p class="when">Первый вход со 2-го дня ивента и позже</p>
+    <ul class="chg"><li>Что уже выдано для догонялок: деньги, прокачанные точки, поставки за пропущенные дни</li><li>Кнопка «Погнали»</li><li>Оффер «ещё столько же + до 2 точек + 20 ходов»</li></ul>
+    <div class="sts"><span class="st">без покупки</span><span class="st">купил пакет</span></div>
+    <p class="ex"><span>Пример</span>старт с дня 3: 1360 дол. и 4 точки; оффер 149 ₽</p><p class="note">Основа из карты (16755:5295) — пустая подложка без попапа, взят соседний кадр той же секции. Детали обсуждаются</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=16882-6336" target="_blank" rel="noopener">Офферы → bonus («С возвращением, пацан!»)</a></p>
+  </div>
+</article></section><section class="grp" id="g6"><h2>Финал<small>7</small></h2><article class="scr" id="UI-71" data-dec="new" data-text="ui-71 итоги недели: подсчёт день 7 после поставки или первый вход после конца строки появляются по очереди, числа бегут: поставки, нал, точки и бизнесы, итого отдельно «осталось товара: n шт. — очков не даёт» кнопка ведёт в финал референс — начисление очков зубной феи (14448:2424)">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-71.jpg" aria-label="Открыть крупно: UI-71 в прототипе"><img src="proto-web/UI-71.jpg" alt="UI-71 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><div class="shot empty"><span>Основы нет</span><b>рисуем с нуля</b></div></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-71</span><span class="pill new">новое</span><span class="match">основа: нет</span></header>
+    <h3>Итоги недели: подсчёт</h3>
+    <p class="when">День 7 после поставки или первый вход после конца</p>
+    <ul class="chg"><li>Строки появляются по очереди, числа бегут: поставки, нал, точки и бизнесы, итого</li><li>Отдельно «Осталось товара: N шт. — очков не даёт»</li><li>Кнопка ведёт в финал</li></ul>
+    <div class="sts"><span class="st">с остатком товара</span><span class="st">без</span></div>
+    <p class="ex"><span>Пример</span>нал 105 000 дол. → 15 очков (потолок), активы — 8000 дол. за очко, до 15</p><p class="note">Референс — начисление очков Зубной феи (14448:2424)</p>
+    <p class="src"><span class="base none">в Block Boss UI нет</span></p>
+  </div>
+</article><article class="scr" id="UI-72" data-dec="mod" data-text="ui-72 финал: джонни в банде очки ≥ 375 «джонни летит в россию — он уже в банде» сколько карточек джонни получено за неделю и до какого уровня он качается место в рейтинге и приз за место ранг числом не показываем ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-72.jpg" aria-label="Открыть крупно: UI-72 в прототипе"><img src="proto-web/UI-72.jpg" alt="UI-72 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-72.jpg" aria-label="Открыть крупно: UI-72 — основа Block Boss"><img src="img/UI-72.jpg" alt="UI-72 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-72</span><span class="pill mod">доработать</span><span class="match">основа: близко</span></header>
+    <h3>Финал: Джонни в банде</h3>
+    <p class="when">Очки ≥ 375</p>
+    <ul class="chg"><li>«Джонни летит в Россию — он уже в банде»</li><li>Сколько карточек Джонни получено за неделю и до какого уровня он качается</li><li>Место в рейтинге и приз за место</li><li>Ранг числом не показываем</li></ul>
+    <div class="sts"><span class="st">рубеж 1 — до 40 ур.</span><span class="st">рубеж 2 — до 60</span><span class="st">рубеж 3 — до 80</span><span class="st">карточки или шарды</span></div>
+    <p class="ex"><span>Пример</span>375 — до 40 ур.; 842 — до 60 ур.; 1350 — до 80 ур.</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=14391-3039" target="_blank" rel="noopener">Ивенты → 36 («3 место / Твоя награда»)</a></p>
+  </div>
+</article><article class="scr" id="UI-73" data-dec="skin" data-text="ui-73 финал: утешительная харда очки ниже 375, но потрачено 30+ кубиков «джонни остался в бруклине. до билета не хватило 37 очков» харда кора, растёт с набранными очками формула «очки → харда кора» — в тз по балансу">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-73.jpg" aria-label="Открыть крупно: UI-73 в прототипе"><img src="proto-web/UI-73.jpg" alt="UI-73 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-73.jpg" aria-label="Открыть крупно: UI-73 — основа Block Boss"><img src="img/UI-73.jpg" alt="UI-73 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-73</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Финал: утешительная харда</h3>
+    <p class="when">Очки ниже 375, но потрачено 30+ кубиков</p>
+    <ul class="chg"><li>«Джонни остался в Бруклине. До билета не хватило 37 очков»</li><li>Харда кора, растёт с набранными очками</li></ul>
+    <div class="sts"><span class="st">сумма растёт с очками</span></div>
+    <p class="ex"><span>Пример</span>237 очков — медиана «занятого» игрока</p><p class="note">Формула «очки → харда кора» — в ТЗ по балансу</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=14391-2429" target="_blank" rel="noopener">Ивенты → 35 («Забег завершён»)</a></p>
+  </div>
+</article><article class="scr" id="UI-74" data-dec="keep" data-text="ui-74 финал: без награды потрачено меньше 30 кубиков текст и одна кнопка «понял» кадр общий с ui-73">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-73.jpg" aria-label="Открыть крупно: UI-74 в прототипе"><img src="proto-web/UI-73.jpg" alt="UI-74 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-73.jpg" aria-label="Открыть крупно: UI-74 — основа Block Boss"><img src="img/UI-73.jpg" alt="UI-74 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-74</span><span class="pill keep">как есть</span><span class="match">основа: точно</span></header>
+    <h3>Финал: без награды</h3>
+    <p class="when">Потрачено меньше 30 кубиков</p>
+    <ul class="chg"><li>Текст и одна кнопка «Понял»</li></ul>
+    
+    <p class="ex"><span>Пример</span>порог — 30 потраченных кубиков</p><p class="note">Кадр общий с UI-73</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=14391-2429" target="_blank" rel="noopener">Ивенты → 35 («Понял»)</a></p>
+  </div>
+</article><article class="scr" id="UI-75" data-dec="skin" data-text="ui-75 приз за место в рейтинге вместе с финалом, один раз крупное место и награда призы по местам отложены. парсер наград места — вопрос к разработке">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><button class="shot" type="button" data-full="proto-web/UI-75.jpg" aria-label="Открыть крупно: UI-75 в прототипе"><img src="proto-web/UI-75.jpg" alt="UI-75 в прототипе" loading="lazy" width="393" height="852"></button></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-75.jpg" aria-label="Открыть крупно: UI-75 — основа Block Boss"><img src="img/UI-75.jpg" alt="UI-75 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-75</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Приз за место в рейтинге</h3>
+    <p class="when">Вместе с финалом, один раз</p>
+    <ul class="chg"><li>Крупное место и награда</li></ul>
+    <div class="sts"><span class="st">с призом</span><span class="st">без приза</span></div>
+    <p class="ex"><span>Пример</span>«4 место из 10»</p><p class="note">Призы по местам отложены. Парсер наград места — вопрос к разработке</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=14441-4623" target="_blank" rel="noopener">Ивенты → 31</a></p>
+  </div>
+</article><article class="scr" id="UI-76" data-dec="skin" data-text="ui-76 ивент завершён первый запуск после окончания, если финал не видел «неделя в бруклине закончилась» с артом джонни кнопка ведёт в подсчёт итогов ">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><div class="shot empty muted"><span>В прототипе нет</span><small>Окна «Ивент завершён» нет: при загрузке законченной партии прототип сразу начинает новую неделю (newGame)</small></div></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-76.jpg" aria-label="Открыть крупно: UI-76 — основа Block Boss"><img src="img/UI-76.jpg" alt="UI-76 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-76</span><span class="pill skin">переодеть</span><span class="match">основа: точно</span></header>
+    <h3>Ивент завершён</h3>
+    <p class="when">Первый запуск после окончания, если финал не видел</p>
+    <ul class="chg"><li>«Неделя в Бруклине закончилась» с артом Джонни</li><li>Кнопка ведёт в подсчёт итогов</li></ul>
+    
+    <p class="ex"><span>Пример</span>—</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=13227-1848" target="_blank" rel="noopener">Ивенты → info popup («Ивент завершён»)</a></p>
+  </div>
+</article><article class="scr" id="UI-77" data-dec="skin" data-text="ui-77 джонни в банде: получение и мердж сразу после анимации пачки на рубеже; мердж — в коре на рубеже 375 — «новый пацан: джонни!» (legendary) подсказка «слей карточки — джонни качается до 60 ур.» с переходом в окно пацана мердж — окном кора как есть; при шардах — иконка и счётчик шардов второй кадр — ранг ап за шарды, «не хватает» (19876:12608). шардов в билде 1.42.7 нет">
+  <div class="shots"><figure><figcaption>Прототип сейчас</figcaption><div class="row"><div class="shot empty muted"><span>В прототипе нет</span><small>Получение Джонни в банду и мердж — в коре, в прототипе нет</small></div></div></figure><figure><figcaption>Основа в Block Boss</figcaption><div class="row"><button class="shot" type="button" data-full="img/UI-77.jpg" aria-label="Открыть крупно: UI-77 — основа Block Boss"><img src="img/UI-77.jpg" alt="UI-77 — основа Block Boss" loading="lazy" width="393" height="852"></button><button class="shot" type="button" data-full="img/UI-77-b.jpg" aria-label="Открыть крупно: UI-77 — основа Block Boss"><img src="img/UI-77-b.jpg" alt="UI-77 — основа Block Boss" loading="lazy" width="393" height="852"></button></div></figure></div>
+  <div class="info">
+    <header><span class="uid">UI-77</span><span class="pill skin">переодеть</span><span class="match">основа: близко</span></header>
+    <h3>Джонни в банде: получение и мердж</h3>
+    <p class="when">Сразу после анимации пачки на рубеже; мердж — в коре</p>
+    <ul class="chg"><li>На рубеже 375 — «Новый пацан: Джонни!» (Legendary)</li><li>Подсказка «Слей карточки — Джонни качается до 60 ур.» с переходом в окно пацана</li><li>Мердж — окном кора как есть; при шардах — иконка и счётчик шардов</li></ul>
+    <div class="sts"><span class="st">новый Джонни — рубеж 1</span><span class="st">дубликаты — рубежи 2 и 3</span><span class="st">Джонни уже в банде — повторный ивент</span></div>
+    <p class="ex"><span>Пример</span>ранг 2 / 3 / 4 при 20 уровнях на ранг, карточек 2 / 3 / 5</p><p class="note">Второй кадр — ранг ап за шарды, «не хватает» (19876:12608). Шардов в билде 1.42.7 нет</p>
+    <p class="src"><a class="base" href="https://www.figma.com/design/vCRB0uoDlSeBkvjr2vpsgT/Block-Boss-UI?node-id=7438-11202" target="_blank" rel="noopener">Раздел Пацаны → 28 («новое дело»)</a></p>
+  </div>
+</article></section>
+  <p class="empty-msg" id="none" hidden>Ничего не найдено — сбросьте фильтр или поиск.</p>
+</div>
+<dialog id="dlg"><img id="dlgImg" alt=""></dialog>
+<script>
+(function(){
+  var on={keep:1,skin:1,mod:1,new:1,drop:1}, q=document.getElementById('q');
+  var cards=[].slice.call(document.querySelectorAll('.scr'));
+  function apply(){
+    var t=(q.value||'').trim().toLowerCase(), n=0;
+    cards.forEach(function(c){ var ok=on[c.dataset.dec]&&(!t||c.dataset.text.indexOf(t)>=0); c.hidden=!ok; if(ok)n++; });
+    document.querySelectorAll('.grp').forEach(function(g){ g.hidden=!g.querySelector('.scr:not([hidden])'); });
+    document.getElementById('none').hidden=n>0;
+  }
+  document.querySelectorAll('.chip').forEach(function(b){ b.addEventListener('click',function(){
+    var f=b.dataset.f; on[f]=on[f]?0:1; b.setAttribute('aria-pressed',on[f]?'true':'false'); apply(); }); });
+  q.addEventListener('input',apply);
+  var dlg=document.getElementById('dlg'), di=document.getElementById('dlgImg');
+  document.addEventListener('click',function(ev){
+    var s=ev.target.closest('.shot[data-full]'); if(s){ di.src=s.dataset.full; di.alt=s.querySelector('img').alt; dlg.showModal(); return; }
+    if(ev.target===dlg||ev.target===di) dlg.close();
+  });
+})();
+</script>

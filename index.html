@@ -312,7 +312,7 @@ body:has(#modal:not([hidden])) #guide{display:none}
 @media(max-width:360px){.training-pack{grid-template-columns:minmax(0,1fr) 22px 80px;gap:6px}.training-crate{width:80px;height:80px}.training-good{grid-template-columns:48px minmax(0,1fr)}.training-good .good-icon{width:48px;height:48px}}
 </style>
 
-<link rel="icon" href="icon.png"><link rel="stylesheet" href="bundle.css?v=caaa6329"><meta name="theme-color" content="#302d27"><link rel="stylesheet" href="liveops.css?v=2"></head>
+<link rel="icon" href="icon.png"><link rel="stylesheet" href="bundle.css?v=caaa6329"><meta name="theme-color" content="#302d27"><link rel="stylesheet" href="liveops.css?v=4"></head>
 <body><section id="boot" aria-labelledby="bootTitle">
   <picture class="start-city" aria-hidden="true"><source media="(orientation:landscape)" srcset="assets/start/city-landscape.webp"><img src="assets/start/city-portrait.webp" alt="" fetchpriority="high"></picture>
   <div class="start-print-edge" aria-hidden="true"></div>
@@ -502,11 +502,11 @@ let cam={x:0,y:0}, camT={x:0,y:0}, pan={x:0,y:0}, dragging=false, flyers=[], inv
 // ---------- доска ----------
 function zoneOf(i){return CFG.ZONES.findIndex(z=>i>=z.from&&i<=z.to);}
 function buildTiles(){
-  const t=[], biz=new Set([3,8,17,23,32,37]), chance=new Set([5,15,25,35]), wh=new Set([6,19,24,30,34]);
+  const t=[], biz=new Set([3,8,17,23,32,37]), chance=new Set([5,15,25,35]), wh=new Set([6,19,24,34]);
   const rnd=(a,b)=>Math.round((a+Math.random()*(b-a))/10)*10;
   for(let i=0;i<40;i++){
     const z=zoneOf(i); let o={i,type:'kiosk',zone:z,owner:null,level:0,capLvl:1,salesLvl:1,goods:0,tier:1};
-    if(i===0)o.type='home'; else if(i===10){o.type='wh';o.zone=-1;} else if(wh.has(i)){o.type='wh';o.zone=-1;} else if(i===20)o.type='bank'; // home — «Старт» в интерфейсе
+    if(i===0)o.type='home'; else if(i===10||i===30){o.type='chance';o.zone=-1;} else if(wh.has(i)){o.type='wh';o.zone=-1;} else if(i===20)o.type='bank'; // home — «Старт» в интерфейсе
     else if(i===15){o.type='police';o.zone=-1;} else if(i===25){o.type='pot';o.zone=-1;} else if(i===35){o.type='scatter';o.zone=-1;}
     else if(i===5){o.type='hazard';o.zone=-1;}
     else if(biz.has(i)){o.type='biz';o.price=rnd(...CFG.BIZ_PRICE[z]);o.price0=o.price;}
@@ -1364,7 +1364,7 @@ async function kioskWindow(t){
       $('kSal').onclick=()=>{track('upgrade',{tile:t.i,stat:'sales',lvl:t.salesLvl+1,cost:salesCost(t)});fly('💵',AT.cash(),AT.card(),flyN(salesCost(t)));S.cash-=salesCost(t);t.salesLvl++;qProg('upg',1);log(`${name(t)}: продажи ур. ${t.salesLvl}.`);render();draw();};
     }
   };
-  draw(); await openCustom(); save(); render();
+  window.__kioskRedraw=draw; draw(); await openCustom(); window.__kioskRedraw=null; save(); render();
 }
 async function bizWindow(t){
   const draw=()=>{
@@ -4254,7 +4254,7 @@ function kioskUpgradeBoth(t){
   fly('💵',AT.cash(),AT.card(),flyN(cost));S.cash-=cost;
   if(t.capLvl<capTab(t).length)t.capLvl++;if(t.salesLvl<salTab(t).length)t.salesLvl++;
   qProg('upg',1);log(`${name(t)}: точка ур. ${kioskLvl(t)} — запас ${cap(t)} шт, продажи ${sales(t)}/круг.`);
-  render();draw();return true;
+  render();draw();if(window.__kioskRedraw)window.__kioskRedraw();return true;
 }
 (function(){
   const base=render;
@@ -6317,5 +6317,5 @@ if(UI_REVIEW||!load())newGame();else if(S.finished)newGame();else if(!S.player)s
 S.sessions=(S.sessions||0)+1;track('session_start',{sessions:S.sessions,v:VERSION,cfg:cfgHash(),startV:S.startVersion||null});
 fit();{const[g1,g2]=gridOf(S.pos);const[x,y]=iso(g1,g2);cam={x,y:y-TH*0.4};}render();
 </script>
-<script>window.SHIPMENT_STAGE_URL="./shipment-stage.js?v=428d4433";</script><script src="shipment-event.js?v=5529f201"></script><script src="parcel-fill.js?v=0d8f0894"></script><script src="property-motion.js?v=20ec4fbc"></script><script src="property-layout.js?v=8c93b518"></script><script src="spot-varnish.js?v=8e8c6d94"></script><script src="property-upgrade-fx.js?v=9d6e4442"></script><script src="number-drum.js?v=3d9383db"></script><script src="interface-details.js?v=710c976d"></script><script src="advice-target.js?v=61a09bdc"></script><script src="map-progress.js?v=669e000f"></script><script src="top-hud.js?v=f4923580"></script><script src="authority-windows.js?v=0a00d418"></script><script src="notice-windows.js?v=644789a9"></script><script src="interface-review.js?v=7de4130d"></script><script>(function(){var done=0;function go(){if(done)return;done=1;var e=document.createElement("script");e.type="module";e.src="roll-button.js?v=7cd84172";document.body.appendChild(e)}function w(){document.body.classList.contains("engine-ready")?go():setTimeout(w,300)}w();setTimeout(go,20000)})()</script><script src="money-journal.js?v=c13f52b4"></script><script src="liveops.js?v=2"></script></body>
+<script>window.SHIPMENT_STAGE_URL="./shipment-stage.js?v=428d4433";</script><script src="shipment-event.js?v=5529f201"></script><script src="parcel-fill.js?v=0d8f0894"></script><script src="property-motion.js?v=20ec4fbc"></script><script src="property-layout.js?v=8c93b518"></script><script src="spot-varnish.js?v=8e8c6d94"></script><script src="property-upgrade-fx.js?v=9d6e4442"></script><script src="number-drum.js?v=3d9383db"></script><script src="interface-details.js?v=710c976d"></script><script src="advice-target.js?v=61a09bdc"></script><script src="map-progress.js?v=669e000f"></script><script src="top-hud.js?v=f4923580"></script><script src="authority-windows.js?v=0a00d418"></script><script src="notice-windows.js?v=644789a9"></script><script src="interface-review.js?v=7de4130d"></script><script>(function(){var done=0;function go(){if(done)return;done=1;var e=document.createElement("script");e.type="module";e.src="roll-button.js?v=7cd84172";document.body.appendChild(e)}function w(){document.body.classList.contains("engine-ready")?go():setTimeout(w,300)}w();setTimeout(go,20000)})()</script><script src="money-journal.js?v=c13f52b4"></script><script src="liveops.js?v=3"></script></body>
 </html>

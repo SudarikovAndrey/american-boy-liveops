@@ -5,6 +5,12 @@
 // может только ведущий показа — в скрытом «Меню тестирования»
 // (5 быстрых тапов по заголовку «Настройки аккаунта»).
 (function(){
+  // Угловые клетки 10 и 30 — «Шанс». Партии, начатые до этого, переводим на лету.
+  if(typeof S!=='undefined'&&S&&S.tiles){
+    let moved=false;
+    for(const i of [10,30]){const t=S.tiles[i];if(t&&t.type!=='chance'){t.type='chance';t.zone=-1;t.owner=null;moved=true;}}
+    if(moved){try{save();render();}catch(e){}}
+  }
   // День закрывает полночь, а не игрок.
   dayCard=async function(){
     const u=dayUnlocks(S.day,true), nx=CFG.MILESTONES.find(m=>S.pts<m.pts);
@@ -37,4 +43,27 @@
   const card=document.getElementById('card');
   if(card)new MutationObserver(clean).observe(card,{childList:true,subtree:true});
   document.title='Америкэн бой — прототип ивента';
+
+  // ---- Фейковый главный экран Block Boss ----
+  // Старт — с главного экрана кора; тап по виджету ивента открывает ивент.
+  // Кнопка «← Выход» в ивенте возвращает на главный экран, прогресс сохраняется.
+  const core=document.createElement('div');core.id='loCore';
+  core.innerHTML='<div class="lo-stage" role="img" aria-label="Главный экран Block Boss">'+
+    '<button id="loWidget" type="button" aria-label="Открыть ивент «Америкэн бой»">'+
+    '<img src="assets/icons/hud-johnny.webp" alt=""><span class="lo-time" id="loTime"></span><span class="lo-dot"></span>'+
+    '<span class="lo-hint">Америкэн бой</span></button></div>';
+  document.body.append(core);
+  const exit=document.createElement('button');exit.id='loExit';exit.type='button';
+  exit.setAttribute('aria-label','Выйти на главный экран Block Boss');exit.innerHTML='<b>←</b>Выход';
+  document.body.append(exit);
+  const timeLeft=()=>{
+    const day=(typeof S!=='undefined'&&S&&S.day)||1,days=Math.max(0,CFG.DAYS-day);
+    const now=new Date(),mid=new Date(now);mid.setHours(24,0,0,0);const h=Math.floor((mid-now)/36e5);
+    return days>0?`${days}д : ${h}ч`:`${h}ч : ${Math.floor((mid-now)%36e5/6e4)}м`;
+  };
+  const show=on=>{core.hidden=!on;exit.hidden=on;if(on)document.getElementById('loTime').textContent=timeLeft();};
+  document.getElementById('loWidget').onclick=()=>show(false);
+  exit.onclick=()=>{if(typeof moving!=='undefined'&&moving)return;show(true);};
+  setInterval(()=>{if(!core.hidden)document.getElementById('loTime').textContent=timeLeft();},30000);
+  show(true);
 })();

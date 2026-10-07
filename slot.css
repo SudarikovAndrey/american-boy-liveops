@@ -1,0 +1,30 @@
+/* The machine owns its art; the host keeps its original resource HUD above it. */
+.sl-integrated{position:fixed;inset:0;z-index:80;background:#0c0906b0;backdrop-filter:blur(14px) saturate(.75);-webkit-backdrop-filter:blur(14px) saturate(.75);display:flex;justify-content:center;overflow:hidden;isolation:isolate}
+#bandit-frame{display:block;width:100%;height:100%;border:0;background:transparent;color-scheme:normal}
+.sl-loading{position:absolute;inset:0;display:grid;place-items:center;background:#191713;color:#edd8ac;font:700 22px 'Bitter',Georgia,serif}
+.sl-loading-close{position:absolute;top:14px;right:14px;width:46px;height:46px;padding:0;border:0;border-radius:50%;overflow:hidden;background:none;box-shadow:0 3px #211e17}
+.sl-loading-close .atlas-art{width:100%;height:100%}
+.sl-test-controls{display:flex;flex-wrap:wrap;gap:8px;width:100%;margin:8px 0}
+.sl-test-controls select,.sl-test-controls button{flex:1;min-width:180px;min-height:44px}
+
+/* Shared core resource header, directly above either minigame. */
+.minigame-layer{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);justify-content:stretch;align-content:start;padding:0;background:#111;backdrop-filter:none;-webkit-backdrop-filter:none}
+.minigame-layer .sl-res{position:relative;inset:auto;z-index:6;margin:calc(env(safe-area-inset-top,0px) + 6px) 10px 6px;min-width:0}
+.minigame-layer .sl-res .cur{min-width:0}
+.minigame-layer .minigame-frame{display:block;width:100%;height:100%;min-height:0;border:0;background:transparent}
+
+/* One continuous backdrop: extra height belongs to the room, not to the controls. */
+.minigame-layer{background:#191713;padding-bottom:env(safe-area-inset-bottom,0px)}
+.minigame-layer::before{content:"";position:absolute;inset:0;background:url(assets/paper-grain.svg) repeat;opacity:.035;pointer-events:none;z-index:-1}
+
+/* Painted wood continues behind the resources and through both game frames. */
+.minigame-layer{background:linear-gradient(to bottom,#070605b3,transparent 22%,transparent 75%,#0b07044d),url(assets/minigames/dark-wood-v1.webp) center/100% 100% no-repeat;background-color:#130c07}
+.minigame-layer::before{display:none}
+
+/* A short room fade, then the loaded artwork lands without moving the HUD. */
+.minigame-layer{animation:minigame-room-in 140ms ease-out both}
+.minigame-layer:not(.minigame-ready) .minigame-frame{visibility:hidden}
+.minigame-closing{pointer-events:none}
+.minigame-layer .sl-loading{background:transparent;pointer-events:none}
+@keyframes minigame-room-in{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.minigame-layer{animation-duration:80ms}}

@@ -1,0 +1,13 @@
+#card.print-property .property-picture{position:relative;isolation:isolate}
+#card.print-property .property-illustration{position:relative;z-index:1}
+.property-fx-old{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:2;pointer-events:none}
+/* The turning sheet is an exact frozen copy of the real card, at the same bounds. */
+.property-evolution{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:transparent;overflow:hidden;color:#f4e4bf;font-family:Bitter,Georgia,serif}
+.property-evolution::backdrop{background:transparent}
+.evolution-flight{position:absolute;perspective:1400px;transform-origin:50% 50%;pointer-events:none;will-change:transform}
+.evolution-turner{position:relative;width:100%;height:100%;transform-style:preserve-3d;will-change:transform}
+.evolution-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;transform-style:preserve-3d}
+.evolution-before{transform:rotateY(0deg)}
+.evolution-after{transform:rotateY(180deg)}
+.evolution-sheet-copy{backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.evolution-announcement{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}

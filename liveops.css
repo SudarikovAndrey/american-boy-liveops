@@ -1,0 +1,6 @@
+/* Прототип LiveOps-ивента: на старте только «Играть». */
+#boot #startFriends{display:none!important}
+/* Выбор карты: в прототипе всегда Бруклин. */
+#card .hud-map{display:none!important}
+/* Меню тестирования: только то, что нужно ведущему показа. */
+#card #treeTest,#card #chTest,#card .cu-testrow,#card .sl-test-controls,#card #dice21Test{display:none!important}

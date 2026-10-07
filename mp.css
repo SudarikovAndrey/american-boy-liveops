@@ -1,0 +1,380 @@
+/* ===== Мультиплеер «Сан-Франциско» (?map=sf&mp): лобби, полоса игроков, фишки соперников =====
+   Палитра Style Bible: бумага #F2E3BD, чернила #25221C, красный #A92720, синий #243F4B, золото #C99A32. */
+.mp-mode{--mp-paper:#f2e3bd;--mp-paper2:#e9d8ae;--mp-ink:#25221c;--mp-red:#a92720;--mp-green:#496b45;--mp-num:'Golos Text','Suisse Intl',Arial,sans-serif;--mp-txt:'Bitter',Georgia,serif}
+.mp-mode #bTaxi{display:none!important}               /* такси двигает фишку вне очереди */
+.mp-mode #sRollsCap,.mp-mode #sRolls{visibility:hidden}   /* ход = один бросок, запаса ходов нет */
+
+/* ---- лобби и итог ---- */
+.mp-lobby{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;padding:16px;
+  background:rgba(37,34,28,.55);overflow:auto}
+.mp-lobby[hidden]{display:none}
+.mp-sheet{width:min(100%,420px);max-height:calc(100% - 8px);overflow:auto;background:var(--mp-paper) url(assets/paper-grain.svg);
+  color:var(--mp-ink);border:2.5px solid var(--mp-ink);border-radius:14px 10px 15px 9px;box-shadow:5px 6px 0 rgba(37,34,28,.85);
+  padding:18px 18px 14px;font-family:var(--mp-txt);font-weight:600}
+.mp-sheet h2{margin:0 0 6px;font:800 21px/1.15 var(--mp-num);letter-spacing:-.01em}
+.mp-lead{margin:0 0 12px;font-size:14px;line-height:1.35;color:#4a3f31}
+.mp-err{margin:0 0 10px;padding:7px 10px;border:2px solid var(--mp-red);border-radius:8px 11px 7px 10px;color:var(--mp-red);font-size:14px}
+.mp-warn{margin:8px 0 0;font-size:12px;line-height:1.3;color:var(--mp-red)}
+.mp-host-note{color:#4a3f31}
+.mp-field{display:block;margin:0 0 12px}
+.mp-field span{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#6b5f52;margin-bottom:4px}
+.mp-sheet input{width:100%;box-sizing:border-box;font:700 17px var(--mp-txt)!important;padding:10px 12px;color:var(--mp-ink);
+  background:#fbf3dc;border:2px solid var(--mp-ink);border-radius:9px 12px 8px 11px;outline:none}
+.mp-sheet input:focus{border-color:var(--mp-red)}
+.mp-sheet button{font-family:var(--mp-txt)!important;font-weight:800;cursor:pointer;color:var(--mp-ink);background:var(--mp-paper2);
+  border:2px solid var(--mp-ink);border-radius:9px 12px 8px 11px;padding:9px 14px;font-size:15px}
+.mp-sheet button:disabled{opacity:.5;cursor:default}
+.mp-big{display:block;width:100%;margin:6px 0 4px;padding:13px 16px!important;font:800 19px var(--mp-num)!important;letter-spacing:.01em;
+  color:#fbf0d4!important;background:var(--mp-red)!important;border:2.5px solid var(--mp-ink)!important;border-radius:11px 14px 10px 13px!important;
+  box-shadow:4px 4px 0 var(--mp-ink);text-transform:uppercase}
+.mp-big:active:not(:disabled){transform:translate(3px,3px);box-shadow:1px 1px 0 var(--mp-ink)}
+.mp-big:disabled{background:#6f665a!important;box-shadow:3px 3px 0 rgba(37,34,28,.6)}
+.mp-or{display:flex;align-items:center;gap:10px;margin:14px 0 10px;font-size:12px;color:#6b5f52;text-transform:uppercase;letter-spacing:.06em}
+.mp-or:before,.mp-or:after{content:"";flex:1;border-top:1.5px solid rgba(37,34,28,.35)}
+.mp-join{display:flex;gap:8px}
+.mp-join input{flex:1;text-align:center;font:800 22px var(--mp-num)!important;letter-spacing:.3em;text-transform:uppercase}
+.mp-join button{flex:none;background:var(--mp-green);color:#fbf0d4;white-space:nowrap}
+.mp-solo{display:block;margin:12px auto 0;text-align:center;font-size:13px;color:#6b5f52;text-decoration:underline;text-underline-offset:3px}
+.mp-code{display:inline-block;padding:0 8px;margin-left:2px;font:800 26px var(--mp-num);letter-spacing:.18em;color:var(--mp-red);
+  border:2px dashed var(--mp-red);border-radius:8px 11px 7px 10px;transform:rotate(-1.5deg)}
+.mp-spin{width:34px;height:34px;margin:10px auto;border:4px solid rgba(37,34,28,.2);border-top-color:var(--mp-red);border-radius:50%;animation:mp-spin 1s steps(8) infinite}
+@keyframes mp-spin{to{transform:rotate(360deg)}}
+.mp-share{display:flex;gap:12px;align-items:center;margin:10px 0 12px;padding:10px;border:1.5px solid rgba(37,34,28,.35);border-radius:10px 13px 9px 12px}
+.mp-qr{flex:none;width:132px;height:132px;display:flex;align-items:center;justify-content:center;background:var(--mp-paper)}
+.mp-qr img,.mp-qr canvas{display:block;width:132px;height:132px}
+.mp-qr-code{font:800 28px var(--mp-num);letter-spacing:.15em}
+.mp-share-t{flex:1;min-width:0}
+.mp-share-t p{margin:0 0 8px;font-size:13px;line-height:1.3;color:#4a3f31}
+.mp-share-t button{display:block;width:100%;margin:0 0 6px;font-size:14px;padding:8px 10px}
+.mp-share-t button:first-of-type{background:var(--mp-green);color:#fbf0d4}
+.mp-seats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:0 0 12px}
+.mp-seat{position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:8px;align-items:center;
+  padding:8px;border:2px solid var(--mp-ink);border-radius:9px 12px 8px 11px;background:#fbf3dc;min-width:0}
+.mp-seat i{grid-row:span 2;width:30px;height:30px;border-radius:50%;background:var(--c);border:2px solid var(--mp-ink);color:#fbf0d4;
+  font:800 15px/26px var(--mp-num);text-align:center;font-style:normal}
+.mp-seat b{font:800 14px var(--mp-num);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mp-seat small{font-size:11px;color:#6b5f52}
+.mp-seat.empty{border-style:dashed;background:transparent;opacity:.65}
+.mp-seat.empty i{background:transparent;border:2px dashed var(--c)}
+.mp-kick{position:absolute;top:2px;right:2px;padding:0 6px!important;font-size:12px!important;border:none!important;background:none!important;color:#6b5f52!important}
+.mp-set{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 8px;font-size:13px}
+.mp-set>span small{display:block;font-size:10px;color:#6b5f52;font-weight:600}
+.mp-seg{display:flex;border:2px solid var(--mp-ink);border-radius:9px 12px 8px 11px;overflow:hidden}
+.mp-seg button{border:none!important;border-radius:0!important;padding:6px 9px!important;font-size:13px!important;background:transparent!important}
+.mp-seg button+button{border-left:1.5px solid var(--mp-ink)!important}
+.mp-seg button.on{background:var(--mp-ink)!important;color:var(--mp-paper)!important;opacity:1!important}
+.mp-seg button:disabled:not(.on){opacity:.55}
+.mp-est{margin:4px 0 8px;font-size:12px;line-height:1.3;color:#6b5f52}
+.mp-waithost{text-align:center;font-style:italic}
+.mp-rank{margin:6px 0 12px}
+.mp-place{display:grid;grid-template-columns:22px 32px 1fr auto;gap:8px;align-items:center;padding:8px 6px;border-bottom:1.5px solid rgba(37,34,28,.25)}
+.mp-place.first{background:rgba(201,154,50,.22);border:2px solid #c99a32;border-radius:9px 12px 8px 11px}
+.mp-n{font:800 20px var(--mp-num);text-align:center}
+.mp-place i{width:30px;height:30px;border-radius:50%;background:var(--c);border:2px solid var(--mp-ink);color:#fbf0d4;font:800 15px/26px var(--mp-num);text-align:center;font-style:normal}
+.mp-who{min-width:0}.mp-who b{display:block;font:800 15px var(--mp-num)}
+.mp-who small{display:block;font-size:11px;line-height:1.25;color:#6b5f52}
+.mp-tot{font:800 18px var(--mp-num)}
+
+/* ---- полоса игроков под шапкой ---- */
+.mp-bar{position:fixed;left:50%;transform:translateX(-50%);z-index:29;display:flex;gap:5px;align-items:stretch;max-width:calc(100% - 16px);
+  pointer-events:none;font-family:var(--mp-num)}
+.mp-bar[hidden]{display:none}
+.mp-round{display:flex;align-items:center;padding:3px 8px;font-size:11px;color:var(--mp-paper);background:rgba(37,34,28,.82);border-radius:8px 10px 7px 9px;white-space:nowrap}
+.mp-round b{font-size:14px;margin-right:1px}
+.mp-chip{position:relative;display:grid;grid-template-columns:auto 1fr;column-gap:5px;align-items:center;min-width:0;padding:3px 7px 5px 4px;
+  background:var(--mp-paper);border:2px solid var(--mp-ink);border-radius:9px 12px 8px 11px;box-shadow:2px 2px 0 rgba(37,34,28,.7);overflow:hidden}
+.mp-chip>i{grid-row:span 2;width:22px;height:22px;border-radius:50%;background:var(--c);border:1.5px solid var(--mp-ink);color:#fbf0d4;
+  font:800 12px/19px var(--mp-num);text-align:center;font-style:normal}
+.mp-nm{font-size:11px;font-weight:700;color:#4a3f31;max-width:64px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.1}
+.mp-cap{display:flex;align-items:center;gap:2px;font-size:13px;font-weight:800;color:var(--mp-ink);line-height:1.1;white-space:nowrap}
+.mp-cap .cash-glyph{width:12px;height:12px;flex:none}
+.mp-chip em{position:absolute;right:4px;top:2px;font-size:9px;font-style:normal;color:var(--mp-red)}
+.mp-chip.off{opacity:.55}
+.mp-chip.on{border-color:var(--c);box-shadow:0 0 0 2px var(--c),3px 3px 0 rgba(37,34,28,.75);transform:translateY(1px)}
+.mp-chip u{position:absolute;left:0;bottom:0;height:3px;width:0;background:var(--c);text-decoration:none}
+.mp-chip:not(.on) u{display:none}
+
+/* ---- «чей ход» над кубиком и «Передать ход» ---- */
+.mp-tag,.mp-end{position:fixed;z-index:29;   /* под окнами (#modal — 30) */transform:translate(-50%,-100%);font-family:var(--mp-num);white-space:nowrap}
+.mp-tag[hidden],.mp-end[hidden]{display:none}
+.mp-tag{display:flex;gap:6px;align-items:baseline;padding:5px 10px;pointer-events:none;color:var(--mp-paper);background:var(--c,#25221c);
+  border:2px solid var(--mp-ink);border-radius:9px 12px 8px 11px;box-shadow:2px 3px 0 rgba(37,34,28,.75)}
+.mp-tag span{font-size:11px;opacity:.85}.mp-tag b{font-size:14px}.mp-tag small{font-size:12px;font-variant-numeric:tabular-nums;opacity:.9}
+.mp-tag.mine{animation:mp-bob 1.1s steps(4) infinite}
+.mp-tag.late small{color:#ffd27a;opacity:1}
+@keyframes mp-bob{50%{transform:translate(-50%,calc(-100% - 3px))}}
+.mp-end{display:flex;flex-direction:column;align-items:center;padding:8px 16px 6px;cursor:pointer;color:#fbf0d4;background:var(--mp-red);
+  border:2.5px solid var(--mp-ink);border-radius:11px 14px 10px 13px;box-shadow:3px 4px 0 var(--mp-ink)}
+.mp-end b{font-size:16px;text-transform:uppercase;letter-spacing:.02em}
+.mp-end small{font-size:12px;font-variant-numeric:tabular-nums;opacity:.9}
+.mp-end:active{transform:translate(calc(-50% + 2px),calc(-100% + 2px));box-shadow:1px 2px 0 var(--mp-ink)}
+.mp-end.late small{color:#ffd27a;opacity:1}
+
+/* не свой ход: кубик и действия с клетками приглушены (поле двигать можно) */
+.mp-wait #bRoll{filter:grayscale(.85) brightness(.9)}
+.mp-wait #tilebar,.mp-wait #bShop,.mp-wait #bUp,.mp-wait #bShip{pointer-events:none;opacity:.5}
+.mp-mine #bRoll{filter:none}
+
+.mp-status{position:fixed;left:50%;bottom:calc(var(--world-bottom,200px) + 8px);transform:translateX(-50%);z-index:95;max-width:calc(100% - 32px);
+  padding:7px 12px;font:700 13px var(--mp-txt);color:var(--mp-paper);background:rgba(169,39,32,.95);border:2px solid var(--mp-ink);border-radius:9px 12px 8px 11px}
+.mp-status[hidden]{display:none}
+
+/* ---- фишки соперников и флажки их клеток ---- */
+.mp-layer{position:fixed;inset:0;z-index:6;pointer-events:none}
+.mp-layer[hidden]{display:none}
+.mp-token,.mp-flag{position:absolute;left:0;top:0;will-change:transform}
+.mp-token{width:26px;height:26px;margin:-30px 0 0 -13px;border-radius:50% 50% 50% 50%/55% 55% 45% 45%;background:var(--c);color:#fbf0d4;
+  border:2.5px solid var(--mp-ink);box-shadow:2px 3px 0 rgba(37,34,28,.6);font:800 13px/21px var(--mp-num);text-align:center}
+.mp-token:after{content:"";position:absolute;left:50%;bottom:-9px;width:3px;height:8px;margin-left:-1.5px;background:var(--mp-ink)}
+.mp-token.on{width:30px;height:30px;margin:-34px 0 0 -15px;line-height:25px;font-size:15px;box-shadow:0 0 0 3px #fbf0d4,2px 4px 0 rgba(37,34,28,.6)}
+.mp-token.off{opacity:.45}
+.mp-flag{display:none!important;   /* поле само заливает чужие клетки цветом хозяина (b8713d6) */
+  width:16px;height:16px;margin:-8px 0 0 -8px;border-radius:3px 6px 3px 5px;background:var(--c);border:1.5px solid var(--mp-ink);
+  color:#fbf0d4;font:800 9px/13px var(--mp-num);text-align:center}
+
+/* окно чужой клетки */
+#card .mp-owner{display:flex;align-items:center;gap:6px}
+#card .mp-owner i{display:inline-block;width:22px;height:22px;border-radius:50%;border:1.5px solid #25221c;color:#fbf0d4;font:800 12px/19px var(--mp-num);text-align:center;font-style:normal}
+#card .mp-buyout-note{font-size:12px;color:#6b5f52;margin:8px 0 0}
+#card .mp-need{margin-top:6px}
+
+@media (max-width:380px){.mp-nm{max-width:44px}.mp-cap{font-size:12px}.mp-round{padding:3px 5px}}
+@media (prefers-reduced-motion:reduce){.mp-tag.mine{animation:none}.mp-spin{animation-duration:3s}}
+.mp-clock{position:fixed;z-index:31;transform:translate(-100%,-100%);padding:3px 9px;font:800 13px var(--mp-num);font-variant-numeric:tabular-nums;
+  color:var(--mp-paper);background:var(--mp-ink);border:2px solid var(--mp-ink);border-radius:8px 10px 7px 9px;box-shadow:2px 2px 0 rgba(37,34,28,.5);pointer-events:none}
+.mp-clock[hidden]{display:none}.mp-clock.late{background:var(--mp-red)}
+
+/* ===== плейтест 01.10 ===== */
+/* круг стола: цифра — барабан прокачки (NumberDrum), плашка «глотает» смену */
+.mp-round{pointer-events:auto}
+.mp-round.bump{animation:mp-gulp .42s cubic-bezier(.34,1.56,.64,1)}
+@keyframes mp-gulp{0%{transform:scale(1)}30%{transform:scale(.88,1.1)}65%{transform:scale(1.14,.92)}100%{transform:scale(1)}}
+.mp-chips{display:flex;gap:5px}
+.mp-pts{margin-left:5px;font-size:11px;font-weight:700;color:#4a3f31}
+
+/* чужой ход: кубика нет, на его месте — «Ходит Вася»; свой ход после броска: на его месте «Передать ход» */
+.mp-wait #bRoll,.mp-rolled #bRoll{visibility:hidden}
+.mp-tag.center{transform:translate(-50%,-50%);flex-direction:column;align-items:center;gap:0;padding:6px 12px;min-width:84px;border-radius:13px 16px 12px 15px}
+.mp-tag.center span{font-size:11px}.mp-tag.center b{font-size:16px;max-width:110px;overflow:hidden;text-overflow:ellipsis}
+.mp-end{transform:translate(-50%,-50%);min-height:64px;justify-content:center}
+.mp-end:active{transform:translate(calc(-50% + 2px),calc(-50% + 2px))}
+/* время на исходе: мигает плашка, кнопка и часы на карточке */
+.mp-tag.late,.mp-end.late,.mp-clock.late{animation:mp-blink .5s steps(2,jump-none) infinite}
+.mp-late #bRoll{animation:mp-blink .5s steps(2,jump-none) infinite}
+@keyframes mp-blink{50%{filter:brightness(1.35) saturate(1.3);box-shadow:0 0 0 4px #ffd27a,3px 4px 0 var(--mp-ink)}}
+
+/* «Твой ход!» — плакат выпрыгивает и улетает в кубик */
+.mp-bang{position:fixed;left:50%;top:42%;z-index:60;pointer-events:none;padding:12px 26px 14px;background:var(--mp-red);color:#fbf0d4;
+  border:3px solid var(--mp-ink);border-radius:14px 18px 13px 17px;box-shadow:6px 7px 0 var(--mp-ink);transform:translate(-50%,-50%)}
+.mp-bang b{display:block;font:800 34px/1 var(--mp-num);text-transform:uppercase;letter-spacing:.02em;white-space:nowrap}
+
+/* заметная плашка денег: рента, перекуп, дубль */
+.mp-plate{position:fixed;left:50%;top:34%;z-index:58;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:1px;
+  min-width:190px;padding:10px 18px 9px;background:var(--mp-paper) url(assets/paper-grain.svg);color:var(--mp-ink);
+  border:3px solid var(--mp-ink);border-radius:13px 17px 12px 16px;box-shadow:5px 6px 0 rgba(37,34,28,.85);transform:translate(-50%,-50%)}
+.mp-plate b{font:800 16px var(--mp-num)}
+.mp-plate strong{font:800 34px/1.05 var(--mp-num);font-variant-numeric:tabular-nums}
+.mp-plate small{font:600 12px var(--mp-txt);color:#6b5f52;max-width:240px;text-align:center}
+.mp-plate.minus strong{color:var(--mp-red)}.mp-plate.plus strong{color:var(--mp-green)}
+.mp-plate.minus{border-color:var(--mp-red)}.mp-plate.plus{border-color:var(--mp-green)}
+
+/* всплытие над клеткой соперника: +$ / −$ */
+.mp-float{position:fixed;z-index:7;pointer-events:none;font:800 18px var(--mp-num);white-space:nowrap;
+  text-shadow:-1.5px -1.5px 0 #fbf0d4,1.5px -1.5px 0 #fbf0d4,-1.5px 1.5px 0 #fbf0d4,1.5px 1.5px 0 #fbf0d4,0 3px 0 rgba(37,34,28,.35)}
+
+/* окно перекупа: что можно сделать */
+#card .mp-choice{margin:10px 0 0;padding:8px 10px;border:1.5px dashed rgba(37,34,28,.45);border-radius:9px 12px 8px 11px}
+#card .mp-choice b{display:block;font-size:13px;margin-bottom:4px}
+#card .mp-choice p{margin:3px 0;font-size:13px;line-height:1.3}
+#card .mp-choice p span{font-weight:800}
+
+@media (prefers-reduced-motion:reduce){.mp-tag.late,.mp-end.late,.mp-clock.late,.mp-late #bRoll{animation:none}.mp-round.bump{animation:none}}
+
+/* итог-шоу */
+.mp-show{position:relative}
+.mp-cards{display:flex;flex-direction:column;gap:8px;margin:6px 0 12px}
+.mp-card{border:2px solid var(--mp-ink);border-radius:10px 13px 9px 12px;background:#fbf3dc;padding:7px 9px;opacity:.55;transition:opacity .2s}
+.mp-card.live,.mp-card.done{opacity:1}.mp-card.live{box-shadow:0 0 0 3px var(--c)}
+.mp-card-h{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}
+.mp-card-h i{width:28px;height:28px;border-radius:50%;background:var(--c);border:2px solid var(--mp-ink);color:#fbf0d4;font:800 14px/24px var(--mp-num);text-align:center;font-style:normal}
+.mp-card-h b{font:800 15px var(--mp-num)}
+.mp-sum{font:800 22px var(--mp-num);font-variant-numeric:tabular-nums}
+.mp-lines{margin-top:4px}
+.mp-line{display:none;justify-content:space-between;font-size:13px;padding:2px 0 2px 36px;border-top:1px dashed rgba(37,34,28,.2)}
+.mp-line.on{display:flex;animation:mp-line-in .22s cubic-bezier(.34,1.56,.64,1)}
+.mp-line small{color:#6b5f52;font-size:11px}
+.mp-line b{font-variant-numeric:tabular-nums}.mp-line.neg b{color:var(--mp-red)}
+@keyframes mp-line-in{from{transform:translateY(-6px);opacity:0}}
+.mp-crown{display:none;margin-top:6px;text-align:center;font:800 15px var(--mp-num);color:#7a5a12}
+.mp-card.win{opacity:1;background:#f6e3a8;border-color:#c99a32;box-shadow:0 0 0 3px #c99a32,4px 5px 0 var(--mp-ink);animation:mp-win .6s cubic-bezier(.34,1.56,.64,1)}
+.mp-card.win .mp-crown{display:block}
+.mp-card.lose{opacity:.7}
+@keyframes mp-win{0%{transform:scale(.9)}45%{transform:scale(1.07) rotate(-1deg)}75%{transform:scale(.98)}100%{transform:scale(1)}}
+.mp-skip{position:absolute;right:12px;top:14px;padding:4px 10px!important;font-size:12px!important;background:transparent!important}
+@media (prefers-reduced-motion:reduce){.mp-card.win{animation:none}.mp-line.on{animation:none}}
+/* лобби: пять длин партии не влезали в строку — подпись сверху, кнопки на всю ширину */
+.mp-set{flex-direction:column;align-items:stretch;gap:4px;margin-bottom:10px}
+.mp-set>span{display:flex;align-items:baseline;gap:6px}
+.mp-set>span small{display:inline}
+.mp-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
+.mp-seg button{white-space:nowrap;padding:7px 4px!important}
+
+/* ручная пауза: кнопка в полосе игроков и плашка поверх поля */
+.mp-pausebtn{pointer-events:auto;flex:none;width:30px;border:2px solid var(--mp-ink);border-radius:8px 10px 7px 9px;background:var(--mp-paper);
+  color:var(--mp-ink);font:800 13px var(--mp-num);box-shadow:2px 2px 0 rgba(37,34,28,.7);cursor:pointer;padding:0}
+.mp-pausebtn:active{transform:translate(1px,1px);box-shadow:1px 1px 0 rgba(37,34,28,.7)}
+.mp-paused .mp-pausebtn{visibility:hidden}
+.mp-pause{position:fixed;inset:0;z-index:92;display:flex;align-items:center;justify-content:center;background:rgba(37,34,28,.5)}
+.mp-pause[hidden]{display:none}
+.mp-pause-card{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:220px;padding:16px 22px 14px;background:var(--mp-paper) url(assets/paper-grain.svg);
+  border:3px solid var(--mp-ink);border-radius:14px 18px 13px 17px;box-shadow:6px 7px 0 var(--mp-ink);animation:mp-pause-in .26s cubic-bezier(.34,1.56,.64,1)}
+.mp-pause-card>b{font:800 30px var(--mp-num);text-transform:uppercase;color:var(--mp-ink)}
+.mp-pause-card>small{font:600 14px var(--mp-txt);color:#4a3f31}
+.mp-pause-card .mp-big{margin-top:10px;font-family:var(--mp-num)!important}
+@keyframes mp-pause-in{from{transform:scale(.86);opacity:0}}
+@media (prefers-reduced-motion:reduce){.mp-pause-card{animation:none}}
+
+/* полоса игроков на 3–4 игрока не влезала в 375 px: переносится, фишки компактнее */
+.mp-bar{flex-wrap:wrap;justify-content:center;row-gap:4px}
+.mp-chips{flex-wrap:wrap;justify-content:center}
+.mp-bar.tight .mp-chips{order:-1;flex-basis:100%}
+.mp-bar.tight .mp-chip{padding:3px 6px 5px 3px;column-gap:4px}
+.mp-bar.tight .mp-nm{max-width:52px}
+.mp-bar.tight .mp-cap{font-size:12px}
+.mp-bar.tight .mp-pts{margin-left:3px;font-size:10px}
+.mp-bar{width:min(calc(100% - 16px),560px)}
+.mp-bar.tight .mp-chips{display:grid;grid-template-columns:1fr 1fr;gap:4px;width:min(100%,340px);flex-basis:auto;margin:0 auto}
+.mp-bar.tight .mp-chips+.mp-pausebtn,.mp-bar.tight .mp-round{height:24px}
+/* предложение о покупке: шесть цен — вложенное ×1…×10 */
+#card .mp-mults{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+#card .mp-mult{display:flex;flex-direction:column;align-items:center;gap:1px;padding:6px 4px!important;min-height:0;border-radius:9px 12px 8px 11px}
+#card .mp-mult b{font:800 15px var(--mp-num)}
+#card .mp-mult span{font:700 12px var(--mp-num);font-variant-numeric:tabular-nums}
+.mp-round.final{background:var(--mp-red);animation:mp-blink 1s steps(2,jump-none) infinite}
+@media (prefers-reduced-motion:reduce){.mp-round.final{animation:none}}
+
+/* Codex: the lobby is a single printed table invitation, not nested UI cards. */
+body.mp-mode .mp-lobby{box-sizing:border-box;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));background:#25221cb8;backdrop-filter:blur(4px);overscroll-behavior:contain}
+body.mp-mode .mp-sheet{box-sizing:border-box;width:min(100%,760px);max-height:100%;padding:20px 18px 16px;border:3px solid #30261b;border-radius:14px 10px 15px 11px;box-shadow:0 0 0 3px #eddbb4,0 7px 0 3px #30261b;background:#f2e3bd url(assets/paper-grain.svg);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#897451 transparent}
+body.mp-mode .mp-sheet h2{font:800 24px/1.18 Bitter,Georgia,serif;margin-bottom:10px;padding-bottom:10px;border-bottom:2px solid #30261b;overflow-wrap:anywhere}
+body.mp-mode .mp-lead{font-size:14px;line-height:1.45;margin-bottom:15px}
+body.mp-mode .mp-code{font-family:Bitter,Georgia,serif;font-size:28px;border:2px solid #a92720;border-radius:2px 4px 3px 2px;letter-spacing:.13em;padding:2px 7px;white-space:nowrap;background:#eddbb4 url(assets/print/ink-wear.svg)}
+body.mp-mode .mp-sheet button{min-height:42px;font-size:15px;border-radius:5px 7px 4px 6px}
+body.mp-mode .mp-big{font:800 22px/1.15 Bitter,Georgia,serif!important;min-height:53px;padding:12px 16px!important;background:#a92720 url(assets/print/ink-wear.svg)!important;box-shadow:0 4px #30261b;text-transform:none;letter-spacing:0}
+body.mp-mode .mp-big:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px #30261b}
+body.mp-mode .mp-field>span{font:700 13px Bitter,Georgia,serif;letter-spacing:0;text-transform:none}
+body.mp-mode .mp-share{display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px;align-items:start;padding:0 0 12px;margin:0 0 12px;border:0;border-radius:0;border-bottom:1px solid #78634677}
+body.mp-mode .mp-qr{width:100px;height:100px;align-self:start;padding:3px;box-sizing:border-box;background:#f2e3bd;border:1px solid #786346}
+body.mp-mode .mp-qr img,body.mp-mode .mp-qr canvas{width:92px;height:92px}
+body.mp-mode .mp-share-t p{font-size:12px;line-height:1.3}
+body.mp-mode .mp-share-t p:first-child{display:none}
+body.mp-mode .mp-share-t button{font-size:14px;line-height:1.2;min-height:40px;padding:7px 9px;margin-bottom:7px}
+body.mp-mode .mp-share-t .mp-host-note{grid-column:1/-1;font-size:11px;line-height:1.3;margin:5px 0 0}
+body.mp-mode .mp-warn{font-size:11px;line-height:1.3}
+body.mp-mode .mp-seats{gap:6px;margin-bottom:16px}
+body.mp-mode .mp-seat{padding:7px 6px;border:0;border-left:5px solid var(--c);border-bottom:1px solid #78634666;border-radius:0;background:#eddbb470;min-height:43px}
+body.mp-mode .mp-seat b{font-size:13px;max-width:100%;padding-right:12px}
+body.mp-mode .mp-seat small{font-size:11px}
+body.mp-mode .mp-seat i{width:26px;height:26px;line-height:23px;font-size:14px;border-width:1.5px}
+body.mp-mode .mp-seat.empty{opacity:.65;border-left-style:dashed}
+body.mp-mode .mp-kick{min-height:28px!important;min-width:24px;font-size:16px!important;top:0;right:0}
+body.mp-mode .mp-set{display:block;margin-bottom:13px;padding-top:8px;border-top:1px solid #78634666}
+body.mp-mode .mp-set>span{display:block;margin-bottom:7px;font:800 16px/1.2 Bitter,Georgia,serif}
+body.mp-mode .mp-set>span small{margin-top:4px;font:600 12px/1.3 Bitter,Georgia,serif}
+body.mp-mode .mp-seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;width:100%;box-sizing:border-box;border-radius:5px 7px 4px 6px;border-width:1.5px}
+body.mp-mode .mp-seg button{min-height:38px;font-size:13px!important;padding:6px 4px!important;white-space:normal;line-height:1.15}
+body.mp-mode .mp-seg[data-k="win"]{grid-auto-flow:row;grid-template-columns:repeat(2,minmax(0,1fr))}
+body.mp-mode .mp-seg[data-k="win"] button{font-size:13px!important;min-height:42px;border-left:0!important;border-top:0!important;padding:7px 5px!important}
+body.mp-mode .mp-seg[data-k="win"] button:nth-child(2n){border-left:1px solid #30261b!important}
+body.mp-mode .mp-seg[data-k="win"] button:nth-child(n+3){border-top:1px solid #30261b!important}
+body.mp-mode .mp-seg:has(button:disabled){border-color:#a39376;background:#d8ceb5}
+body.mp-mode .mp-seg button:disabled{cursor:default;color:#71664f;opacity:1;background:transparent!important}
+body.mp-mode .mp-seg button.on:disabled{background:#b8aa8e!important;color:#30261b!important;box-shadow:inset 0 -3px #a39376}
+body.mp-mode .mp-host-only{font-size:13px;padding:7px 10px;background:#d8ceb5;border-left:3px solid #897451}
+body.mp-mode .mp-est{font-size:12px;line-height:1.4;margin:8px 0 12px;padding-top:8px;border-top:1px solid #78634666}
+body.mp-mode .mp-rules-btn{margin-bottom:9px;min-height:38px;font-size:14px;background:transparent;border:1px solid #786346}
+body.mp-mode .mp-join{gap:6px}
+body.mp-mode .mp-join input{min-width:0;width:40%;font-size:20px!important;letter-spacing:.12em}
+body.mp-mode .mp-join button{font-size:14px;min-height:46px;padding:8px 10px}
+body.mp-mode .mp-solo{font-size:13px;line-height:1.3;margin-top:15px}
+body.mp-mode .mp-sheet button:focus-visible,body.mp-mode .mp-sheet input:focus-visible{outline:3px solid #c99a32;outline-offset:3px}
+/* Existing rules presentation: preserve each illustrated prop's proportions. */
+body.mp-mode #onboard.mp-rules .mpr-art img{object-fit:contain;max-width:100%;height:auto;aspect-ratio:auto}
+body.mp-mode #onboard.mp-rules .mpr-row img{width:74px;height:74px;object-fit:contain}
+body.mp-mode #onboard.mp-rules .mpr-char>img{max-height:150px;width:auto}
+body.mp-mode #onboard.mp-rules .ob-art{overflow:hidden}
+@media(min-width:900px){
+ body.mp-mode .mp-sheet:has(.mp-seats){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:24px}
+ body.mp-mode .mp-sheet:has(.mp-seats)>h2{grid-column:1/-1}
+ body.mp-mode .mp-sheet:has(.mp-seats)>.mp-share,body.mp-mode .mp-sheet:has(.mp-seats)>.mp-seats,body.mp-mode .mp-sheet:has(.mp-seats)>.mp-host-only{grid-column:1}
+ body.mp-mode .mp-sheet:has(.mp-seats)>.mp-set{grid-column:2}
+ body.mp-mode .mp-sheet:has(.mp-seats)>.mp-set:nth-of-type(3){grid-row:2}
+ body.mp-mode .mp-sheet:has(.mp-seats)>.mp-est,body.mp-mode .mp-sheet:has(.mp-seats)>#mpStart,body.mp-mode .mp-sheet:has(.mp-seats)>.mp-rules-btn,body.mp-mode .mp-sheet:has(.mp-seats)>.mp-waithost,body.mp-mode .mp-sheet:has(.mp-seats)>.mp-solo{grid-column:1/-1}
+}
+body.mp-mode .mp-set>span small{display:block;font-weight:600}
+body.mp-mode .mp-share-t{display:contents}
+body.mp-mode .mp-share-t button{grid-column:2}
+body.mp-mode .mp-qr{grid-row:1/span 2}
+body.mp-mode .mp-share-t .mp-warn{grid-column:1/-1}
+body.mp-mode .mp-guest-note{font:700 13px/1.35 Bitter,Georgia,serif;padding:8px 10px;border:1px dashed #897451;background:#e0d4b8}
+
+/* Compact auction choices keep the price and touch target readable. */
+body.mp-mode #card .mp-lot{padding:12px;border:2px solid #A92720;background:#f2e3bd url(assets/paper-grain.svg)}
+body.mp-mode #card .mp-lot>b{font:800 20px/1.15 Bitter,Georgia,serif}
+body.mp-mode #card .mp-lot p{font-size:14px;line-height:1.4}
+body.mp-mode #card .mp-bids{grid-template-columns:1fr;gap:7px}
+body.mp-mode #card .mp-bid{min-height:44px;padding:10px!important;font:800 18px/1.15 Bitter,Georgia,serif!important}
+body.mp-mode #card .mp-lot-btn{min-height:44px;font-size:15px!important;border-style:solid!important}
+/* Two rows of seats leave the centre of the phone for the board. Specificity
+   deliberately wins over the legacy mp-ui.css loaded after this sheet. */
+@media(max-width:600px){
+ body.mp-play .mp-bar,body.mp-play .mp-bar.tight{max-width:none;width:calc(100% - 124px);right:6px}
+ body.mp-play .mp-bar .mp-chips,body.mp-play .mp-bar.tight .mp-chips{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:100%}
+ body.mp-play .mp-bar .mp-chip{min-width:0;padding:3px 4px;column-gap:3px}
+ body.mp-play .mp-bar .mp-nm{max-width:65px}
+ body.mp-play .mp-bar .mp-win{min-height:24px}
+ body.mp-play .mp-bar .mp-pausebtn{width:32px;height:28px}
+}
+
+/* Phone ranking: small coloured counters at the edge; details on tap. */
+@media(max-width:600px){
+ body.mp-play .mp-bar,body.mp-play .mp-bar.tight{width:104px;max-width:104px}
+ body.mp-play .mp-bar .mp-chips,body.mp-play .mp-bar.tight .mp-chips{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+ body.mp-play .mp-bar .mp-chip,body.mp-play .mp-bar.tight .mp-chip{position:relative;display:grid;place-items:center;width:44px;height:44px;box-sizing:border-box;padding:0;border:2px solid #25221c;border-radius:50%;background:var(--c);overflow:visible;cursor:pointer;box-shadow:0 2px 0 #25221c,inset 0 0 0 2px #f2e3bd}
+ body.mp-play .mp-bar .mp-chip>i{width:auto;height:auto;font:800 19px/1 Bitter,Georgia,serif;border:0;background:none;box-shadow:none;color:#fff0cb}
+ body.mp-play .mp-bar .mp-chip .mp-nm,body.mp-play .mp-bar .mp-chip .mp-cap,body.mp-play .mp-bar .mp-chip em,body.mp-play .mp-bar .mp-chip u{display:none}
+ body.mp-play .mp-bar .mp-chip::after{content:attr(data-place);position:absolute;left:-6px;bottom:-2px;width:16px;height:16px;border:1px solid #25221c;border-radius:50%;background:#f2e3bd;color:#25221c;font:800 10px/16px Bitter,Georgia,serif;text-align:center}
+ body.mp-play .mp-bar .mp-chip.on{box-shadow:0 0 0 2px #f2e3bd,0 0 0 4px var(--c),0 3px 0 #25221c}
+ body.mp-play .mp-bar .mp-win{font-size:10px}
+}
+@media(min-width:900px){
+ body.mp-play .mp-bar,body.mp-play .mp-bar.tight{right:14px;max-width:220px;width:220px;gap:7px}
+ body.mp-play .mp-bar .mp-chip{padding:7px 10px;gap:5px;cursor:pointer}
+ body.mp-play .mp-bar .mp-chip>i{width:28px;height:28px;font-size:15px;line-height:25px}
+ body.mp-play .mp-bar .mp-nm{font-size:14px;max-width:160px}
+ body.mp-play .mp-bar .mp-cap,body.mp-play .mp-bar.tight .mp-cap{font-size:18px}
+ body.mp-play .mp-bar .mp-pts{font-size:12px}
+ body.mp-play .mp-bar .mp-round{font-size:16px;padding:7px 10px}
+ body.mp-play .mp-bar .mp-pausebtn{width:36px;height:36px;font-size:18px}
+ body.mp-play .mp-bar .mp-win b{font-size:14px}
+ body.mp-play #moneyJournal{font-size:14px}
+}
+body.mp-play .mp-chip:focus-visible{outline:3px solid #f2e3bd;outline-offset:4px}
+
+@media(max-width:600px){
+ body.mp-play .mp-bar,body.mp-play .mp-bar.tight{width:120px;max-width:120px}
+ body.mp-play .mp-bar .mp-pausebtn{width:28px;height:28px}
+ body.mp-play .mp-bar .mp-chip>i{grid-area:1/1;grid-row:1;position:static;text-align:center;justify-self:center;align-self:center}
+}
+
+/* Deal dialogs are a single printed sheet. Floating turn/auction badges belong
+   to the board and must never print through or over the sheet. */
+body.mp-play.mp-modal .mp-tag,body.mp-play.mp-modal .mp-end,body.mp-play.mp-modal .mp-bar,
+body.mp-play.mp-modal .mp-offer-badge,body.mp-play.mp-modal .mp-ticker,body.mp-play.mp-modal #moneyJournal{visibility:hidden;pointer-events:none}
+body.mp-play .mp-bar .mp-chip{pointer-events:auto}
+body.mp-play.mp-modal .mp-plate,body.mp-play.mp-modal .mp-bang{visibility:hidden}
+/* Передача стола: «Хозяин отключился — стол ведёт …» (mp-hosthandoff). Печатная плашка в стиле плашки версии, без красного. */
+.mp-handoff{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);transform:translateX(-50%) rotate(-.6deg);z-index:97;max-width:calc(100% - 32px);
+  padding:8px 14px;background:#f2e3bd;color:#25221c;border:2.5px solid #25221c;border-radius:10px 13px 9px 12px;box-shadow:3px 4px 0 #25221c;
+  font:800 14px/1.25 var(--mp-num,inherit);text-align:center;pointer-events:none}
+.mp-handoff[hidden]{display:none}

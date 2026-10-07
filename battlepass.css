@@ -1,0 +1,388 @@
+/* Баттлпасс по референсу ui5: расписной задник, две линии наград, лестница
+   уровней между ними, красный плакат премиума внизу.
+   Детали (клеймо, заголовок, шильды, жетоны, кнопки) вырезаны из
+   battlepass-atlas.webp в assets/bp/. Сами плашки собраны вёрсткой в цветах
+   кита: в атласе они идут слитой колонкой с впечатанными иконками, чистой
+   пустой плашки там нет. */
+
+#card.battlepass-card{
+  --paper:#ece0c0; --gold-a:#f0c44e; --gold-b:#d79a26;
+  --stone-a:#e9dcbb; --stone-b:#d8c8a0;
+  --ink:#2a2118; --red:#b12f26;
+  padding:0!important; overflow:hidden; border-radius:18px;
+  background:linear-gradient(#8fb3c9 0%, #a8c3d3 38%, #c3cfcb 62%, #b9ae92 100%);
+}
+
+/* ---------- шапка ---------- */
+#card.battlepass-card .pass-header{
+  position:relative; display:grid; grid-template-columns:auto 1fr auto;
+  align-items:center; gap:9px; padding:11px 12px 9px;
+  background:linear-gradient(#f2e6c6,#e6d7b0); border-bottom:3px solid var(--ink);
+}
+#card.battlepass-card .pass-stamp{
+  width:52px; height:54px; font-size:0; flex:none; align-self:start;
+  background:url(assets/bp/bp-badge.webp) center/contain no-repeat}
+#card.battlepass-card .pass-header>div:not(.pass-progress){min-width:0}
+#card.battlepass-card .pass-header h2{
+  height:44px; margin:0; color:transparent; overflow:hidden; text-indent:-999px;
+  white-space:nowrap;
+  background:url(assets/bp/bp-title.webp) left center/contain no-repeat}
+#card.battlepass-card .pass-header h2+small{display:none}
+#card.battlepass-card .xhead{align-self:start}
+
+/* строка прогресса на всю ширину под заголовком */
+#card.battlepass-card .pass-progress{
+  grid-column:1/-1; display:grid; grid-template-columns:auto 1fr auto;
+  align-items:center; gap:9px; margin-top:3px}
+#card.battlepass-card .pass-progress>b{
+  font-family:var(--num); font-weight:800; font-size:17px; color:var(--ink);
+  background:#f6ecd0; border:2px solid var(--ink); border-radius:999px; padding:3px 11px}
+#card.battlepass-card .pass-progress>div{min-width:0}
+#card.battlepass-card .pass-progress span{
+  display:block; font-size:12.5px; color:#4b4132; margin-bottom:3px; text-align:right}
+#card.battlepass-card .pass-meter{
+  height:17px; border:2px solid var(--ink); border-radius:999px; overflow:hidden;
+  background:#cfc3a4; box-shadow:inset 0 2px 0 #00000022}
+#card.battlepass-card .pass-meter i{
+  display:block; height:100%; width:calc(var(--progress,0) * 100%);
+  background:linear-gradient(#d0453a,#a62a22); border-right:2px solid #7d1d17}
+#card.battlepass-card .pass-progress>small{
+  font-size:11px; line-height:1.15; text-align:center; color:#4b4132;
+  background:#f6ecd0; border:2px solid var(--ink); border-radius:9px; padding:3px 7px}
+#card.battlepass-card .pass-progress>small b{font-family:var(--num); font-size:13px; color:var(--ink)}
+
+/* ---------- полоса-баннер вместо прежней сцены ---------- */
+#card.battlepass-card .pass-scene{
+  position:relative; min-height:58px; padding:8px 10px;
+  display:flex; align-items:center; gap:10px;
+  background:linear-gradient(#7ba7c2,#93b6c9); border-bottom:3px solid var(--ink)}
+#card.battlepass-card .pass-scene svg{display:none}
+#card.battlepass-card .pass-scene>span{
+  flex:1; min-width:0; font-size:0;
+  height:46px; background:url(assets/bp/bp-banner.webp) left center/contain no-repeat}
+#card.battlepass-card .pass-hero{
+  width:64px; height:60px; flex:none;
+  background:url(assets/bp/bp-sun.webp) center/contain no-repeat}
+#card.battlepass-card .pass-hero svg{display:none}
+
+/* ---------- заголовки колонок ---------- */
+#card.battlepass-card .pass-lanes{
+  display:grid; grid-template-columns:1fr 46px 1fr; gap:6px; align-items:end;
+  padding:10px 9px 6px}
+#card.battlepass-card .pass-lanes b{font-size:0; height:40px}
+#card.battlepass-card .pass-lanes b:first-child{
+  background:url(assets/bp/bp-head-free.webp) center/contain no-repeat}
+#card.battlepass-card .pass-lanes b:last-child{
+  background:url(assets/bp/bp-head-prem.webp) center/contain no-repeat}
+#card.battlepass-card .pass-lanes b svg{display:none}
+
+/* ---------- лестница ---------- */
+#card.battlepass-card .pass-scroll{
+  overflow:auto; -webkit-overflow-scrolling:touch;
+  background:linear-gradient(#a9c3d2 0%, #bcc7c2 55%, #b3a88c 100%)}
+#card.battlepass-card .pass-stairs{position:relative; padding:0 9px 12px}
+/* нижняя панорама города из кита */
+#card.battlepass-card .pass-stairs::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:92px; z-index:0;
+  background:url(assets/bp/bp-city.webp) center bottom/cover no-repeat; opacity:.5}
+#card.battlepass-card .pass-side{display:none}
+
+#card.battlepass-card .pass-rung{
+  position:relative; z-index:1;
+  display:grid; grid-template-columns:1fr 46px 1fr; gap:6px; align-items:center;
+  margin-bottom:7px}
+
+/* вертикальная тетива лестницы позади жетонов */
+#card.battlepass-card .pass-stairs::before{
+  content:''; position:absolute; z-index:0; top:4px; bottom:96px;
+  left:50%; width:30px; translate:-50% 0;
+  background:linear-gradient(90deg,#6b4f31 0 6px,#8a6a45 6px calc(100% - 6px),#6b4f31 calc(100% - 6px) 100%);
+  border:2px solid #402d1b; border-radius:4px}
+
+#card.battlepass-card .pass-level{
+  position:relative; z-index:2; width:46px; height:46px; display:grid; place-items:center;
+  font-family:var(--num); font-weight:800; font-size:18px; color:#2c2318;
+  background:url(assets/bp/bp-token.webp) center/contain no-repeat}
+#card.battlepass-card .pass-level.next{
+  filter:drop-shadow(0 0 0 #fff) drop-shadow(0 0 6px #ffd76a)}
+
+/* ---------- плашки наград ---------- */
+/* Базовые стили кнопок игры задают свой фон (серый у заблокированной,
+   красный у премиума) с весом выше нашего, поэтому фон задаётся явно.
+   Смешивание слоёв отключено: с multiply золото перемножалось с красным
+   и давало тёмно-бордовый. */
+#card.battlepass-card .pass-reward{
+  display:flex; align-items:center; justify-content:space-between; gap:6px;
+  min-height:54px; padding:5px 7px 5px 9px; border-radius:10px;
+  border:2.5px solid var(--ink); box-shadow:0 3px 0 #00000055;
+  background-blend-mode:normal!important}
+#card.battlepass-card .pass-reward.free{
+  background:var(--stone-a) url(assets/paper-grain.svg)!important}
+#card.battlepass-card .pass-reward.premium{
+  background:linear-gradient(var(--gold-a),var(--gold-b))!important}
+#card.battlepass-card .pass-reward.locked{filter:saturate(.85) brightness(.97)}
+#card.battlepass-card .pass-reward.claimed{opacity:.72}
+#card.battlepass-card .pass-reward.available{
+  box-shadow:0 3px 0 #00000055, 0 0 0 3px #ffd76a}
+
+#card.battlepass-card .pass-loot{display:flex; align-items:center; gap:4px; min-width:0}
+#card.battlepass-card .pass-loot span{display:flex; align-items:center; gap:3px}
+#card.battlepass-card .pass-loot svg{width:30px; height:30px; flex:none}
+#card.battlepass-card .pass-loot b{
+  font-family:var(--num); font-weight:800; font-size:17px; color:#2b2318}
+
+#card.battlepass-card .pass-state{
+  flex:none; display:grid; place-items:center; min-width:40px;
+  font-size:11px; font-weight:600; color:#3c3325; text-align:center}
+#card.battlepass-card .pass-state svg{width:0;height:0}
+#card.battlepass-card .claimed .pass-state{
+  width:32px; height:32px; font-size:0;
+  background:url(assets/bp/bp-check.webp) center/contain no-repeat}
+#card.battlepass-card .locked .pass-state{
+  width:32px; height:32px; font-size:0;
+  background:url(assets/bp/bp-lock.webp) center/contain no-repeat}
+#card.battlepass-card .available .pass-state{
+  font-size:0; width:64px; height:30px;
+  background:url(assets/bp/bp-ribbon-ok.webp) center/contain no-repeat}
+
+/* ---------- подвал ---------- */
+#card.battlepass-card .pass-tasks{
+  position:relative; z-index:1; margin:6px 9px 10px;
+  background:#efe2c2; border:2px solid #7b6543; border-radius:10px; padding:0 10px}
+#card.battlepass-card .pass-footer{
+  padding:9px 10px calc(env(safe-area-inset-bottom,0px) + 9px);
+  background:linear-gradient(#efe2c2,#e2d2ab); border-top:3px solid var(--ink)}
+#card.battlepass-card .pass-feedback{font-size:12.5px; color:#4b4132; text-align:center; margin-bottom:7px}
+#card.battlepass-card #bpBuy{
+  width:100%; min-height:58px; font-size:0; border:0!important; box-shadow:none!important;
+  background:url(assets/bp/bp-btn-buy.webp) center/contain no-repeat!important}
+#card.battlepass-card #bpBuy svg,#card.battlepass-card #bpBuy b{display:none}
+#card.battlepass-card #bpBuy .enamel-skin,#card.battlepass-card #bpBuy::before{display:none!important}
+#card.battlepass-card .pass-owned{
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  font-size:13px; color:#3c3325}
+#card.battlepass-card .pass-owned svg{width:24px;height:24px}
+
+/* На 6 и 12 уровнях наград три, в одну строку они не помещаются:
+   позволяем переносить и ужимаем значки. */
+#card.battlepass-card .pass-loot{flex:1; min-width:0; flex-wrap:wrap; row-gap:0; column-gap:3px}
+#card.battlepass-card .pass-loot svg{width:26px; height:26px}
+#card.battlepass-card .pass-loot b{font-size:15px}
+#card.battlepass-card .pass-reward{overflow:hidden}
+
+/* Карточка выше экрана: шапка и подвал закреплены, прокручивается только
+   список ступеней. Иначе кнопка премиума и вкладки уезжают за нижний край. */
+#card.battlepass-card{display:flex; flex-direction:column;
+  max-height:calc(100dvh - 24px)!important}
+#card.battlepass-card .pass-header,
+#card.battlepass-card .pass-scene,
+#card.battlepass-card .pass-footer{flex:0 0 auto}
+#card.battlepass-card .pass-scroll{flex:1 1 auto; min-height:0}
+
+/* На 320 px колонка награды сужается до 41 px и содержимое режется.
+   Ужимаем значки, числа и центральную лестницу, освобождая место. */
+@media (max-width:360px){
+  #card.battlepass-card .pass-lanes,
+  #card.battlepass-card .pass-rung{grid-template-columns:1fr 38px 1fr; gap:4px}
+  #card.battlepass-card .pass-level{width:38px; height:38px; font-size:15px}
+  #card.battlepass-card .pass-stairs::before{width:24px}
+  #card.battlepass-card .pass-reward{padding:4px 5px 4px 6px; min-height:50px; gap:4px}
+  #card.battlepass-card .pass-loot svg{width:22px; height:22px}
+  #card.battlepass-card .pass-loot b{font-size:13px}
+  #card.battlepass-card .claimed .pass-state,
+  #card.battlepass-card .locked .pass-state{width:26px; height:26px}
+  #card.battlepass-card .pass-state{min-width:26px; font-size:10px}
+  #card.battlepass-card .available .pass-state{width:52px; height:24px}
+  #card.battlepass-card .pass-stairs{padding:0 5px 12px}
+}
+
+/* Синяя полоса с баннером и солнцем убрана целиком: она отъедала высоту
+   и разрывала связь шапки со списком ступеней. */
+#card.battlepass-card .pass-scene{display:none!important}
+
+/* Список уходит под шапку и подвал не обрывом, а растворением.
+   Маска съедает верхние и нижние пиксели содержимого, поэтому ступени
+   проявляются постепенно. */
+#card.battlepass-card .pass-scroll{
+  -webkit-mask-image:linear-gradient(to bottom,
+    transparent 0, rgba(0,0,0,.35) 10px, #000 30px,
+    #000 calc(100% - 22px), rgba(0,0,0,.4) calc(100% - 8px), transparent 100%);
+  mask-image:linear-gradient(to bottom,
+    transparent 0, rgba(0,0,0,.35) 10px, #000 30px,
+    #000 calc(100% - 22px), rgba(0,0,0,.4) calc(100% - 8px), transparent 100%)}
+/* Тень под шапкой усиливает ощущение, что список уходит под неё. */
+#card.battlepass-card .pass-header{box-shadow:0 5px 9px #2a211826; position:relative; z-index:2}
+
+/* ===== «Билет» и «Топ» в стиле пропуска =====
+   Каркас общий с баттлпассом (шапка, прогресс, небо, подвал). Своё здесь:
+   текстовая шильда заголовка и плашки-ступени списка. */
+#card.battlepass-card .pass-header h2.hub-title{
+  height:auto; width:max-content; max-width:100%; color:var(--ink); text-indent:0; overflow:hidden;
+  text-overflow:ellipsis; white-space:nowrap;
+  background:#f3e6c2 url(assets/paper-grain.svg); border:3px solid var(--ink); border-radius:7px;
+  box-shadow:3px 3px 0 #2a211866; padding:3px 12px 4px; rotate:-2deg;
+  font-family:var(--num); font-weight:900; font-size:23px; line-height:1.15; text-transform:uppercase; letter-spacing:.01em}
+#card.hub-card .pass-progress>b{min-width:52px; text-align:center}
+#card.hub-card .pass-progress span{font-size:14px; font-weight:600; color:#3c3325}
+
+#card.hub-card .hub-scroll{position:relative}
+#card.hub-card .hub-list{position:relative; padding:16px 10px 96px}
+#card.hub-card .hub-list::after{
+  content:''; position:absolute; left:0; right:0; bottom:0; height:92px; z-index:0; pointer-events:none;
+  background:url(assets/bp/bp-city.webp) center bottom/cover no-repeat; opacity:.5}
+
+#card.hub-card .hub-plate{
+  position:relative; z-index:1; display:flex; align-items:center; gap:10px;
+  min-height:62px; margin-bottom:9px; padding:7px 10px 7px 8px; border-radius:11px;
+  border:2.5px solid var(--ink); box-shadow:0 3px 0 #00000055;
+  background:var(--stone-a) url(assets/paper-grain.svg)}
+#card.hub-card .hub-plate .pass-level{flex:none}
+#card.hub-card .hub-text{flex:1; min-width:0; display:flex; flex-direction:column; gap:1px}
+#card.hub-card .hub-text b{font-family:var(--txt); font-weight:700; font-size:17px; line-height:1.18; color:var(--ink)}
+#card.hub-card .hub-text small{font-size:13.5px; line-height:1.25; color:#4b4132}
+#card.hub-card .hub-plate .pass-loot{flex:none; min-width:0}
+#card.hub-card .hub-plate .pass-loot b{font-size:18px}
+#card.hub-card .hub-plate .pass-loot svg{width:28px; height:28px}
+
+/* состояния — как у наград пропуска */
+#card.hub-card .hub-plate.available{box-shadow:0 3px 0 #00000055, 0 0 0 3px #ffd76a}
+#card.hub-card .hub-plate.claimed{opacity:.75}
+#card.hub-card .hub-plate .pass-state{flex:none; width:32px; height:32px; font-size:0}
+#card.hub-card .hub-plate.claimed .pass-state{background:url(assets/bp/bp-check.webp) center/contain no-repeat}
+#card.hub-card .hub-plate.locked .pass-state{background:url(assets/bp/bp-lock.webp) center/contain no-repeat}
+#card.hub-card .hub-goal.available .pass-state{display:none}
+
+/* рубежи билета: жетон шире — в нём до четырёх цифр */
+#card.hub-card .hub-goal .pass-level{width:58px; height:58px; font-size:17px}
+#card.hub-card .hub-goal.available{background:linear-gradient(var(--gold-a),var(--gold-b))}
+
+#card.hub-card .hub-sub{
+  position:relative; z-index:1; margin:16px 2px 8px; font-family:var(--num); font-weight:800; font-size:18px;
+  color:var(--ink); text-transform:uppercase; letter-spacing:.02em}
+#card.hub-card .hub-prog{flex:none; font-family:var(--num); font-weight:800; font-size:17px; color:#3c3325;
+  background:#f6ecd0; border:2px solid var(--ink); border-radius:999px; padding:2px 10px}
+#card.hub-card .hub-claim{flex:none; min-height:40px; padding:4px 12px; font-size:15px}
+#card.hub-card #hZone{flex:none; display:flex; align-items:center; gap:4px; min-height:42px; padding:4px 12px}
+#card.hub-card #hZone svg{width:24px; height:24px}
+#card.hub-card #hZone b{font-family:var(--num); font-size:18px}
+
+/* рейтинг: призовые места золото, серебро, бронза; своя строка подсвечена */
+#card.hub-card .hub-rank .pass-level{width:44px; height:44px; font-size:18px}
+#card.hub-card .hub-ava{flex:none; width:42px; height:42px; display:grid; place-items:center; font-size:24px;
+  border-radius:50%; background:#f6ecd0; border:2px solid var(--ink)}
+#card.hub-card .hub-rank.top1{background:linear-gradient(var(--gold-a),var(--gold-b))}
+#card.hub-card .hub-rank.top2{background:linear-gradient(#e3e6e4,#b9c0c0)}
+#card.hub-card .hub-rank.top3{background:linear-gradient(#e7b98a,#c1834f)}
+#card.hub-card .hub-rank.me{box-shadow:0 3px 0 #00000055, 0 0 0 3px #ffd76a; outline:0}
+#card.hub-card .hub-rank.me .hub-text b{color:#8c1f18}
+
+@media (max-width:360px){
+  #card.battlepass-card .pass-header h2.hub-title{font-size:19px; padding:2px 9px 3px}
+  #card.hub-card .hub-plate{gap:7px; padding:6px 8px 6px 6px}
+  #card.hub-card .hub-text b{font-size:15.5px}
+  #card.hub-card .hub-text small{font-size:12.5px}
+  #card.hub-card .hub-goal .pass-level{width:50px; height:50px; font-size:15px}
+  #card.hub-card .hub-ava{width:36px; height:36px; font-size:20px}
+}
+
+/* крестик в шапке стоит поверх сетки — шильде оставляем под него место */
+#card.hub-card .hub-head>div:not(.pass-progress){padding-right:50px}
+#card.battlepass-card .pass-header h2.hub-title{font-size:21px}
+@media (max-width:360px){
+  #card.battlepass-card .pass-header h2.hub-title{font-size:16px; padding:2px 7px 3px; letter-spacing:0}
+  #card.hub-card .hub-head>div:not(.pass-progress){padding-right:38px}
+  #card.hub-card .hub-goal .pass-level{font-size:13.5px}
+}
+
+/* ===== Окно премиума (навык game-ui-designer) ===== */
+.pass-offer{position:absolute;inset:0;z-index:20;display:grid;place-items:center;padding:14px;background:rgba(24,18,12,.55)}
+.pass-offer-paper{position:relative;width:100%;max-width:360px;box-sizing:border-box;padding:0 16px 14px;text-align:center;
+  border:3px solid #2a2118;border-radius:18px;background:#f2e6c6 url(assets/paper-grain.svg);box-shadow:0 5px 0 #2a2118,0 14px 30px #0006}
+.po-hero{position:relative;height:118px;margin:0 -16px 4px;border-radius:15px 15px 0 0;overflow:hidden;
+  background:linear-gradient(#b1332a,#8f241e);border-bottom:3px solid #2a2118;display:grid;place-items:center}
+.po-sun{position:absolute;width:250px;opacity:.55;animation:poSpin 18s linear infinite}
+.po-crown{position:relative;width:86px;height:86px;filter:drop-shadow(0 4px 0 #2a2118aa);animation:poBob 2.2s ease-in-out infinite}
+.po-crown svg{width:100%;height:100%}
+@keyframes poSpin{to{rotate:360deg}}
+@keyframes poBob{50%{translate:0 -5px;rotate:-3deg}}
+.po-title{margin:10px auto 0;width:max-content;padding:3px 16px 4px;rotate:-2deg;background:#f3e6c2 url(assets/paper-grain.svg);
+  border:3px solid #2a2118;border-radius:7px;box-shadow:3px 3px 0 #2a211866;font-family:var(--num);font-weight:900;font-size:26px;text-transform:uppercase;color:#2a2118}
+.po-sub{margin:7px 0 12px;font-size:15px;color:#4b4132}
+.po-list{display:flex;flex-direction:column;gap:7px;text-align:left}
+.po-row{display:flex;align-items:center;gap:11px;padding:8px 10px;border:2.5px solid #2a2118;border-radius:11px;
+  background:linear-gradient(#f0c44e,#d79a26);box-shadow:0 3px 0 #00000055}
+.po-ic{flex:none;width:38px;height:38px;display:grid;place-items:center}
+.po-ic svg,.po-ic img{width:36px;height:36px;object-fit:contain}
+.po-t{display:flex;flex-direction:column;min-width:0}
+.po-t b{font-family:var(--num);font-weight:800;font-size:18px;color:#2a2118;line-height:1.1}
+.po-t small{font-size:13px;color:#3c3325}
+.po-now{margin:11px 0 0;font-size:15px;font-weight:700;color:#2f6b2a}
+#card .pass-offer-paper #passConfirm{width:100%;min-height:58px;margin:12px 0 0;font-size:20px}
+#card .pass-offer-paper .po-later{display:block;margin:8px auto 0;padding:6px 12px;min-height:40px;border:0;background:none;box-shadow:none;
+  font:600 15px var(--txt);color:#5b4c35;text-decoration:underline;text-underline-offset:3px}
+.po-note{display:block;margin-top:2px;font-size:12px;color:#7a6a50}
+
+/* ===== Сцена покупки ===== */
+.prem-stage{position:fixed;inset:0;z-index:90;pointer-events:none;background:rgba(24,18,12,.62)}
+.prem-confetti{position:absolute;inset:0;width:100%;height:100%}
+.prem-rays,.prem-crown{position:absolute;left:50%;top:42%;translate:-50% -50%}
+.prem-rays{opacity:0}
+.prem-crown{filter:drop-shadow(0 6px 0 #2a2118aa)}
+.prem-crown svg{width:100%;height:100%}
+.prem-plate{position:absolute;left:50%;top:calc(42% + min(23vw,110px) + 26px);opacity:0;padding:8px 22px 10px;text-align:center;white-space:nowrap;
+  background:#f3e6c2 url(assets/paper-grain.svg);border:3px solid #2a2118;border-radius:9px;box-shadow:4px 4px 0 #2a2118aa}
+.prem-plate b{display:block;font-family:var(--num);font-weight:900;font-size:28px;text-transform:uppercase;color:#b1332a}
+.prem-plate small{display:block;margin-top:2px;font-size:15px;font-weight:700;color:#2f6b2a}
+.prem-stage.reduced .prem-crown{width:160px;height:160px;opacity:1}
+.prem-stage.reduced .prem-plate{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.po-sun,.po-crown{animation:none}}
+/* лучи — рисованный веер вместо картинки солнца */
+.po-sun,.prem-rays{display:block;aspect-ratio:1;border-radius:50%;
+  background:repeating-conic-gradient(#ffd76a 0 9deg,transparent 9deg 22.5deg);
+  -webkit-mask:radial-gradient(circle,#000 30%,transparent 70%);mask:radial-gradient(circle,#000 30%,transparent 70%)}
+.po-sun{width:320px;opacity:.5}
+.prem-rays{background:repeating-conic-gradient(#ffe08a 0 8deg,#ffe08a00 8deg 20deg)}
+#card .pass-offer-paper h2.po-title{display:table;margin:10px auto 0}
+#card .pass-offer-paper button.po-later{border:0!important;background:none!important;box-shadow:none!important}
+/* своя строка в топе: золото, толстое кольцо и закладка «ТЫ» */
+#card.hub-card .hub-rank.me{position:relative;background:linear-gradient(#f7d97a,#e9b945)!important;
+  box-shadow:0 0 0 4px #ffcf4a,0 0 0 6.5px #2a2118,0 5px 0 6px #00000040!important;translate:0 -2px;margin:12px 0 14px}
+#card.hub-card .hub-rank.me::after{content:'ТЫ';position:absolute;right:-6px;top:-11px;padding:2px 8px 3px;rotate:6deg;border:2.5px solid #2a2118;border-radius:6px;
+  background:#c43a2d;color:#fff6de;font:900 13px/1 var(--num);letter-spacing:.06em;box-shadow:2px 2px 0 #2a211899}
+#card.hub-card .hub-rank.me .hub-text b{color:#2a2118}
+#card.hub-card .hub-rank.me .hub-ava{background:#fff3cf}
+/* своя строка не путается с золотым 1-м местом: светлая заливка, красное кольцо */
+#card.hub-card .hub-rank.me{background:#fff0c2 url(assets/paper-grain.svg)!important;box-shadow:0 0 0 4px #c43a2d,0 0 0 6.5px #2a2118,0 5px 0 6px #00000040!important}
+#card.hub-card .hub-rank.me .hub-text b{color:#8c1f18}
+
+/* ===== окно «Сегодня» ===== */
+#card.today-card .td-stamp{background:#f6ecd0 url(assets/icons/clock.webp) center/70% no-repeat;border:3px solid #2a2118;border-radius:50%;width:50px;height:50px}
+#card.today-card .td-scroll{overscroll-behavior:contain}
+#card.today-card .td-list{padding:14px 10px 18px}
+#card.today-card .td-list::after{display:none}
+#card.today-card .td-now{min-height:58px}
+#card.today-card .td-now.hot{background:linear-gradient(#f7d97a,#e9b945)}
+#card.today-card .td-now.bad{background:#f3d4c8 url(assets/paper-grain.svg)}
+#card.today-card .td-ic{flex:none;width:40px;height:40px;display:grid;place-items:center;font-size:28px}
+#card.today-card .td-ic img{width:38px;height:38px;object-fit:contain}
+#card.today-card .td-week{position:relative;display:flex;flex-direction:column;gap:6px}
+#card.today-card .td-week::before{content:'';position:absolute;left:21px;top:10px;bottom:10px;width:6px;border-radius:3px;background:#6b4f31;border:2px solid #402d1b}
+#card.today-card .td-day{position:relative;display:flex;align-items:center;gap:10px;min-height:50px;padding:6px 10px 6px 0;border-radius:11px}
+#card.today-card .td-num{flex:none;width:46px;height:46px;font-size:18px;z-index:1}
+#card.today-card .td-tags{flex:1;min-width:0;display:flex;flex-wrap:wrap;gap:5px}
+#card.today-card .td-tag{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border:2px solid #2a2118;border-radius:999px;background:#f2e6c6 url(assets/paper-grain.svg);
+  font:700 13.5px/1.15 var(--txt);color:#2a2118;box-shadow:0 2px 0 #00000040}
+#card.today-card .td-tag i{font-style:normal;font-size:15px}
+#card.today-card .td-tag.none{background:none;border-style:dashed;box-shadow:none;color:#5b4c35;font-weight:600}
+#card.today-card .td-day.past{opacity:.55}
+#card.today-card .td-day.past .td-tag{box-shadow:none}
+#card.today-card .td-check{flex:none;width:28px;height:28px;background:url(assets/bp/bp-check.webp) center/contain no-repeat}
+#card.today-card .td-day.today{background:#fff0c2 url(assets/paper-grain.svg);box-shadow:0 0 0 3px #c43a2d,0 0 0 5px #2a2118;margin:6px 0}
+#card.today-card .td-day.today .td-num{filter:drop-shadow(0 0 5px #ffcf4a)}
+#card.today-card .td-now-mark{flex:none;padding:3px 7px 4px;rotate:5deg;border:2px solid #2a2118;border-radius:6px;background:#c43a2d;color:#fff6de;font:900 12px/1 var(--num);text-transform:uppercase}
+#card.today-card .td-foot .segbar{display:none}
+#card.today-card #tdOk{width:100%;min-height:56px;font-size:19px}
+#card.today-card .td-now-mark{position:absolute;right:-5px;top:-10px}
+#card.today-card .td-day.today{padding-right:8px}
+
+.po-crown>img{width:100%;height:100%;object-fit:contain}

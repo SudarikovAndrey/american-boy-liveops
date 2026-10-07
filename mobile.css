@@ -1,0 +1,588 @@
+:root{--disp:'Suisse Intl',Arial,sans-serif;--world-top:155px;--world-bottom:220px;--ui:1;--cream:#f6e5c1;--ink:#29231c}
+html,body{background:#24221e;font-family:'Suisse Intl',Arial,sans-serif}
+button,input,select,textarea{font-family:'Suisse Intl',Arial,sans-serif!important;letter-spacing:normal!important;font-stretch:normal}
+button{touch-action:manipulation}
+#app{max-width:480px;background:#36332e;isolation:isolate}
+#top,#panel,#inv,#tip,#toast{zoom:1!important}
+#top{padding:calc(env(safe-area-inset-top,0px) + 8px) 8px 7px;gap:6px;background:linear-gradient(#b0b4a0,#656b65);border-bottom:2px solid #2d261d}
+.bar0{gap:5px;position:relative}
+#bJohnnyTop{width:49px;height:51px;flex:none;border:0;box-shadow:none;background-color:transparent;background-image:url(assets/interface-atlas.webp);background-size:1097.14% 731.43%;background-position:2.22% 3.40%;border-radius:0;padding-top:33px}
+#bJohnnyTop span{display:none}#bJohnnyTop small{font:700 10px 'Suisse Intl',Arial,sans-serif;position:relative;top:3px;background:#f4e2bc;border-radius:4px;padding:1px 4px}
+#bHub{height:51px;min-width:0;flex:1;display:flex;flex-direction:column;justify-content:center;padding:7px 12px;background-color:transparent;background-image:url(assets/interface-atlas.webp);background-size:273.80% 794%;background-position:20.06% 3.34%;box-shadow:none;border-radius:0;white-space:normal}
+#bHub b{font:800 17px/1.1 'Suisse Intl',Arial,sans-serif}#bHub small{font:600 11px/1.15 'Suisse Intl',Arial,sans-serif;white-space:nowrap}
+#bHub .chipbar{display:none}
+#bHelp{flex:none;width:48px;height:46px;min-height:44px;padding:0;border:2px solid #2c2820;background:#244963;color:#fff0ce;font:700 11px/1.15 'Suisse Intl',Arial,sans-serif;white-space:normal;box-shadow:0 2px #34281b}
+#bSettings{width:40px;height:46px;flex:none;font-size:0;border:0;box-shadow:none;background-color:transparent;background-image:url(assets/interface-atlas.webp);background-size:1146.27% 731.43%;background-position:98.80% 2.82%;border-radius:0}
+.bar1,.bar2{gap:5px}
+.cur{height:36px;border:0;border-radius:8px;background-color:#f4e5c4;background-image:url(assets/paper-grain.svg);box-shadow:0 2px #241c15;overflow:hidden;padding:0 6px 0 3px}
+.cur b{font-size:18px;padding:0 4px;min-width:0}
+.cur .ic{font-size:0;background-color:transparent;width:33px;height:32px;flex:none;background-image:url(assets/interface-atlas.webp);background-repeat:no-repeat}
+.cur .ic.g{background-size:2133.3% 1462.86%;background-position:3.1% 19.1%}
+.cur .ic.b{background-size:1860.6% 1511%;background-position:26.2% 19.2%}
+.cur .ic.o{background-size:2104.1% 1280%;background-position:49.02% 18.3%}
+.qchip{border:1px solid #b89b65;border-radius:10px;min-height:43px;background:#252420 url(assets/paper-grain.svg);padding:5px;color:#f9e5b6;font:600 11px/1.15 'Suisse Intl',Arial,sans-serif;box-shadow:0 2px #151511}
+.qchip.done{background:#406b43}
+#stage{position:absolute;inset:0;overflow:hidden}
+#board-frame{position:absolute;left:0;width:100%;top:var(--world-top);bottom:var(--world-bottom);height:calc(100% - var(--world-top) - var(--world-bottom));border:0;pointer-events:none;z-index:0}
+#board{position:absolute;left:0;top:var(--world-top);width:100%;height:calc(100% - var(--world-top) - var(--world-bottom));opacity:0;z-index:1;touch-action:none}
+.map-controls{position:absolute;top:calc(var(--world-top) + 9px);right:9px;display:flex;gap:5px;z-index:3}
+.map-controls button{font-size:11px;min-height:33px;padding:5px 9px;background:#efe0c2ed;color:#29231c;border:1px solid #493923;border-radius:8px;box-shadow:0 2px #2c241a66}
+#inv{bottom:calc(var(--world-bottom) + 10px);left:8px}
+#invBtn{width:auto;min-width:56px;padding:4px 6px;border:1px solid #483b27;background:#f4e4c4}#invBtn em{font-size:21px}#invBtn i{width:100%;min-width:42px}#invBtn small{font-size:11px;white-space:nowrap;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+#panel{padding:7px 8px calc(env(safe-area-inset-bottom,0px) + 8px);gap:6px;background:#302d27 url(assets/paper-grain.svg);border-top:2px solid #201b14}
+#guide{border:0;border-radius:13px;background:#f4e4c4 url(assets/paper-grain.svg);color:#282219;box-shadow:inset 0 0 0 2px #302820,inset 0 0 0 5px #dbc8a1,0 2px #0006;padding:10px;gap:8px;min-height:74px;align-items:center}
+#guide img{width:48px;height:48px;object-fit:cover;border-radius:6px}
+#guide small{font-size:10px;line-height:1.1}
+#guide b{font:800 15px/1.2 'Suisse Intl',Arial,sans-serif;margin:2px 0}
+#guide p{font-size:12px;line-height:1.25;margin:3px 0 0}
+#tilebar{min-height:43px;border:2px solid #352a1f;border-radius:12px;background:#f5e4bf url(assets/paper-grain.svg);padding:6px 8px;gap:6px;box-shadow:0 2px #15100c;align-items:center}
+#tbText{font:700 13px/1.2 'Suisse Intl',Arial,sans-serif;min-width:0;overflow-wrap:anywhere}
+#tilebar>b{font:700 12px/1 'Suisse Intl',Arial,sans-serif;padding:8px;border-radius:9px;background:#397548;color:#fff2d1;white-space:nowrap}
+#tilebar.off>b{background:#8d8575;color:#eee3d1}
+#dock{display:grid;grid-template-columns:1fr 1fr 1.1fr 1fr 1fr;gap:3px;align-items:end;padding:2px 0 0}
+#dock>.dk{width:100%;height:77px;min-width:0;padding:48px 1px 6px;border:0;border-radius:0;background-color:transparent;background-image:url(assets/interface-atlas.webp);box-shadow:none;color:#211b14}
+#dock .dk>span{display:none}
+#dock .dk>small{font:700 10px/1.1 'Suisse Intl',Arial,sans-serif;display:block;white-space:nowrap}
+#dock #bTaxi{background-size:1052% 731%;background-position:65.00% 92.00%}
+#dock #bShip{background-size:1052% 731%;background-position:75.70% 92.00%}
+#dock #bJohnny{background-size:1052% 731%;background-position:86.4% 92.00%}
+#dock #bShop{background-size:1052% 731%;background-position:97.5% 92.00%}
+#dock #bJohnny small,#dock #bShop small{color:#fff1ce}
+#dock .dk:disabled{opacity:.57;filter:saturate(.55)}
+#dock .diebox{margin:0;gap:2px;width:100%;align-self:end;min-width:0}
+#bRoll{width:86px;height:80px;max-width:calc(100vw / 4.7);border-radius:0;border:0;background-color:transparent;background-image:url(assets/interface-atlas.webp);background-size:734.92% 628.22%;background-position:52.7% 91.3%;box-shadow:none}
+#bRoll .die{visibility:hidden}
+#bRoll:disabled{opacity:.58}
+#sRolls{font:800 15px/1 'Suisse Intl',Arial,sans-serif;border:1px solid #2f241a;border-radius:7px;padding:3px 8px;white-space:nowrap;box-shadow:none}
+#sRollsCap{font:600 10px/1 'Suisse Intl',Arial,sans-serif;padding:3px 2px;white-space:nowrap;box-shadow:none;border:1px solid #ae9769;border-radius:5px}
+#starterInfo{font-size:9px}
+.card,#helpDialog{font-family:'Suisse Intl',Arial,sans-serif;background:#f4e5c8 url(assets/paper-grain.svg);border:2px solid #392c20}
+.card h2,.card h3,#helpTitle{font-family:'Suisse Intl',Arial,sans-serif;font-weight:800;letter-spacing:normal}
+.card h2{font-size:23px;line-height:1.1}
+.card p{font-size:14px}
+.card button{min-height:43px}
+.card{max-height:calc(100dvh - 28px)!important}
+#helpDialog{max-height:90dvh;width:calc(100% - 20px)}
+#tip{font:600 15px/1.3 'Suisse Intl',Arial,sans-serif}
+.coach-tip-open #board-frame{filter:blur(4px)}
+.coach-tip-open #toast{visibility:hidden}
+.map-float,.mobile-fly{position:fixed;pointer-events:none;z-index:75;font:800 19px 'Suisse Intl',Arial,sans-serif;text-shadow:0 2px 2px #23190e;transform:translate(-50%,-50%)}
+.map-float{animation:mapFloat 1.4s ease-out forwards}
+@keyframes mapFloat{to{translate:0 -45px;opacity:0}}
+/* ===== Загрузочный экран =====
+   Ночной Бруклин, солнце из кита, Джонни с коробкой и настоящая полоса
+   загрузки: движок сообщает проценты, а не просто «ждите». */
+#boot{position:absolute;inset:0;z-index:120;overflow:hidden;
+  background:linear-gradient(#20313f 0%, #344a56 44%, #6d6a56 78%, #8b7d60 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:#f5e4c3;gap:12px;padding:24px 22px calc(env(safe-area-inset-bottom,0px) + 24px);
+  text-align:center}
+#boot .boot-city{position:absolute;left:0;right:0;bottom:0;height:46%;
+  background:url(assets/bp/bp-city.webp) center bottom/cover no-repeat;opacity:.6}
+#boot .boot-sun{position:absolute;top:5%;right:14px;width:104px;height:104px;
+  background:url(assets/bp/bp-sun.webp) center/contain no-repeat;opacity:.9;
+  animation:bootSun 9s ease-in-out infinite}
+@keyframes bootSun{50%{transform:translateY(7px) rotate(4deg)}}
+#boot .boot-head{position:relative;display:flex;align-items:center;gap:11px;
+  background:#f2e4c2 url(assets/paper-grain.svg);color:#2a2118;
+  border:3px solid #2a2118;border-radius:12px;box-shadow:0 5px 0 #17120d;
+  padding:10px 14px 10px 11px;rotate:-1.1deg}
+#boot .boot-stamp{width:46px;height:48px;flex:none;
+  background:url(assets/bp/bp-badge.webp) center/contain no-repeat}
+#boot .boot-head b{display:block;font-family:var(--disp);font-weight:700;
+  font-size:23px;line-height:1.05;letter-spacing:-.01em}
+#boot .boot-head small{display:block;font-size:11.5px;opacity:.75;margin-top:2px}
+#boot .boot-hero{position:relative;width:auto;height:min(34vh,210px);
+  filter:drop-shadow(0 6px 0 #17120d66)}
+#boot .boot-meter{position:relative;width:min(78vw,272px);height:18px;
+  background:#2b2419;border:3px solid #17120d;border-radius:999px;overflow:hidden;
+  box-shadow:inset 0 2px 0 #0006}
+#boot .boot-meter i{display:block;height:100%;width:0;border-radius:999px;
+  background:linear-gradient(#d8543f,#a8291f);transition:width .25s ease-out}
+#boot #loadProgress{position:relative;font-family:var(--num);font-weight:700;font-size:14px}
+#boot #bootFull{position:relative;margin-top:2px;min-height:46px;padding:9px 18px;
+  font-family:var(--disp);font-weight:700;font-size:15px;color:#fbf0d4;
+  background:#b12f26;border:3px solid #17120d;border-radius:11px;box-shadow:0 4px 0 #17120d}
+#boot .boot-tip{position:relative;font-size:11.5px;opacity:.72;max-width:250px}
+@media (prefers-reduced-motion:reduce){#boot .boot-sun{animation:none}}
+.engine-ready #boot{display:none}
+@media(max-width:360px){#bHub small{font-size:10px}#bHub b{font-size:15px}#bJohnnyTop{width:43px}#bHelp{width:43px;font-size:10px}#guide img{display:none}.qchip{font-size:10px}#dock .dk>small{font-size:9px}#bRoll{height:72px}}
+@media(max-height:720px){#guide p{font-size:11px}#guide{padding:7px;min-height:63px}#guide img{width:38px;height:38px}#dock>.dk{height:68px;padding-top:42px}#bRoll{height:68px}#top{gap:4px}.qchip{min-height:36px}.cur{height:33px}}
+@media(prefers-reduced-motion:reduce){.map-float{animation-duration:.1s}}
+/* Keep the atlas art crisp; original prototype color shorthands must not erase it. */
+.cur .ic.g,.cur .ic.b,.cur .ic.o{background-color:transparent;background-image:url(assets/interface-atlas.webp);background-repeat:no-repeat}
+.cur .ic.g{background-size:2133.3% 1462.86%;background-position:3.1% 19.1%}
+.cur .ic.b{background-size:1860.6% 1511%;background-position:26.2% 19.2%}
+.cur .ic.o{background-size:2104.1% 1280%;background-position:49.02% 18.3%}
+.cur,#guide,#tilebar,.card,#helpDialog{background-image:linear-gradient(#f4e4c4e8,#f4e4c4e8),url(assets/paper-grain.svg)}
+.qchip{background-image:linear-gradient(#252420ed,#252420ed),url(assets/paper-grain.svg)}
+#panel{background-image:linear-gradient(#302d27ed,#302d27ed),url(assets/paper-grain.svg)}
+#bRoll.guide-target{animation:mobileRollPulse 1.05s ease-in-out infinite!important}
+@keyframes mobileRollPulse{0%,100%{transform:scale(1);filter:brightness(1) drop-shadow(0 0 2px #f5c652);box-shadow:none}50%{transform:scale(1.07);filter:brightness(1.15) drop-shadow(0 0 9px #ffe07d);box-shadow:none}}
+#bHub,#bHub small{color:#29231c}
+body.mobile-modal #toast{visibility:hidden;pointer-events:none!important}
+#card.training-card{width:calc(100% - 24px);max-width:440px;padding:14px;box-sizing:border-box;border-radius:18px}
+.training-card .training-pack{grid-template-columns:minmax(0,1fr) 22px 78px;gap:5px}
+.training-card .training-good{grid-template-columns:46px minmax(0,1fr);gap:6px;padding:6px;min-width:0}
+.training-card .training-good .good-icon{width:46px;height:46px;font-size:28px}
+.training-card .training-good b{font-size:14px}.training-card .training-good small{font-size:11px}
+.training-card .training-crate{width:78px;height:84px}
+.training-card .training-content{overflow-x:hidden}
+.training-card>.training-actions{background:transparent}
+@media(max-width:360px){.training-card .training-good{grid-template-columns:1fr;text-align:center;justify-items:center}.training-card .training-good small{font-size:10px}}
+.training-card .training-crate.pulse{animation:crateFlash .65s ease-out!important;transform:none!important}
+@keyframes crateFlash{0%,100%{filter:brightness(1)}40%{filter:brightness(1.3)}}
+/* Full-screen field. Only the individual paper controls cover the artwork. */
+#top,#panel{background:none;border:0;box-shadow:none;pointer-events:none}
+#top>*{pointer-events:none}#top button,#top .cur{pointer-events:auto}
+#panel>*{pointer-events:auto}#panel #dock{pointer-events:none}#dock button{pointer-events:auto}
+#board-frame,#board{inset:0;width:100%;height:100%;bottom:auto}
+#panel{padding:4px 9px calc(env(safe-area-inset-bottom,0px) + 9px);gap:7px}
+#top{padding-top:calc(env(safe-area-inset-top,0px) + 8px);gap:5px}
+#dock{gap:4px;padding:0;grid-template-columns:1fr 1fr 1.14fr 1fr 1fr}
+#dock .diebox{gap:0;pointer-events:none}
+#dock>.dk{height:73px;padding-top:46px;filter:drop-shadow(0 3px 2px #24170b77)}
+#dock .dk:disabled{opacity:.8;filter:saturate(.45) drop-shadow(0 3px 2px #24170b77)}
+#bRoll{height:76px;width:82px}
+#sRolls{margin-top:-5px;z-index:1;font-size:14px;min-width:62px;background:#f3dfb4}
+#sRollsCap{margin-top:3px;background:#27231ced;color:#f3dfb4;font-size:9px}
+#starterInfo{max-width:100px;background:#27231cef;border-radius:4px;padding:2px;font-size:8px;line-height:1.2}
+#guide{min-height:65px;padding:8px 10px;gap:8px;box-shadow:0 3px #271e14,0 6px 10px #21170d44,inset 0 0 0 2px #a88c60}
+#guide img{width:42px;height:44px}
+#guide b{font-size:14px}#guide p{font-size:12px}
+#tilebar{min-height:47px;box-shadow:0 3px #271e14,0 5px 9px #21170d44}
+#inv{bottom:calc(var(--world-bottom) + 13px);left:10px;pointer-events:none}#inv button,#invList{pointer-events:auto}
+.map-controls{top:calc(var(--world-top) + 7px);right:9px;gap:4px}
+.map-controls button{min-height:34px;font-size:10px;padding:6px 8px;box-shadow:0 2px #33271788}
+#diceResult{position:absolute;z-index:10;left:50%;transform:translateX(-50%);display:flex;align-items:baseline;justify-content:center;gap:7px;padding:0;text-align:center;background:none;border:0;border-radius:0;box-shadow:none;color:#fff0cd;pointer-events:none;white-space:nowrap;font:800 19px/1.15 Bitter,Georgia,serif;text-shadow:0 2px 1px #30261b,1px 0 #30261b,-1px 0 #30261b,0 -1px #30261b}
+#diceResult[hidden]{display:none}
+#diceResult b{font-size:36px;line-height:1;letter-spacing:-1px}
+.map-controls{display:none}
+.mobile-modal #diceResult,.coach-tip-open #diceResult{visibility:hidden}
+.dice-rolling .map-controls,.dice-rolling #inv,.dice-rolling #guide{visibility:hidden}
+.dice-rolling #toast{visibility:hidden;pointer-events:none!important}
+@media(max-height:720px){#guide{min-height:57px;padding:6px 9px}#guide img{width:36px;height:38px}#guide p{font-size:11px}#dock>.dk{height:64px;padding-top:39px}#bRoll{height:65px}#panel{gap:5px}.map-controls button{min-height:31px}#tilebar{min-height:44px}}
+@media(prefers-reduced-motion:reduce){#bRoll.guide-target,.guide-target{animation:none!important;filter:brightness(1.1)}#diceResult{transition:none}}
+/* Brief ink-and-paper accents; never cover controls or intercept a tap. */
+.cartoon-fx{position:fixed;z-index:8;pointer-events:none;transform:translate(-50%,-50%)}
+.cartoon-fx svg{display:block;width:100%;overflow:visible}
+
+
+/* ===== v30: типографика «крепкий гротеск» =====================
+   Golos Text — весь текст | Bitter 800 — числа
+   ПРАВИЛО ВЕСА: жирное получают только заголовок, число и действие.
+   Всё остальное — обычное начертание, читаемость держат кегль и цвет.
+   Откат: обрезать файл до строки 141. ===== */
+@font-face{font-family:'Bitter';font-weight:500;font-display:swap;src:url(assets/fonts/bitter-500-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Bitter';font-weight:500;font-display:swap;src:url(assets/fonts/bitter-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Bitter';font-weight:600;font-display:swap;src:url(assets/fonts/bitter-600-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Bitter';font-weight:600;font-display:swap;src:url(assets/fonts/bitter-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Bitter';font-weight:700;font-display:swap;src:url(assets/fonts/bitter-700-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Bitter';font-weight:700;font-display:swap;src:url(assets/fonts/bitter-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Bitter';font-weight:800;font-display:swap;src:url(assets/fonts/bitter-800-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Bitter';font-weight:800;font-display:swap;src:url(assets/fonts/bitter-800-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Golos Text';font-weight:400;font-display:swap;src:url(assets/fonts/golos-text-400-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-weight:400;font-display:swap;src:url(assets/fonts/golos-text-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Golos Text';font-weight:500;font-display:swap;src:url(assets/fonts/golos-text-500-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-weight:500;font-display:swap;src:url(assets/fonts/golos-text-500-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Golos Text';font-weight:600;font-display:swap;src:url(assets/fonts/golos-text-600-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-weight:600;font-display:swap;src:url(assets/fonts/golos-text-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Golos Text';font-weight:700;font-display:swap;src:url(assets/fonts/golos-text-700-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+@font-face{font-family:'Golos Text';font-weight:700;font-display:swap;src:url(assets/fonts/golos-text-700-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}:root{
+  --disp:'Golos Text',Georgia,sans-serif;
+  --num:'Bitter',Georgia,serif;
+  --txt:'Golos Text',Arial,sans-serif;
+}
+/* --- текст: обычное начертание, крупнее и темнее --- */
+html,body{font-family:var(--txt)}
+button,input,select,textarea{font-family:var(--txt)!important}
+.card,#helpDialog{font-family:var(--txt)}
+#card p{font-size:16px;font-weight:400}
+.qchip{font-family:var(--txt);font-size:13px;font-weight:500}
+#tbText{font-family:var(--txt);font-size:15.5px;font-weight:400}
+#sRollsCap{font-family:var(--txt);font-size:11.5px;font-weight:400}
+#bJohnnyTop small{font-family:var(--txt);font-size:11px;font-weight:600}
+#guide p{font-family:var(--txt);font-size:14px;font-weight:400}
+#guide small{font-family:var(--txt);font-size:12px;font-weight:400}
+#tip{font-family:var(--txt);font-size:16px;font-weight:400}
+#starterInfo{font-family:var(--txt);font-size:10.5px}
+h2 small,h3 small,#helpTitle small{font-family:var(--txt);font-weight:400}
+/* --- числа: единственное место, где вес максимальный --- */
+.cur b{font-family:var(--num);font-weight:800;font-size:21px}
+#sRolls{font-family:var(--num);font-weight:800;font-size:18px}
+.card .v,#card .v{font-family:var(--num);font-weight:800}
+/* --- заголовки и действия --- */
+.card h2,.card h3,#helpTitle{font-family:var(--disp);font-weight:700;letter-spacing:-.015em}
+#tilebar>b{font-family:var(--disp);font-weight:700;font-size:15px}
+#bRoll{font-family:var(--disp);font-weight:700}
+/* --- голос Джонни --- */
+#guide b{font-family:var(--disp);font-weight:700;font-size:16px}
+/* --- нижние кнопки: читаются иконками, подписи убраны --- */
+#dock .dk>small{display:none}
+#dock>.dk{padding-bottom:0}
+
+/* ===== v31: аккуратные окантовки кнопок и валюта на цене =====
+   Скин кнопки — картинка 181x61, которую растягивали на 334x44
+   с preserveAspectRatio:none: боковые грани толстели, верхняя и нижняя
+   худели, углы плыли. Отдаём тот же рисунок через border-image —
+   углы сохраняют размер, тянутся только грани. ===== */
+#card button.enamel-button .enamel-skin,#helpDialog button.enamel-button .enamel-skin{display:none}
+#card button.enamel-button::before,#helpDialog button.enamel-button::before{
+  content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;
+  border:15px solid transparent;
+  border-image:url(assets/btn-dark.webp) 20 fill / 15px stretch}
+#card button.enamel-button.ok::before{border-image-source:url(assets/btn-green.webp)}
+#card button.enamel-button.bad::before{border-image-source:url(assets/btn-red.webp)}
+#card button.enamel-button.sec::before,#card button.enamel-button.hard::before{border-image-source:url(assets/btn-blue.webp)}
+/* иконка игровых денег вместо знака доллара — та же пачка купюр, что в шапке */
+.cash-glyph{display:inline-block;width:1.45em;height:1.3em;vertical-align:-.28em;
+  background-image:url(assets/interface-atlas.webp);background-repeat:no-repeat;
+  background-size:2133.3% 1462.86%;background-position:3.1% 19.1%;margin-right:.1em;margin-left:.06em}
+/* Крестик: арт 69x64 вписывался в квадрат 46x46 по 'meet', оставляя зазоры
+   сверху и снизу — круглая маска резала кольцо неровно. Маска нужна (в атласе
+   вокруг кружка тёмный фон), поэтому арт заставляем заполнять квадрат: см.
+   paintedClose в mobile-windows.js — там 'meet' заменён на 'slice'. */
+
+/* Под кубиком: один счётчик и один отсчёт, обе строки крупнее и без «воды». */
+#sRolls{font-size:19px;padding:4px 10px}
+#sRollsCap{font-family:var(--num);font-weight:700;font-size:14px;padding:3px 7px;letter-spacing:.01em}
+#sRollsCap[hidden]{display:none}
+#starterInfo{display:none!important}
+/* Иконка валюты: по высоте прописных, а не по строке, и с воздухом вокруг. */
+.cash-glyph{width:1.18em;height:1.05em;vertical-align:-.16em;margin-right:.14em;margin-left:.1em}
+
+/* ===== v34: единый набор иконок ресурсов =====
+   Иконки нарезаны из ui4.webp кита: в исходнике нет альфы (шахматка нарисована),
+   поэтому фон выбит заливкой снаружи — внутренние белые блики сохранены.
+   Раньше деньги и кристалл брались спрайтами из interface-atlas и не совпадали
+   по стилю с иконками в окнах. ===== */
+.cur .ic.g,.cur .ic.b{background-image:none!important;background-repeat:no-repeat;background-position:center;background-size:contain}
+.cur .ic.g{background-image:url(assets/icons/money.webp)!important;width:38px;height:34px}
+.cur .ic.b{background-image:url(assets/icons/gem.webp)!important;width:34px;height:34px}
+/* Иконка валюты в тексте кнопок — та же пачка купюр, что в шапке. */
+.cash-glyph{background-image:url(assets/icons/money.webp);background-size:contain;
+  background-position:center;background-repeat:no-repeat;
+  width:1.3em;height:1.18em;vertical-align:-.22em;margin:0 .14em 0 .08em}
+/* В значениях строк иконка чуть мельче заголовочной, чтобы колонка не рябила. */
+.card .v .cash-glyph,#card .v .cash-glyph{width:1.12em;height:1.02em;vertical-align:-.15em}
+#tbText .cash-glyph{width:1.1em;height:1em;vertical-align:-.14em}
+
+/* Иконка товара внутри круглой ячейки строки. */
+.gi{display:block;width:100%;height:100%;background-repeat:no-repeat;
+  background-position:center;background-size:82% 82%}
+#card .shop .ico:has(.gi){background:#f1e3c1;border-color:#8a7145;padding:0;overflow:hidden}
+
+/* Переключатели звука и музыки в меню — значками. Выключенное состояние
+   показывает красная перечёркивающая линия, а не смена подписи. */
+.audio-toggles{gap:10px}
+#card .audio-toggle{flex:0 0 auto; width:62px; min-height:56px; padding:6px;
+  display:grid; place-items:center}
+#card .audio-toggle svg{width:34px; height:34px; display:block}
+#card .audio-toggle.is-off{filter:grayscale(.55)}
+#card .audio-toggle.is-off svg .wv{opacity:.35}
+
+/* Переключатели звука и музыки в меню — значками. Выключенное состояние
+   показывает красная перечёркивающая линия, а не смена подписи. */
+.audio-toggles{gap:10px}
+#card .audio-toggle{flex:0 0 auto; width:64px; min-height:56px; padding:6px;
+  display:grid; place-items:center}
+#card .audio-toggle svg{width:34px; height:34px; display:block}
+#card .audio-toggle.is-off{filter:grayscale(.5)}
+#card .audio-toggle.is-off svg .wv{opacity:.3}
+
+
+/* .mbtns растягивает кнопки на всю строку — переключателям это не нужно. */
+#card .mbtns.audio-toggles{justify-content:flex-start}
+#card .mbtns.audio-toggles .audio-toggle{flex:0 0 74px!important; width:74px!important;
+  min-width:74px; min-height:60px}
+#card .mbtns.audio-toggles .audio-toggle svg{width:38px; height:38px}
+
+/* Готовность поставки помечалась классом `ok`, который заливал кнопку
+   сплошным зелёным поверх спрайта — рисунок пропадал совсем.
+   Возвращаем спрайт и помечаем готовность пульсацией, а не заливкой. */
+#dock .dk.ok{background-color:transparent!important;
+  background-image:url(assets/interface-atlas.webp)!important;
+  animation:dockReady 1.15s ease-in-out infinite}
+#dock #bShip.ok{background-size:1052% 731%;background-position:75.70% 92.00%}
+#dock #bTaxi.ok{background-size:1052% 731%;background-position:65.00% 92.00%}
+#dock #bJohnny.ok{background-size:1052% 731%;background-position:86.4% 92.00%}
+#dock #bShop.ok{background-size:1052% 731%;background-position:97.5% 92.00%}
+@keyframes dockReady{
+  50%{filter:drop-shadow(0 0 8px #ffd76a) brightness(1.07); translate:0 -2px}}
+#dock .dk.ok.blink{animation-duration:.7s}
+@media (prefers-reduced-motion:reduce){
+  #dock .dk.ok{animation:none; filter:drop-shadow(0 0 6px #ffd76a)}}
+
+/* Нечего купить внутри — кнопка строки точки серая, но остаётся нажимаемой. */
+#tilebar.poor>b{background:#9a938a; color:#f0ece4}
+
+/* ===== Онбординг ===== */
+#onboard{position:fixed;inset:0;z-index:130;display:grid;place-items:center;padding:16px;
+  background:#1d1a15cc;opacity:0;transition:opacity .2s}
+#onboard.in{opacity:1}#onboard.out{opacity:0}
+#onboard .ob-card{position:relative;width:min(100%,400px);max-height:calc(100dvh - 32px);
+  display:flex;flex-direction:column;overflow:hidden;
+  background:#f2e4c2 url(assets/paper-grain.svg);color:#2a2118;
+  border:3px solid #2a2118;border-radius:18px;box-shadow:0 7px 0 #17120d;padding:16px 16px 18px}
+#onboard .ob-skip{position:absolute;top:10px;right:12px;z-index:2;border:0!important;box-shadow:none!important;
+  background:none!important;font:500 14px/1 var(--txt);color:#6a5d45;padding:8px 4px;min-height:0;text-decoration:underline}
+#onboard .ob-track{position:relative;flex:1;min-height:0}
+#onboard .ob-slide{display:none;flex-direction:column;align-items:center;text-align:center;gap:10px;animation:obIn .28s ease-out}
+#onboard .ob-slide.on{display:flex}
+@keyframes obIn{from{opacity:0;translate:18px 0}}
+#onboard .ob-step{font:600 12.5px/1 var(--txt);color:#8a7a5c;letter-spacing:.02em;margin-top:4px}
+#onboard .ob-art{position:relative;width:100%;min-height:196px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;padding:10px;border-radius:14px;
+  background:linear-gradient(#e6d6ae,#dac79b);border:2px solid #b89e6f}
+#onboard .ob-title{margin:4px 0 0;font:700 25px/1.1 var(--disp);letter-spacing:-.01em}
+#onboard .ob-text{margin:0;font:400 16.5px/1.4 var(--txt);color:#3c3326;max-width:320px}
+#onboard .ob-goal{margin:2px 0 0;font:600 14px/1.35 var(--txt);color:#7d2a1f;
+  background:#f7ecd0;border:2px solid #c9a86a;border-radius:10px;padding:8px 10px}
+#onboard .ob-dots{display:flex;justify-content:center;gap:8px;margin:14px 0 12px}
+#onboard .ob-dots i{width:9px;height:9px;border-radius:50%;background:#c2ad84;cursor:pointer;transition:width .2s}
+#onboard .ob-dots i.on{width:26px;border-radius:5px;background:#b12f26}
+#onboard .ob-next{width:100%;min-height:54px;font:700 19px/1 var(--disp)!important;color:#fbf0d4}
+
+/* картинки экранов */
+#onboard .ob-banner{position:relative;width:100%;border:2px solid #2a2118;border-radius:10px;overflow:hidden;
+  box-shadow:0 3px 0 #2a211855}
+#onboard .ob-banner img{display:block;width:100%;height:auto}
+#onboard .ob-chip{display:inline-flex;align-items:center;gap:3px;background:#2f5b3a;color:#fbf0d4;
+  font:700 16px/1 var(--txt);padding:8px 14px;border:2px solid #17120d;border-radius:10px;box-shadow:0 3px 0 #17120d}
+#onboard .ob-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#onboard .ob-row .ob-chip{background:#244963}
+#onboard .ob-up{position:absolute;right:8px;top:8px;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;font:800 24px/1 var(--num);color:#fbf0d4;background:#2f5b3a;
+  border:2px solid #17120d;animation:obBob 1.4s ease-in-out infinite}
+#onboard .ob-shelf{position:relative;display:flex;align-items:flex-end;gap:10px;padding:26px 16px 12px;
+  background:#f7ecd0;border:2px solid #2a2118;border-radius:12px}
+#onboard .ob-sign{position:absolute;top:-12px;left:50%;translate:-50% 0;font:800 14px/1 var(--disp);
+  color:#fbf0d4;background:#b12f26;border:2px solid #17120d;border-radius:6px;padding:4px 10px;letter-spacing:.06em}
+#onboard .ob-good{width:54px;height:54px;object-fit:contain;animation:obBob 1.6s ease-in-out infinite}
+#onboard .ob-good.g2{animation-delay:.2s}#onboard .ob-good.g3{animation-delay:.4s}
+#onboard .ob-arrow{font:800 30px/1 var(--num);color:#b12f26;animation:obNudge 1.1s ease-in-out infinite}
+#onboard .ob-mini{width:62%;border:2px solid #2a2118;border-radius:8px;overflow:hidden}
+#onboard .ob-mini img{display:block;width:100%}
+#onboard .ob-start{width:112px;height:62px;display:grid;place-items:center;background:#c84b36;
+  border:3px solid #17120d;border-radius:10px;box-shadow:0 4px 0 #17120d;rotate:-3deg}
+#onboard .ob-start span{font:800 20px/1 var(--disp);color:#fbf0d4;letter-spacing:.05em}
+#onboard .ob-flow{display:flex;align-items:center;gap:12px}
+#onboard .ob-fly-good,#onboard .ob-fly-cash{width:56px;height:56px;object-fit:contain}
+#onboard .ob-fly-cash{animation:obPop 1.4s ease-in-out infinite}
+#onboard .ob-plus{background:#b12f26}
+#onboard .ob-stack img{width:58px;height:58px;object-fit:contain;animation:obBob 1.5s ease-in-out infinite}
+#onboard .ob-stack img:nth-child(2){animation-delay:.18s}#onboard .ob-stack img:nth-child(3){animation-delay:.36s}
+#onboard .ob-pop{animation:obPop 1.6s ease-in-out infinite}
+@keyframes obBob{50%{translate:0 -6px}}
+@keyframes obNudge{50%{translate:6px 0}}
+@keyframes obPop{50%{scale:1.08}}
+@media (prefers-reduced-motion:reduce){#onboard *{animation:none!important}}
+/* Карточка не должна прыгать по высоте между экранами */
+#onboard .ob-art{height:214px;min-height:0}
+#onboard .ob-text{min-height:3.6em}
+#onboard .ob-slide:last-child .ob-text{min-height:0}
+#onboard .ob-track{flex:0 0 auto;height:452px}
+@media (max-height:700px){#onboard .ob-track{height:auto}#onboard .ob-art{height:170px}}
+#onboard .ob-art{height:254px;gap:9px}
+#onboard .ob-track{height:494px}
+#onboard .ob-mini{width:54%}
+#onboard .ob-row .ob-chip{font-size:14px;padding:7px 11px}
+#onboard .ob-row{flex-wrap:nowrap}
+
+/* ===== «Совет Джонни» ===== */
+body #tip[hidden]{display:none!important}
+body #tip{background:none!important;border:0!important;outline:0!important;box-shadow:none!important;
+  padding:0!important;color:#2a2118!important;display:flex;align-items:flex-end;gap:0;
+  font-family:var(--txt);overflow:visible;max-width:min(92vw,400px)}
+body #tip::before,body #tip::after{content:none!important;display:none!important}
+#tip .tip-johnny{flex:0 0 86px;height:74px;margin:0 -10px 4px 0;position:relative;z-index:2;
+  background:url(assets/bp/tip-johnny.webp) left bottom/contain no-repeat;
+  filter:drop-shadow(0 3px 0 #17120d66)}
+#tip .tip-bubble{position:relative;flex:1;min-width:0;
+  background:#f4e6c4 url(assets/paper-grain.svg);border:3px solid #2a2118;
+  border-radius:16px 13px 17px 11px;box-shadow:0 5px 0 #17120d,0 10px 22px #0006;
+  padding:12px 40px 13px 16px;rotate:-.6deg}
+#tip .tip-bubble::before{content:'';position:absolute;left:-15px;bottom:14px;width:18px;height:18px;
+  background:#f4e6c4;border-left:3px solid #2a2118;border-bottom:3px solid #2a2118;
+  transform:skewY(28deg) rotate(8deg);border-radius:0 0 0 4px}
+#tip .tip-label{display:block;font:700 12.5px/1 var(--disp);color:#b12f26;letter-spacing:.04em;
+  text-transform:uppercase;margin-bottom:6px}
+#tip .tip-text{margin:0;font:500 16px/1.38 var(--txt);color:#2a2118}
+#tip .tip-x{position:absolute;top:-14px;right:-12px;width:38px;height:38px;min-height:0;padding:0;z-index:3}
+/* крестик подсказки: только нарисованный круг, без подложки кнопки */
+#tip .tip-x{background:none!important;border:0!important;box-shadow:none!important;
+  border-radius:50%!important;overflow:hidden!important}
+
+/* Standalone advice is one printed card: the portrait stays inside its header. */
+body #tip.tip-standalone{display:block;width:calc(100% - 40px);max-width:400px;overflow:visible;cursor:pointer}
+#tip.tip-standalone .tip-bubble{padding:22px 24px 25px;border:3px solid #392d1e;
+  border-radius:23px 18px 24px 20px;background:#efdfb7 url(assets/print/card-stock.webp) center/400px 600px;
+  box-shadow:0 0 0 3px #ead7a6,inset 0 0 0 2px #f7e9c5,0 7px 0 3px #30261b,0 15px 26px #0005;rotate:0}
+#tip.tip-standalone .tip-bubble::before{display:none}
+#tip.tip-standalone .tip-johnny{position:absolute;top:18px;left:20px;width:83px;height:87px;margin:0;
+  background-position:center bottom;filter:none}
+#tip.tip-standalone .tip-label{display:flex;align-items:center;min-height:80px;margin:0 14px 19px 94px;
+  font:800 25px/1.12 Bitter,Georgia,serif;letter-spacing:-.4px;text-transform:none;color:#a53627}
+#tip.tip-standalone .tip-text{padding-top:17px;border-top:2px solid #9a8054;
+  font:600 18px/1.48 Bitter,Georgia,serif;color:#332b20;text-wrap:pretty}
+#tip.tip-standalone .tip-x{top:-13px;right:-10px;width:44px;height:44px}
+#tip.tip-attached .tip-label{font:800 14px/1.2 Bitter,Georgia,serif;text-transform:none;letter-spacing:0}
+#tip.tip-attached .tip-text{font:600 16px/1.38 Bitter,Georgia,serif}
+@media(max-width:360px){
+ #tip.tip-standalone .tip-bubble{padding:18px 19px 21px}
+ #tip.tip-standalone .tip-johnny{width:72px;height:76px;left:17px;top:17px}
+ #tip.tip-standalone .tip-label{min-height:73px;margin-left:82px;font-size:23px}
+ #tip.tip-standalone .tip-text{font-size:17px;line-height:1.43}
+}
+@media(max-height:500px){
+ #tip.tip-standalone .tip-bubble{padding:14px 20px 17px}
+ #tip.tip-standalone .tip-johnny{height:56px;width:58px;top:11px;left:19px}
+ #tip.tip-standalone .tip-label{min-height:48px;margin:0 25px 10px 70px;font-size:22px}
+ #tip.tip-standalone .tip-text{padding-top:11px;font-size:16px;line-height:1.35}
+}
+
+/* Строка товара в обучении посылки: общая пульсация масштабирует до 1.08
+   и даёт кольцо 7 px — у широкой строки это вылезало за край окна и
+   обрезалось. Здесь пульс без масштаба, кольцо золотое (без неона) и
+   внутри запаса, который даёт отступ контейнера. */
+.training-card .training-goods{padding:6px}
+.training-card .training-good.guide-target{animation:coachPulseWide 1.05s ease-in-out infinite!important}
+@keyframes coachPulseWide{0%,100%{filter:brightness(1);box-shadow:0 3px 10px #0003,0 0 0 0 #ffd76a00}
+  50%{filter:brightness(1.07);box-shadow:0 4px 14px #0005,0 0 0 4px #ffd76acc}}
+/* картинка шага 2 — сцена из кита, без растяжения */
+.training-card .training-art{width:100%;height:auto;aspect-ratio:404/168;object-fit:cover}
+
+/* стрелка из окна «Больше груза» к кнопке поставки */
+.ship-hint{position:fixed;inset:0;z-index:40;pointer-events:none}
+.ship-hint .ship-ring{position:absolute;border:4px solid #ffd76a;border-radius:16px;
+  box-shadow:0 0 0 3px #2a2118,0 0 18px #ffd76acc;animation:shipRing 1.1s ease-in-out infinite}
+.ship-hint .ship-arrow{position:absolute;width:44px;filter:drop-shadow(0 3px 0 #0006);
+  animation:shipArrow 1s ease-in-out infinite}
+@keyframes shipRing{50%{transform:scale(1.06)}}
+@keyframes shipArrow{50%{translate:0 7px}}
+@media (prefers-reduced-motion:reduce){.ship-hint *{animation:none!important}}
+
+/* Карточка «Первый круг · N/9» убрана совсем: ведут пульсация и советы Джонни. */
+#guide{display:none!important}
+/* Онбординговый круг: только кубик и строка клетки. */
+body.first-lap #bTaxi,body.first-lap #bShip,body.first-lap #bJohnny,body.first-lap #bShop,
+body.first-lap #qrow,body.first-lap #bHub,body.first-lap #inv,body.first-lap .map-controls{visibility:hidden!important;pointer-events:none!important}
+
+/* ===== v50: мягкая валюта — монеты везде =====
+   Одна иконка (монеты из кита, как на поле) в шапке, в тексте, на кнопках,
+   в наградах и в летящих частицах. Пачка купюр больше нигде не используется. */
+.cur .ic.g{background-image:url(assets/icons/soft.webp)!important;width:36px;height:35px}
+.cash-glyph{background-image:url(assets/icons/soft.webp)!important;background-size:contain;background-position:center;
+  background-repeat:no-repeat;width:1.12em;height:1.08em;vertical-align:-.2em;margin:0 .12em 0 .06em}
+.card .v .cash-glyph,#card .v .cash-glyph{width:1.04em;height:1em;vertical-align:-.16em}
+#tbText .cash-glyph{width:1.04em;height:1em;vertical-align:-.15em}
+.mobile-fly.fly-coin img{display:block;width:30px;height:auto;filter:drop-shadow(0 2px 1px #23190e99)}
+
+/* Поставка на сегодня сделана: ящик закрыт плашкой с надписью. */
+#dock #bShip.ship-done{position:relative;filter:saturate(.55)}
+#dock #bShip.ship-done::after{content:'Отправка завтра';position:absolute;inset:8px 5px 10px;display:flex;align-items:center;justify-content:center;
+  text-align:center;border-radius:10px;background:#e8dbbd;box-shadow:inset 0 0 0 1.5px #b9a57f;
+  font-family:'Golos Text',sans-serif;font-weight:700;font-size:10.5px;line-height:1.15;color:#3d3022;letter-spacing:0;padding:0 1px;overflow:hidden}
+
+/* ===== v57: шапка и плашки заданий по киту =====
+   Иконки валют — чистые вырезки на альфе одной высоты: раньше календарь
+   тащил край плашки, а кристалл — кремовую обводку-наклейку. */
+.cur .ic,.cur .ic.g,.cur .ic.b,.cur .ic.o{width:34px!important;height:30px!important;margin-left:3px;flex:none;
+  background-color:transparent!important;background-position:center!important;background-size:contain!important;background-repeat:no-repeat!important}
+.cur .ic.g{background-image:url(assets/icons/soft.webp)!important}
+.cur .ic.b{background-image:url(assets/icons/gem-clean.webp)!important}
+.cur .ic.o{background-image:url(assets/icons/calendar.webp)!important}
+/* Задания и таймер — грифельные плашки кита: тёмная доска, кремовая кайма
+   внутри, иконка слева, золотая полоска прогресса по нижнему краю. */
+#qrow .qchip{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:flex-start;gap:6px;text-align:left;
+  min-height:44px;padding:5px 8px 8px 6px;border:2px solid #17130f;border-radius:10px;
+  background:#27231e url(assets/paper-grain.svg)!important;
+  box-shadow:inset 0 0 0 2px #27231e,inset 0 0 0 3.5px #d8c79c99,0 2px 0 #120f0b;
+  color:#f6e7c3;font:600 12.5px/1.15 var(--txt)}
+#qrow .qchip::before{content:'';flex:none;width:27px;height:27px;background:center/contain no-repeat}
+#qrow #sTimer::before{background-image:url(assets/icons/clock.webp)}
+#qrow .qchip[data-kind=earn]::before{background-image:url(assets/icons/soft.webp)}
+#qrow .qchip[data-kind=sell]::before{background-image:url(assets/icons/box.webp)}
+#qrow .qchip[data-kind=buy]::before{background-image:url(assets/icons/shop.webp)}
+#qrow .qchip[data-kind=upg]::before{background-image:url(assets/icons/crown.webp)}
+#qrow .qchip[data-kind=parcel]::before{background-image:url(assets/icons/crate.webp)}
+#qrow .qchip span{flex:1;min-width:0}
+#qrow .qchip i{position:absolute;left:0;bottom:0;height:4px;background:linear-gradient(#f0c44e,#c99a32);border-radius:0 3px 0 0}
+#qrow .qchip.done{background:#3e6d3b url(assets/paper-grain.svg)!important;box-shadow:inset 0 0 0 2px #3e6d3b,inset 0 0 0 3.5px #e9dcb899,0 2px 0 #1d3a1c;color:#fff}
+@media(max-width:360px){#qrow .qchip{font-size:11px;gap:4px;padding-left:4px}#qrow .qchip::before{width:22px;height:22px}}
+/* доска темнее: зерно бумаги только проступает сквозь чёрную краску */
+#qrow .qchip{background:linear-gradient(#1f1c18e6,#1f1c18e6),url(assets/paper-grain.svg)!important;
+  box-shadow:inset 0 0 0 2px #1f1c18,inset 0 0 0 3.5px #d8c79c8c,0 2px 0 #120f0b;
+  gap:4px;padding:5px 7px 8px 5px;font-size:12px;line-height:1.12}
+#qrow .qchip::before{width:23px;height:23px}
+#qrow .qchip.done{background:linear-gradient(#3e6d3bee,#3e6d3bee),url(assets/paper-grain.svg)!important}
+#qrow .qchip{font-size:11.5px}
+#qrow .qchip::before{width:21px;height:21px}
+#qrow #sTimer span b{display:block;font-family:var(--num);font-weight:800;font-size:15px;line-height:1.05;color:#fff3d6}
+#qrow #sTimer span small{display:block;font-size:10.5px;opacity:.8;margin-top:1px}
+/* строка клетки: серая «открыть», если здесь не на что потратиться; зелёная — если есть */
+#tilebar.poor>b{background:#8f887d!important;color:#f3efe6!important;box-shadow:inset 0 -2px 0 #0000002a}
+
+/* Тени под панелями (v61) убраны: их высота шла за панелью и прыгала, когда
+   появлялась строка клетки. Поле идёт до краёв без затемнения. */
+.map-controls{z-index:2}
+
+/* ===== v62: широкий режим на компьютере ===== */
+#wideBtn{position:fixed;top:12px;right:14px;z-index:60;display:flex;align-items:center;gap:8px;
+  padding:9px 14px 9px 11px;border-radius:12px;border:2.5px solid #2a2118;cursor:pointer;
+  background:#f2e6c6 url(assets/paper-grain.svg);box-shadow:0 3px 0 #2a2118;color:#2a2118;
+  font:700 15px/1 var(--txt)}
+#wideBtn svg{width:22px;height:22px}
+#wideBtn:hover{background-color:#fff3d3}
+#wideBtn:active{translate:0 2px;box-shadow:0 1px 0 #2a2118}
+#wideBtn[hidden]{display:none}
+body.wide-mode #app{max-width:none}
+body.wide-mode #top,body.wide-mode #panel{left:50%!important;right:auto!important;width:min(480px,100%);translate:-50% 0}
+body.wide-mode #inv{left:calc(50% - 230px)}
+body.wide-mode .map-controls{left:calc(50% + 240px + 12px);right:auto}
+body.wide-mode #wideBtn{top:14px;right:18px}
+/* Общие плашки ресурсов обеих мини-игр; размещение задаёт minigame-shell. */
+.sl-res{position:absolute;z-index:6;left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 6px);display:grid;grid-template-columns:1fr 1fr;gap:6px;pointer-events:none}
+.sl-res .cur{height:36px}
+/* широкий режим: ячейки ресурсов над мини-игрой — по ширине колонки игры, как #top */
+body.wide-mode .minigame-layer .sl-res{width:min(460px,calc(100% - 20px));justify-self:center;margin-left:auto;margin-right:auto}
+/* число броска — на квадратной бумажной подложке, как ячейки шапки */
+#diceResult{display:grid;place-items:center;min-width:58px;height:58px;padding:0 10px;box-sizing:border-box;border:2.5px solid #2a221c;border-radius:12px;
+  background:#f4e5c4 url(assets/paper-grain.svg);box-shadow:0 3px 0 #2a221c,0 6px 12px #0005;color:#2a221c;text-shadow:none}
+#diceResult b{font:800 36px/1 Bitter,Georgia,serif;letter-spacing:-1px}
+
+/* Кубик не наезжает на счётчик ходов: место под счётчик (28 px) + тень кнопки (5 px) + зазор */
+#dock .diebox{padding-bottom:36px!important}
+#dock .diebox #sRolls{bottom:0}
+
+/* UI start/cells: wide world, bounded controls; no viewport-sized HUD. */
+#top,#panel{box-sizing:border-box;max-width:640px}
+@media(min-width:900px){
+  body #app{max-width:none}
+  body #top,body #panel,body.wide-mode #top,body.wide-mode #panel{left:50%!important;right:auto!important;width:620px!important;translate:-50% 0}
+  body #inv,body.wide-mode #inv{left:calc(50% - 285px)}
+  body .map-controls,body.wide-mode .map-controls{left:calc(50% + 324px);right:auto}
+}
+@media(max-height:700px) and (max-width:600px){
+  #top{gap:4px;padding-bottom:4px}
+  #qrow .qchip{min-height:36px}
+  #panel{gap:4px}
+  #tilebar{min-height:40px}
+}
+
+@media(min-width:900px){
+ body #top .bar0{padding-left:106px;min-height:68px;grid-template-columns:minmax(0,1fr) 48px;gap:10px}
+ body #top #bJohnnyTop{width:96px;height:105px}
+ body #top #bJohnnyTop .hud-portrait{width:100px;height:96px}
+ body #top #bJohnnyTop small{font-size:16px}
+ body #top #bHub.hud-map{height:68px;min-height:68px;padding:10px 18px}
+ body #top .hud-map-heading strong{font-size:27px}
+ body #top #bHub .hud-map-heading b{font-size:34px}
+ body #top #bHub .hud-map-heading small{font-size:24px}
+ body #top #bHelp{width:46px;height:46px;font-size:32px}
+ body #top .cur{height:38px;min-width:98px;padding:0 10px;gap:10px}
+ body #top .cur b{font-size:27px}
+ body #top .cur .ic{width:31px!important;height:31px!important}
+ body #top #qrow .qchip{font-size:15px;min-height:48px}
+ body #panel,body.wide-mode #panel{width:540px!important}
+}

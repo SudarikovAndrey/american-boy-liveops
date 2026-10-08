@@ -69,9 +69,19 @@
       <h1>Америкэн<br>бой</h1>
       <div class="le-info"><button class="le-i" id="leRules" type="button" aria-label="Правила ивента">i</button><span class="le-timer" id="leTimer"></span></div>
       <button class="le-close" id="leClose" type="button" aria-label="Закрыть">×</button></div>
-    <div class="le-body">
-      <div class="le-ms" id="leMs"></div>
-      <div class="le-bar"><b id="leBar"></b><span id="leBarTxt"></span></div>
+    <div class="le-body"><div class="le-content" id="leContent"></div>
+      <nav class="le-tabs" aria-label="Разделы ивента"><button type="button" data-tab="main">Играть</button><button type="button" data-tab="ms">Рубежи</button><button type="button" data-tab="pass">Пропуск</button><button type="button" data-tab="lb">Топ</button></nav>
+    </div></div>`;
+  document.body.append(ev);
+  const booting=()=>{const b=document.getElementById('boot');return !!b&&b.isConnected&&!b.hidden&&getComputedStyle(b).display!=='none';};
+  let leTab='main';
+  const CARDS=[2,3,5],CAPS=[40,60,80];
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const pts=()=>(typeof S!=='undefined'&&S&&S.pts)||0;
+  const mainHtml=()=>{
+    const p=pts(),ms=CFG.MILESTONES,next=ms.find(m=>p<m.pts)||ms[ms.length-1];
+    return `<div class="le-ms">${ms.map(m=>`<span class="${p>=m.pts?'done':''}"><i></i>${m.pts}</span>`).join('')}</div>
+      <div class="le-bar"><b style="width:${Math.min(100,p/next.pts*100)}%"></b><span>${p} / ${next.pts}</span></div>
       <div class="le-prize"><div class="le-card"><img src="assets/icons/hud-johnny.webp" alt=""><small>Легендарный</small></div>
         <div><h2>Главный приз</h2><p>Джонни — легендарный пацан в твою банду</p></div></div>
       <div class="le-rows">
@@ -79,24 +89,54 @@
         <div class="le-row"><span class="le-ic" style="background:#7e70b1">🚚</span><span><b>Каждый день отправляй фуру</b><small>товар в фуре — это очки</small></span></div>
         <div class="le-row"><span class="le-ic" style="background:#f1e3c2">🎫</span><span><b>375 очков — Джонни в банде</b><small>800 и 1350 — прокачка до 60 и 80 ур.</small></span></div>
       </div>
-      <nav class="le-tabs" aria-label="Разделы ивента"><button type="button" class="on" data-go="play">Играть</button><button type="button" data-go="ticket">Рубежи</button><button type="button" data-go="pass">Пропуск</button><button type="button" data-go="lb">Топ</button></nav>
-    </div></div>`;
-  document.body.append(ev);
-  const booting=()=>{const b=document.getElementById('boot');return !!b&&b.isConnected&&!b.hidden&&getComputedStyle(b).display!=='none';};
-  const fillEvent=()=>{
-    const pts=(typeof S!=='undefined'&&S&&S.pts)||0,ms=CFG.MILESTONES,next=ms.find(m=>pts<m.pts)||ms[ms.length-1];
-    document.getElementById('leTimer').textContent='◷ '+timeLeft();
-    document.getElementById('leMs').innerHTML=ms.map(m=>`<span class="${pts>=m.pts?'done':''}"><i></i>${m.pts}</span>`).join('');
-    document.getElementById('leBar').style.width=Math.min(100,pts/next.pts*100)+'%';
-    document.getElementById('leBarTxt').textContent=`${pts} / ${next.pts}`;
+      <button type="button" class="le-cta" id="leGo">Поехали!</button>`;
   };
-  const openEvent=()=>{fillEvent();ev.hidden=false;core.hidden=true;exit.hidden=true;};
+  const msHtml=()=>{
+    const p=pts(),ms=CFG.MILESTONES;
+    const rows=ms.map((m,i)=>{const done=p>=m.pts;return `<div class="le-item ${done?'done':''}">
+      <div class="le-cards"><img src="assets/icons/hud-johnny.webp" alt=""><b>×${CARDS[i]||1}</b></div>
+      <span><b>${m.pts} очков${i===0?' — Джонни в банде':''}</b><small>${CARDS[i]} карточ${CARDS[i]===2||CARDS[i]===3?'ки':'ек'} Джонни · прокачка до ${CAPS[i]} ур.</small></span>
+      <em>${done?'✓ взят':'ещё '+(m.pts-p)}</em></div>`;}).join('');
+    const q=(typeof S!=='undefined'&&S&&S.q)||[];
+    const tasks=q.map(t=>`<div class="le-item small ${t.claimed?'done':''}"><span><b>${esc(t.text)}</b><small>${t.claimed?'награда получена':t.done?'выполнено — забери в игре':Math.min(t.prog,t.goal)+' / '+t.goal}</small></span></div>`).join('');
+    return `<h3 class="le-h">Рубежи · ${p} очков</h3>${rows}${tasks?`<h3 class="le-h">Задания дня</h3>${tasks}`:''}`;
+  };
+  const passHtml=()=>{
+    const L=bpLevel(),av=bpClaimable(),paid=!!(S.bp&&S.bp.paid);
+    const short=r=>[r.rolls?'+'+r.rolls+' 🎲':'',r.hard?'+'+r.hard+' 💎':''].filter(Boolean).join(' ')||'—';
+    const rows=Array.from({length:BP.max},(_,i)=>{const k=i+1,got=k<=L;return `<div class="le-pass ${got?'done':''}">
+      <span class="le-pf">${short(BP.free(k))}${k<=(S.bp.claimedFree||0)?' ✓':''}</span>
+      <span class="le-pk"><b>${k}</b><small>${BP_REQ[i]}</small></span>
+      <span class="le-pp ${paid?'':'lock'}">${short(BP.paid(k))}${paid&&k<=(S.bp.claimedPaid||0)?' ✓':''}</span></div>`;}).join('');
+    return `<h3 class="le-h">Пропуск · ступень ${L} из ${BP.max}</h3>
+      <div class="le-pass head"><span class="le-pf">Бесплатно</span><span class="le-pk"><small>очки</small></span><span class="le-pp">Премиум</span></div>${rows}
+      <div class="le-btns">${av?`<button type="button" class="le-cta" id="leClaim">Забрать награды (${av})</button>`:''}${paid?'':`<button type="button" class="le-cta alt" id="leBuy">Премиум · ${BP.price} ₽</button>`}</div>
+      <p class="le-note">Покупка в прототипе имитируется — деньги не списываются.</p>`;
+  };
+  const lbHtml=()=>{
+    const rows=lbRows();
+    return `<h3 class="le-h">Топ недели</h3>${rows.map((r,i)=>`<div class="le-lb ${r.you?'you':''}"><b>${i+1}</b><span>${esc(r.n)}</span><em>${r.pts}</em></div>`).join('')}
+      <p class="le-note">Призы за места выдаются один раз — в конце ивента.</p>`;
+  };
+  const renderTab=()=>{
+    document.getElementById('leTimer').textContent='◷ '+timeLeft();
+    const c=document.getElementById('leContent');
+    c.innerHTML=leTab==='ms'?msHtml():leTab==='pass'?passHtml():leTab==='lb'?lbHtml():mainHtml();
+    c.scrollTop=0;
+    ev.querySelectorAll('.le-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===leTab));
+    const go=document.getElementById('leGo');if(go)go.onclick=()=>enter();
+    const cl=document.getElementById('leClaim');if(cl)cl.onclick=()=>{bpClaim();save();render();renderTab();};
+    const buy=document.getElementById('leBuy');if(buy)buy.onclick=()=>{bpBuy();save();render();renderTab();};
+  };
+  const openEvent=()=>{leTab='main';renderTab();ev.hidden=false;core.hidden=true;exit.hidden=true;};
   const enter=then=>{
     ev.hidden=true;core.hidden=true;exit.hidden=false;
     if(booting()){const p=document.getElementById('startPlay');if(p)p.click();return;} // первый вход — онбординг игры
     if(then&&!moving)then();
   };
-  ev.querySelectorAll('.le-tabs button').forEach(b=>b.onclick=()=>{const g=b.dataset.go;enter(g==='play'?null:()=>eventHub(g));});
+  ev.querySelectorAll('.le-tabs button').forEach(b=>b.onclick=()=>{
+    if(b.dataset.tab==='main'&&leTab==='main')return enter();   // повторный тап по «Играть» — в игру
+    leTab=b.dataset.tab;renderTab();});
   document.getElementById('leClose').onclick=()=>{ev.hidden=true;show(true);};
   document.getElementById('leRules').onclick=()=>enter(()=>openHelp());
   document.getElementById('loWidget').onclick=openEvent;

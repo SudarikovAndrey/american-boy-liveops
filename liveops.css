@@ -58,3 +58,43 @@
 #loEvent button:focus-visible{outline:2px solid #f2c443;outline-offset:2px}
 /* Пока открыто окно игры — кнопки выхода не видно. */
 body:has(#modal:not([hidden])) #loExit{display:none!important}
+/* Окно ивента: вкладки с содержимым внутри окна. Кнопки — без игрового оформления. */
+#loEvent button{border:0!important;box-shadow:none!important;background-image:none!important;text-shadow:none!important;transform:none!important;margin:0;min-height:0;letter-spacing:0}
+#loEvent button::before,#loEvent button::after{display:none!important}
+#loEvent .le-body{gap:8px}
+#loEvent .le-content{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:10px;padding-top:4px;scrollbar-width:none}
+#loEvent .le-content::-webkit-scrollbar{display:none}
+#loEvent .le-tabs{margin-top:0}
+#loEvent .le-tabs button{background:none!important;color:#efe7d7!important}
+#loEvent .le-tabs button.on{background:#d9c8a4!important;color:#1e1813!important}
+#loEvent .le-cta{display:block;width:100%;border-radius:12px;background:#3f9a52!important;color:#fff!important;font:600 20px/1 'Oswald','Arial Narrow',sans-serif;text-transform:uppercase;padding:14px 0;cursor:pointer}
+#loEvent .le-cta.alt{background:#c98a12!important}
+#loEvent .le-btns{display:flex;flex-direction:column;gap:8px}
+#loEvent .le-h{margin:2px 0 0;font:600 20px/1.1 'Oswald','Arial Narrow',sans-serif;text-transform:uppercase;color:#f1e3c2}
+#loEvent .le-item{display:flex;align-items:center;gap:10px;background:#3a3226;border-radius:12px;padding:9px 10px}
+#loEvent .le-item.done{box-shadow:inset 0 0 0 2px #3f9a52}
+#loEvent .le-item span{flex:1}
+#loEvent .le-item b{display:block;font-size:14px;font-weight:600}
+#loEvent .le-item small{display:block;font-size:12px;color:#b3a58b}
+#loEvent .le-item em{font-style:normal;font-size:12px;color:#e8b33a;white-space:nowrap}
+#loEvent .le-item.done em{color:#7fcf8c}
+#loEvent .le-item.small{padding:7px 10px}
+#loEvent .le-cards{position:relative;width:44px;flex:none}
+#loEvent .le-cards img{width:44px;height:44px;border-radius:8px;background:#e7d2a4;object-fit:cover;box-shadow:3px -3px 0 #b98a3c,6px -6px 0 #8a6a2c}
+#loEvent .le-cards b{position:absolute;right:-6px;bottom:-6px;background:#ff9900;color:#1e1813;border-radius:8px;padding:1px 5px;font-size:12px}
+#loEvent .le-pass{display:grid;grid-template-columns:1fr 54px 1fr;gap:6px;align-items:center}
+#loEvent .le-pass span{background:#3a3226;border-radius:10px;padding:8px 6px;text-align:center;font-size:13px}
+#loEvent .le-pass .le-pk{background:#1e1912;display:flex;flex-direction:column;gap:2px}
+#loEvent .le-pass .le-pk small{font-size:10px;color:#b3a58b}
+#loEvent .le-pass .le-pp{background:#4a3a1c}
+#loEvent .le-pass .le-pp.lock{opacity:.55}
+#loEvent .le-pass.done .le-pk{background:#3f9a52}
+#loEvent .le-pass.head span{background:none;font-size:12px;color:#b3a58b;padding:0}
+#loEvent .le-lb{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;background:#3a3226;border-radius:10px;padding:8px 10px;font-size:14px}
+#loEvent .le-lb b{color:#b3a58b}
+#loEvent .le-lb em{font-style:normal;font-weight:600}
+#loEvent .le-lb.you{background:#d9c8a4;color:#1e1813;position:sticky;bottom:0}
+#loEvent .le-lb.you b{color:#1e1813}
+#loEvent .le-note{margin:0;font-size:12px;color:#b3a58b}
+#loEvent .le-body{min-height:0}
+#loEvent .le-pass span{padding:6px}

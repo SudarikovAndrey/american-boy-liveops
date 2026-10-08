@@ -62,7 +62,44 @@
     return days>0?`${days}д : ${h}ч`:`${h}ч : ${Math.floor((mid-now)%36e5/6e4)}м`;
   };
   const show=on=>{core.hidden=!on;exit.hidden=on;if(on)document.getElementById('loTime').textContent=timeLeft();};
-  document.getElementById('loWidget').onclick=()=>show(false);
+  // ---- Окно ивента по стандартной форме Block Boss ----
+  const ev=document.createElement('div');ev.id='loEvent';ev.hidden=true;
+  ev.innerHTML=`<div class="le-sheet" role="dialog" aria-label="Ивент «Америкэн бой»"><div class="le-bg"></div>
+    <div class="le-head"><img class="le-hero" src="assets/start/johnny-v2.webp" alt="">
+      <h1>Америкэн<br>бой</h1>
+      <div class="le-info"><button class="le-i" id="leRules" type="button" aria-label="Правила ивента">i</button><span class="le-timer" id="leTimer"></span></div>
+      <button class="le-close" id="leClose" type="button" aria-label="Закрыть">×</button></div>
+    <div class="le-body">
+      <div class="le-ms" id="leMs"></div>
+      <div class="le-bar"><b id="leBar"></b><span id="leBarTxt"></span></div>
+      <div class="le-prize"><div class="le-card"><img src="assets/icons/hud-johnny.webp" alt=""><small>Легендарный</small></div>
+        <div><h2>Главный приз</h2><p>Джонни — легендарный пацан в твою банду</p></div></div>
+      <div class="le-rows">
+        <div class="le-row"><span class="le-ic" style="background:#c8452f">🎲</span><span><b>Бросай кубики, скупай точки</b><small>30 ходов в день, ходы копятся сами</small></span></div>
+        <div class="le-row"><span class="le-ic" style="background:#7e70b1">🚚</span><span><b>Каждый день отправляй фуру</b><small>товар в фуре — это очки</small></span></div>
+        <div class="le-row"><span class="le-ic" style="background:#f1e3c2">🎫</span><span><b>375 очков — Джонни в банде</b><small>800 и 1350 — прокачка до 60 и 80 ур.</small></span></div>
+      </div>
+      <nav class="le-tabs" aria-label="Разделы ивента"><button type="button" class="on" data-go="play">Играть</button><button type="button" data-go="ticket">Рубежи</button><button type="button" data-go="pass">Пропуск</button><button type="button" data-go="lb">Топ</button></nav>
+    </div></div>`;
+  document.body.append(ev);
+  const booting=()=>{const b=document.getElementById('boot');return !!b&&b.isConnected&&!b.hidden&&getComputedStyle(b).display!=='none';};
+  const fillEvent=()=>{
+    const pts=(typeof S!=='undefined'&&S&&S.pts)||0,ms=CFG.MILESTONES,next=ms.find(m=>pts<m.pts)||ms[ms.length-1];
+    document.getElementById('leTimer').textContent='◷ '+timeLeft();
+    document.getElementById('leMs').innerHTML=ms.map(m=>`<span class="${pts>=m.pts?'done':''}"><i></i>${m.pts}</span>`).join('');
+    document.getElementById('leBar').style.width=Math.min(100,pts/next.pts*100)+'%';
+    document.getElementById('leBarTxt').textContent=`${pts} / ${next.pts}`;
+  };
+  const openEvent=()=>{fillEvent();ev.hidden=false;core.hidden=true;exit.hidden=true;};
+  const enter=then=>{
+    ev.hidden=true;core.hidden=true;exit.hidden=false;
+    if(booting()){const p=document.getElementById('startPlay');if(p)p.click();return;} // первый вход — онбординг игры
+    if(then&&!moving)then();
+  };
+  ev.querySelectorAll('.le-tabs button').forEach(b=>b.onclick=()=>{const g=b.dataset.go;enter(g==='play'?null:()=>eventHub(g));});
+  document.getElementById('leClose').onclick=()=>{ev.hidden=true;show(true);};
+  document.getElementById('leRules').onclick=()=>enter(()=>openHelp());
+  document.getElementById('loWidget').onclick=openEvent;
   exit.onclick=()=>{if(typeof moving!=='undefined'&&moving)return;show(true);};
   setInterval(()=>{if(!core.hidden)document.getElementById('loTime').textContent=timeLeft();},30000);
   show(true);

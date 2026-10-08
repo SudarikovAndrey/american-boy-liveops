@@ -19,3 +19,42 @@
 #loExit{position:fixed;top:calc(env(safe-area-inset-top,0px) + 104px);right:8px;z-index:36;width:50px;height:50px;padding:0;border:1.5px solid #473f30;border-radius:12px;background:#f0ddb5;color:#2a2620;box-shadow:0 3px 0 #473f30;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font:700 10px/1 system-ui,sans-serif;cursor:pointer}
 #loExit b{font-size:20px;line-height:1}
 #loExit[hidden]{display:none!important}
+/* Окно ивента по стандартной форме Block Boss (как «Дядя Вася»). Стартовый экран прототипа скрыт: он запускает онбординг под капотом. */
+#boot{opacity:0!important;pointer-events:none!important}
+#loEvent{position:fixed;inset:0;z-index:2147483001;display:flex;align-items:center;justify-content:center;background:rgba(10,8,6,.55)}
+#loEvent[hidden]{display:none!important}
+#loEvent .le-sheet{position:relative;height:100%;aspect-ratio:393/852;max-width:100%;overflow:hidden;border-radius:18px;background:#2b241b;color:#efe7d7;font-family:'Suisse Intl',system-ui,sans-serif;display:flex;flex-direction:column}
+#loEvent .le-bg{position:absolute;inset:0;background:url(core-main.jpg) center/cover;filter:blur(6px) brightness(.35);transform:scale(1.08)}
+#loEvent .le-head{position:relative;height:42%;flex:none;overflow:hidden}
+#loEvent .le-hero{position:absolute;right:-8%;top:6%;height:165%;object-fit:contain;object-position:top;filter:drop-shadow(0 8px 18px rgba(0,0,0,.5))}
+#loEvent .le-head::after{content:"";position:absolute;inset:auto 0 0 0;height:35%;background:linear-gradient(transparent,#2b241b)}
+#loEvent h1{position:absolute;left:5%;top:8%;margin:0;font:600 clamp(30px,9.5vw,40px)/.92 'Oswald','Arial Narrow',sans-serif;text-transform:uppercase;color:#f1e3c2;letter-spacing:.01em;text-shadow:0 2px 0 rgba(0,0,0,.35);z-index:2}
+#loEvent .le-info{position:absolute;left:5%;top:30%;z-index:2;display:flex;gap:8px;align-items:center}
+#loEvent .le-i{width:24px;height:24px;border-radius:50%;border:0;background:#3f9a52;color:#fff;font:700 14px/24px 'Suisse Intl',sans-serif;cursor:pointer;padding:0}
+#loEvent .le-timer{font-size:14px;color:#efe7d7}
+#loEvent .le-close{position:absolute;right:4%;top:3.5%;z-index:3;width:38px;height:38px;border:0;background:none;color:#f1e3c2;font:400 40px/38px sans-serif;cursor:pointer;text-shadow:0 2px 6px rgba(0,0,0,.6)}
+#loEvent .le-body{position:relative;flex:1;display:flex;flex-direction:column;gap:3%;padding:0 4% 4%}
+#loEvent .le-ms{display:flex;justify-content:space-between;align-items:center;padding:0 2%}
+#loEvent .le-ms span{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#b3a58b}
+#loEvent .le-ms i{width:22px;height:22px;border-radius:50%;border:2px solid #8a7c63;background:#2b241b}
+#loEvent .le-ms .done i{background:#e8b33a;border-color:#e8b33a}
+#loEvent .le-bar{position:relative;height:26px;border-radius:13px;background:#1c1712;overflow:hidden}
+#loEvent .le-bar b{position:absolute;inset:0 auto 0 0;background:#7e70b1;border-radius:13px}
+#loEvent .le-bar span{position:relative;display:block;text-align:center;font:600 14px/26px 'Suisse Intl',sans-serif}
+#loEvent .le-prize{position:relative;display:flex;align-items:center;gap:4%;border:2px solid #c98a12;border-radius:14px;background:#2f291f;padding:3% 4% 3% 30%;min-height:20%}
+#loEvent .le-card{position:absolute;left:3%;top:-14%;width:24%;aspect-ratio:3/4.2;border-radius:10px;background:#b98a3c;transform:rotate(-6deg);box-shadow:0 6px 14px rgba(0,0,0,.45);padding:6px;display:flex;flex-direction:column;gap:4px}
+#loEvent .le-card img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;background:#e7d2a4}
+#loEvent .le-card small{font:600 9px/1 'Suisse Intl',sans-serif;color:#2a2118;text-align:center}
+#loEvent .le-prize h2{margin:0;font:600 clamp(22px,7vw,30px)/1 'Oswald','Arial Narrow',sans-serif;color:#ff9900;text-transform:uppercase}
+#loEvent .le-prize p{margin:4px 0 0;font-size:13px;line-height:1.3}
+#loEvent .le-rows{display:flex;flex-direction:column;gap:6px}
+#loEvent .le-row{display:flex;gap:10px;align-items:center;background:#3a3226;border-radius:12px;padding:8px 10px}
+#loEvent .le-ic{flex:none;width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:19px}
+#loEvent .le-row b{display:block;font-size:13px;font-weight:600}
+#loEvent .le-row small{display:block;font-size:12px;color:#b3a58b}
+#loEvent .le-tabs{margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#1e1912;border-radius:14px;padding:5px}
+#loEvent .le-tabs button{border:0;border-radius:10px;background:none;color:#efe7d7;font:600 14px/1 'Suisse Intl',sans-serif;padding:13px 0;cursor:pointer}
+#loEvent .le-tabs .on{background:#d9c8a4;color:#1e1813}
+#loEvent button:focus-visible{outline:2px solid #f2c443;outline-offset:2px}
+/* Пока открыто окно игры — кнопки выхода не видно. */
+body:has(#modal:not([hidden])) #loExit{display:none!important}

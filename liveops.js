@@ -91,42 +91,13 @@
       </div>
       <button type="button" class="le-cta" id="leGo">Поехали!</button>`;
   };
-  const msHtml=()=>{
-    const p=pts(),ms=CFG.MILESTONES;
-    const rows=ms.map((m,i)=>{const done=p>=m.pts;return `<div class="le-item ${done?'done':''}">
-      <div class="le-cards"><img src="assets/icons/hud-johnny.webp" alt=""><b>×${CARDS[i]||1}</b></div>
-      <span><b>${m.pts} очков${i===0?' — Джонни в банде':''}</b><small>${CARDS[i]} карточ${CARDS[i]===2||CARDS[i]===3?'ки':'ек'} Джонни · прокачка до ${CAPS[i]} ур.</small></span>
-      <em>${done?'✓ взят':'ещё '+(m.pts-p)}</em></div>`;}).join('');
-    const q=(typeof S!=='undefined'&&S&&S.q)||[];
-    const tasks=q.map(t=>`<div class="le-item small ${t.claimed?'done':''}"><span><b>${esc(t.text)}</b><small>${t.claimed?'награда получена':t.done?'выполнено — забери в игре':Math.min(t.prog,t.goal)+' / '+t.goal}</small></span></div>`).join('');
-    return `<h3 class="le-h">Рубежи · ${p} очков</h3>${rows}${tasks?`<h3 class="le-h">Задания дня</h3>${tasks}`:''}`;
-  };
-  const passHtml=()=>{
-    const L=bpLevel(),av=bpClaimable(),paid=!!(S.bp&&S.bp.paid);
-    const short=r=>[r.rolls?'+'+r.rolls+' 🎲':'',r.hard?'+'+r.hard+' 💎':''].filter(Boolean).join(' ')||'—';
-    const rows=Array.from({length:BP.max},(_,i)=>{const k=i+1,got=k<=L;return `<div class="le-pass ${got?'done':''}">
-      <span class="le-pf">${short(BP.free(k))}${k<=(S.bp.claimedFree||0)?' ✓':''}</span>
-      <span class="le-pk"><b>${k}</b><small>${BP_REQ[i]}</small></span>
-      <span class="le-pp ${paid?'':'lock'}">${short(BP.paid(k))}${paid&&k<=(S.bp.claimedPaid||0)?' ✓':''}</span></div>`;}).join('');
-    return `<h3 class="le-h">Пропуск · ступень ${L} из ${BP.max}</h3>
-      <div class="le-pass head"><span class="le-pf">Бесплатно</span><span class="le-pk"><small>очки</small></span><span class="le-pp">Премиум</span></div>${rows}
-      <div class="le-btns">${av?`<button type="button" class="le-cta" id="leClaim">Забрать награды (${av})</button>`:''}${paid?'':`<button type="button" class="le-cta alt" id="leBuy">Премиум · ${BP.price} ₽</button>`}</div>
-      <p class="le-note">Покупка в прототипе имитируется — деньги не списываются.</p>`;
-  };
-  const lbHtml=()=>{
-    const rows=lbRows();
-    return `<h3 class="le-h">Топ недели</h3>${rows.map((r,i)=>`<div class="le-lb ${r.you?'you':''}"><b>${i+1}</b><span>${esc(r.n)}</span><em>${r.pts}</em></div>`).join('')}
-      <p class="le-note">Призы за места выдаются один раз — в конце ивента.</p>`;
-  };
   const renderTab=()=>{
     document.getElementById('leTimer').textContent='◷ '+timeLeft();
     const c=document.getElementById('leContent');
-    c.innerHTML=leTab==='ms'?msHtml():leTab==='pass'?passHtml():leTab==='lb'?lbHtml():mainHtml();
+    c.innerHTML=mainHtml();
     c.scrollTop=0;
     ev.querySelectorAll('.le-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===leTab));
     const go=document.getElementById('leGo');if(go)go.onclick=()=>enter();
-    const cl=document.getElementById('leClaim');if(cl)cl.onclick=()=>{bpClaim();save();render();renderTab();};
-    const buy=document.getElementById('leBuy');if(buy)buy.onclick=()=>{bpBuy();save();render();renderTab();};
   };
   const openEvent=()=>{leTab='main';renderTab();ev.hidden=false;core.hidden=true;exit.hidden=true;};
   const enter=then=>{
@@ -134,9 +105,16 @@
     if(booting()){const p=document.getElementById('startPlay');if(p)p.click();return;} // первый вход — онбординг игры
     if(then&&!moving)then();
   };
-  ev.querySelectorAll('.le-tabs button').forEach(b=>b.onclick=()=>{
-    if(b.dataset.tab==='main'&&leTab==='main')return enter();   // повторный тап по «Играть» — в игру
-    leTab=b.dataset.tab;renderTab();});
+  // Рубежи, Пропуск, Топ — готовые окна прототипа (прогресс карты, баттлпасс, топ).
+  // После их закрытия снова окно ивента.
+  const HUB={ms:'ticket',pass:'pass',lb:'lb'};
+  ev.querySelectorAll('.le-tabs button').forEach(b=>b.onclick=async()=>{
+    const t=b.dataset.tab;
+    if(t==='main')return enter();
+    if(typeof moving!=='undefined'&&moving)return;
+    ev.hidden=true;
+    try{await eventHub(HUB[t]);}catch(e){}
+    leTab='main';renderTab();ev.hidden=false;});
   document.getElementById('leClose').onclick=()=>{ev.hidden=true;show(true);};
   document.getElementById('leRules').onclick=()=>enter(()=>openHelp());
   document.getElementById('loWidget').onclick=openEvent;

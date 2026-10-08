@@ -98,3 +98,6 @@ body:has(#modal:not([hidden])) #loExit{display:none!important}
 #loEvent .le-note{margin:0;font-size:12px;color:#b3a58b}
 #loEvent .le-body{min-height:0}
 #loEvent .le-pass span{padding:6px}
+/* Кнопка «Играть» внизу окон «Прогресс · Пропуск · Топ», открытых с виджета. */
+#card #loPlay{display:block;width:calc(100% - 24px);margin:10px 12px 12px;padding:14px 0;border:2px solid #24452c;border-radius:12px;background:#3f9a52;color:#fff;font:800 20px/1 'Bitter',Georgia,serif;box-shadow:0 4px 0 #24452c;cursor:pointer}
+#card #loPlay:active{transform:translateY(2px);box-shadow:0 2px 0 #24452c}

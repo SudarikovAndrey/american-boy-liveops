@@ -62,61 +62,34 @@
     return days>0?`${days}д : ${h}ч`:`${h}ч : ${Math.floor((mid-now)%36e5/6e4)}м`;
   };
   const show=on=>{core.hidden=!on;exit.hidden=on;if(on)document.getElementById('loTime').textContent=timeLeft();};
-  // ---- Окно ивента по стандартной форме Block Boss ----
-  const ev=document.createElement('div');ev.id='loEvent';ev.hidden=true;
-  ev.innerHTML=`<div class="le-sheet" role="dialog" aria-label="Ивент «Америкэн бой»"><div class="le-bg"></div>
-    <div class="le-head"><img class="le-hero" src="assets/start/johnny-v2.webp" alt="">
-      <h1>Америкэн<br>бой</h1>
-      <div class="le-info"><button class="le-i" id="leRules" type="button" aria-label="Правила ивента">i</button><span class="le-timer" id="leTimer"></span></div>
-      <button class="le-close" id="leClose" type="button" aria-label="Закрыть">×</button></div>
-    <div class="le-body"><div class="le-content" id="leContent"></div>
-      <nav class="le-tabs" aria-label="Разделы ивента"><button type="button" data-tab="main">Играть</button><button type="button" data-tab="ms">Рубежи</button><button type="button" data-tab="pass">Пропуск</button><button type="button" data-tab="lb">Топ</button></nav>
-    </div></div>`;
-  document.body.append(ev);
+  // ---- Окно ивента = готовые окна прототипа «Прогресс · Пропуск · Топ» + кнопка «Играть» ----
   const booting=()=>{const b=document.getElementById('boot');return !!b&&b.isConnected&&!b.hidden&&getComputedStyle(b).display!=='none';};
-  let leTab='main';
-  const CARDS=[2,3,5],CAPS=[40,60,80];
-  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  const pts=()=>(typeof S!=='undefined'&&S&&S.pts)||0;
-  const mainHtml=()=>{
-    const p=pts(),ms=CFG.MILESTONES,next=ms.find(m=>p<m.pts)||ms[ms.length-1];
-    return `<div class="le-ms">${ms.map(m=>`<span class="${p>=m.pts?'done':''}"><i></i>${m.pts}</span>`).join('')}</div>
-      <div class="le-bar"><b style="width:${Math.min(100,p/next.pts*100)}%"></b><span>${p} / ${next.pts}</span></div>
-      <div class="le-prize"><div class="le-card"><img src="assets/icons/hud-johnny.webp" alt=""><small>Легендарный</small></div>
-        <div><h2>Главный приз</h2><p>Джонни — легендарный пацан в твою банду</p></div></div>
-      <div class="le-rows">
-        <div class="le-row"><span class="le-ic" style="background:#c8452f">🎲</span><span><b>Бросай кубики, скупай точки</b><small>30 ходов в день, ходы копятся сами</small></span></div>
-        <div class="le-row"><span class="le-ic" style="background:#7e70b1">🚚</span><span><b>Каждый день отправляй фуру</b><small>товар в фуре — это очки</small></span></div>
-        <div class="le-row"><span class="le-ic" style="background:#f1e3c2">🎫</span><span><b>375 очков — Джонни в банде</b><small>800 и 1350 — прокачка до 60 и 80 ур.</small></span></div>
-      </div>
-      <button type="button" class="le-cta" id="leGo">Поехали!</button>`;
+  // Стартовый экран принимает «Играть» только когда поле загружено (start-screen.js: MobileHost.ready).
+  const startGame=()=>{let n=0;const tick=()=>{if(!booting())return;
+    if(window.MobileHost&&window.MobileHost.ready){const p=document.getElementById('startPlay');if(p){p.disabled=false;p.click();}}
+    if(++n<300)setTimeout(tick,200);};tick();};
+  // Партия уже есть — игра стартует сама за главным экраном кора. Пока её стартовый экран
+  // не пройден, игра держит интерфейс инертным и ни одна кнопка не нажимается.
+  if(typeof S!=='undefined'&&S&&S.player)setTimeout(startGame,0);
+  let fromWidget=false,closedByX=false;
+  const addPlay=()=>{
+    if(!fromWidget||$('modal').hidden)return;
+    const card=$('card');if(!card.querySelector('[data-tab]')||card.querySelector('#loPlay'))return;
+    const b=document.createElement('button');b.id='loPlay';b.type='button';b.textContent='Играть';
+    b.onclick=()=>closeModal();
+    card.append(b);
   };
-  const renderTab=()=>{
-    document.getElementById('leTimer').textContent='◷ '+timeLeft();
-    const c=document.getElementById('leContent');
-    c.innerHTML=mainHtml();
-    c.scrollTop=0;
-    ev.querySelectorAll('.le-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===leTab));
-    const go=document.getElementById('leGo');if(go)go.onclick=()=>enter();
-  };
-  const openEvent=()=>{leTab='main';renderTab();ev.hidden=false;core.hidden=true;exit.hidden=true;};
-  const enter=then=>{
-    ev.hidden=true;core.hidden=true;exit.hidden=false;
-    if(booting()){const p=document.getElementById('startPlay');if(p)p.click();return;} // первый вход — онбординг игры
-    if(then&&!moving)then();
-  };
-  // Рубежи, Пропуск, Топ — готовые окна прототипа (прогресс карты, баттлпасс, топ).
-  // После их закрытия снова окно ивента.
-  const HUB={ms:'ticket',pass:'pass',lb:'lb'};
-  ev.querySelectorAll('.le-tabs button').forEach(b=>b.onclick=async()=>{
-    const t=b.dataset.tab;
-    if(t==='main')return enter();
+  if(card){new MutationObserver(addPlay).observe(card,{childList:true,subtree:true});
+    card.addEventListener('click',e=>{if(fromWidget&&e.target.closest('#hNo,.xhead,.painted-close,.window-close'))closedByX=true;},true);}
+  const openEvent=async()=>{
     if(typeof moving!=='undefined'&&moving)return;
-    ev.hidden=true;
-    try{await eventHub(HUB[t]);}catch(e){}
-    leTab='main';renderTab();ev.hidden=false;});
-  document.getElementById('leClose').onclick=()=>{ev.hidden=true;show(true);};
-  document.getElementById('leRules').onclick=()=>enter(()=>openHelp());
+    core.hidden=true;exit.hidden=false;
+    if(booting()){startGame();return;}            // новый игрок — сначала онбординг ивента
+    fromWidget=true;closedByX=false;
+    try{await eventHub('ticket');}catch(e){}
+    fromWidget=false;
+    if(closedByX)show(true);                      // закрыл крестиком — обратно на главный экран; «Играть» и «К поставке» — остаёмся в игре
+  };
   document.getElementById('loWidget').onclick=openEvent;
   exit.onclick=()=>{if(typeof moving!=='undefined'&&moving)return;show(true);};
   setInterval(()=>{if(!core.hidden)document.getElementById('loTime').textContent=timeLeft();},30000);
